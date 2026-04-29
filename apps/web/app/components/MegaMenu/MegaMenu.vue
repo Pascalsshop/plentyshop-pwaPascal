@@ -98,7 +98,7 @@
               <SfListItem
                 size="lg"
                 :tag="NuxtLink"
-                :href="item.url"
+                :to="item.url"
                 class="hover:bg-secondary-100"
                 @click="close()"
               >

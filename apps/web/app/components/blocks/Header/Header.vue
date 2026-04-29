@@ -1,312 +1,80 @@
 <template>
-  <div>
-    <MegaMenu :categories="categoryTree">
-      <template v-if="viewport.isGreaterOrEquals('md')">
-        <UiSearch class="hidden md:block flex-1" />
-        <nav class="hidden ml-4 md:flex md:flex-row md:flex-nowrap">
-          <template v-if="localeCodes.length > 1">
-            <UiButton
-              v-if="!isLanguageSelectOpen"
-              class="group relative hover:!bg-header-400 active:!bg-header-400 mr-1 -ml-0.5 rounded-md cursor-pointer"
-              :aria-label="t('common.navigation.languageSelector')"
-              variant="tertiary"
-              :style="{ color: resolvedIconColor }"
-              square
-              data-testid="open-languageselect-button"
-              :disabled="(showConfigurationDrawer && isEditing) || (showConfigurationDrawer && disableActions)"
-              @click="toggleLanguageSelect()"
-            >
-              <template #prefix>
-                <SfIconLanguage class="relative" />
-              </template>
-            </UiButton>
-            <UiButton
-              v-else
-              class="group relative hover:!bg-header-400 active:bg-header-400 mr-1 -ml-0.5 rounded-md cursor-pointer"
-              :aria-label="t('common.navigation.languageSelector')"
-              :style="{ color: isActive ? resolvedIconColor : '' }"
-              variant="tertiary"
-              square
-              data-testid="open-languageselect-button"
-            >
-              <template #prefix>
-                <SfIconLanguage class="relative" />
-              </template>
-            </UiButton>
-          </template>
-          <UiButton
-            class="group relative hover:!bg-header-400 active:bg-header-400 mr-1 -ml-0.5 rounded-md"
-            :tag="NuxtLink"
-            :to="localePath(paths.wishlist)"
-            :style="{ color: resolvedIconColor }"
-            :aria-label="t('cart.numberInWishlist', { count: wishlistItemIds.length })"
-            variant="tertiary"
-            square
-            data-testid="wishlist-page-navigation"
-          >
-            <template #prefix>
-              <SfIconFavorite />
-              <SfBadge
-                :content="wishlistItemIds.length"
-                :style="{
-                  backgroundColor: resolvedIconColor,
-                  outlineColor: resolvedBackgroundColor,
-                  color: resolvedBackgroundColor,
-                }"
-                class="outline group-hover:outline-primary-800 group-active:outline-primary-700 flex justify-center items-center text-xs min-w-[16px] min-h-[16px]"
-                data-testid="wishlist-badge"
-                placement="top-right"
-                :max="99"
-              />
-            </template>
-          </UiButton>
-          <UiButton
-            class="group relative hover:!bg-header-400 active:!bg-header-400 mr-1 -ml-0.5 rounded-md"
-            :tag="NuxtLink"
-            :style="{ color: resolvedIconColor }"
-            :to="localePath(paths.cart)"
-            :aria-label="t('cart.numberInCart', { count: cartItemsCount })"
-            variant="tertiary"
-            square
-          >
-            <template #prefix>
-              <SfIconShoppingCart />
-              <SfBadge
-                :content="cartItemsCount"
-                :style="{
-                  backgroundColor: resolvedIconColor,
-                  outlineColor: resolvedBackgroundColor,
-                  color: resolvedBackgroundColor,
-                }"
-                class="outline group-hover:outline-primary-800 group-active:outline-primary-700 flex justify-center items-center text-xs min-w-[16px] min-h-[16px]"
-                data-testid="cart-badge"
-                placement="top-right"
-                :max="99"
-              />
-            </template>
-          </UiButton>
-          <SfDropdown v-if="isAuthorized" v-model="isAccountDropdownOpen" placement="bottom-end" class="z-50">
-            <template #trigger>
-              <UiButton
-                variant="tertiary"
-                class="relative hover:bg-header-400 active:bg-header-400 rounded-md"
-                :style="{ color: resolvedIconColor }"
-                :class="{ 'bg-primary-700': isAccountDropdownOpen }"
-                data-testid="account-dropdown-button"
-                @click="accountDropdownToggle()"
-              >
-                <template #prefix>
-                  <SfIconPerson />
-                </template>
-                {{ user?.firstName }}
-              </UiButton>
-            </template>
-            <ul class="rounded bg-white shadow-md border border-neutral-100 text-neutral-900 min-w-[152px] py-2">
-              <li v-for="({ label, link }, labelIndex) in accountDropdown" :key="`label-${labelIndex}`">
-                <template v-if="label === t('account.logout')">
-                  <UiDivider class="my-2" />
-                  <SfListItem
-                    tag="button"
-                    class="text-left"
-                    data-testid="account-dropdown-logout-item"
-                    @click="logOut()"
-                  >
-                    {{ label }}
-                  </SfListItem>
-                </template>
-                <SfListItem
-                  v-else
-                  :tag="NuxtLink"
-                  :to="link"
-                  :class="{ 'bg-neutral-200': route.path === link }"
-                  data-testid="account-dropdown-list-item"
-                >
-                  {{ label }}
-                </SfListItem>
-              </li>
-            </ul>
-          </SfDropdown>
-          <UiButton
-            v-else
-            :style="{ color: resolvedIconColor }"
-            class="group relative hover:!bg-header-400 active:!bg-header-400 mr-1 -ml-0.5 rounded-md"
-            variant="tertiary"
-            :aria-label="t('authentication.login.openLoginForm')"
-            square
-            @click="navigateToLogin"
-          >
-            <SfIconPerson />
-          </UiButton>
-        </nav>
-      </template>
-
-      <div v-if="viewport.isLessThan('lg')">
-        <UiButton
-          variant="tertiary"
-          class="relative text-white hover:text-white active:text-white hover:bg-header-400 active:bg-header-400 rounded-md md:hidden"
-          square
-          data-testid="open-languageselect-button"
-          :style="{ color: resolvedIconColor }"
-          :aria-label="t('common.navigation.languageSelector')"
-          :disabled="(showConfigurationDrawer && isEditing) || (showConfigurationDrawer && disableActions)"
-          @click="toggleLanguageSelect()"
-        >
-          <SfIconLanguage />
-        </UiButton>
-        <UiButton
-          variant="tertiary"
-          class="relative text-white hover:text-white active:text-white hover:bg-header-400 active:bg-header-400 rounded-md md:hidden"
-          square
-          :style="{ color: resolvedIconColor }"
-          :aria-label="t('common.navigation.openSearchModal')"
-          @click="searchModalOpen"
-        >
-          <SfIconSearch />
-        </UiButton>
-      </div>
-    </MegaMenu>
-    <LanguageSelector />
-    <UiModal
-      v-if="viewport.isGreaterOrEquals('md') && isAuthenticationOpen"
-      v-model="isAuthenticationOpen"
-      tag="section"
-      class="h-full md:w-[500px] md:h-fit m-0 p-0 overflow-y-auto"
+  <header class="relative w-full md:sticky md:shadow-md z-10">
+    <div
+      class="flex justify-between items-center px-4 md:px-10 py-5 w-full"
+      style="background-color: rgb(var(--colors-2-primary-500));"
     >
-      <header>
-        <UiButton
-          :aria-label="t('common.navigation.closeDialog')"
-          square
-          variant="tertiary"
-          class="absolute right-2 top-2"
-          @click="closeAuthentication"
-        >
-          <SfIconClose />
-        </UiButton>
-      </header>
-      <LoginComponent
-        v-if="isLogin"
-        :is-modal="true"
-        @change-view="isLogin = false"
-        @logged-in="navigateAfterAuth(true)"
-      />
-      <Register v-else :is-modal="true" @change-view="isLogin = true" @registered="closeAuthentication" />
-    </UiModal>
+      <NuxtLink to="/" class="text-white font-bold">
+        Amikon
+      </NuxtLink>
 
-    <NuxtLazyHydrate v-if="viewport.isLessThan('lg')" when-idle>
-      <SfModal
-        v-model="isSearchModalOpen"
-        class="w-full h-full z-50"
-        tag="section"
-        role="dialog"
-        aria-labelledby="search-modal-title"
-      >
-        <header class="mb-4">
-          <UiButton
-            :aria-label="t('common.navigation.closeDialog')"
-            square
-            variant="tertiary"
-            class="absolute right-4 top-2"
-            @click="searchModalClose"
+      <div class="flex gap-4 text-white">
+        <NuxtLink to="/kontakt">Kontakt</NuxtLink>
+        <NuxtLink to="/versand">Versand</NuxtLink>
+      </div>
+    </div>
+
+    <!-- MEGA MENU -->
+    <nav class="hidden lg:block bg-white border-b border-neutral-200">
+      <ul class="flex px-6 py-2">
+        <li
+          class="relative"
+          @mouseenter="isOpen = true"
+          @mouseleave="isOpen = false"
+        >
+          <NuxtLink
+            to="/kategorien"
+            class="inline-flex items-center gap-2 font-medium text-base px-4 py-2 text-neutral-900 hover:bg-gray-100 rounded"
           >
-            <SfIconClose class="text-neutral-500" />
-          </UiButton>
-          <h3 id="search-modal-title" class="absolute left-6 top-4 font-bold typography-headline-4 mb-4">
-            {{ t('common.actions.search') }}
-          </h3>
-        </header>
-        <UiSearch :close="searchModalClose" />
-      </SfModal>
-    </NuxtLazyHydrate>
-  </div>
+            Kategorien
+          </NuxtLink>
+
+          <div
+            v-if="isOpen"
+            class="absolute left-0 top-full w-screen bg-white shadow-lg border-b border-neutral-200 z-50"
+          >
+            <div class="grid max-w-screen-xl grid-cols-4 gap-4 p-6">
+              <NuxtLink
+                v-for="item in categories"
+                :key="item.label"
+                :to="item.url"
+                class="border rounded px-4 py-3 text-sm font-medium hover:bg-gray-100"
+              >
+                {{ item.label }}
+              </NuxtLink>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
 </template>
 
-<script setup lang="ts">
-import {
-  SfBadge,
-  SfDropdown,
-  SfIconClose,
-  SfIconLanguage,
-  SfIconPerson,
-  SfIconSearch,
-  SfIconShoppingCart,
-  SfListItem,
-  SfModal,
-  SfIconFavorite,
-  useDisclosure,
-} from '@storefront-ui/vue';
-import LanguageSelector from '~/components/LanguageSelector/LanguageSelector.vue';
-import { paths } from '~/utils/paths';
-import { handleLogout } from '~/utils/logout';
-import type { HeaderProps } from './types';
+<script setup>
+const isOpen = ref(false);
 
-const props = defineProps<HeaderProps>();
-
-const { registerBlockVisibility } = useBlocksVisibility();
-registerBlockVisibility(props.meta.uuid, true);
-
-const isLogin = ref(true);
-const { data: cart } = useCart();
-const { wishlistItemIds } = useWishlist();
-const cartItemsCount = ref(0);
-const { getSetting: getIconColor } = useSiteSettings('iconColor');
-const { getSetting: getHeaderBackgroundColor } = useSiteSettings('headerBackgroundColor');
-
-const resolvedIconColor = computed(() => props.content.iconColor || getIconColor());
-const resolvedBackgroundColor = computed(() => props.content.backgroundColor || getHeaderBackgroundColor());
-
-const NuxtLink = resolveComponent('NuxtLink');
-const { localeCodes } = useI18n();
-const route = useRoute();
-const localePath = useLocalePath();
-const { isOpen: isAccountDropdownOpen, toggle: accountDropdownToggle } = useDisclosure();
-const { isOpen: isAuthenticationOpen, open: openAuthentication, close: closeAuthentication } = useDisclosure();
-const { open: searchModalOpen, isOpen: isSearchModalOpen, close: searchModalClose } = useDisclosure();
-const { toggle: toggleLanguageSelect, isOpen: isLanguageSelectOpen } = useLocalization();
-const { data: categoryTree, getCategoryTree } = useCategoryTree();
-const { user, isAuthorized, logout } = useCustomer();
-const viewport = useViewport();
-const runtimeConfig = useRuntimeConfig();
-const showConfigurationDrawer = runtimeConfig.public.showConfigurationDrawer;
-const { isEditing, disableActions } = useEditor();
-const isActive = computed(() => isLanguageSelectOpen);
-
-onNuxtReady(async () => {
-  if (categoryTree.value.length === 0) await getCategoryTree();
-  cartItemsCount.value = cart.value?.items?.reduce((price, { quantity }) => price + quantity, 0) ?? 0;
-});
-
-const navigateAfterAuth = (reload: boolean) => {
-  if (reload) {
-    window.location.reload();
-  } else {
-    closeAuthentication();
-  }
-};
-
-watch(
-  () => cart.value?.items,
-  (cartItems) => {
-    cartItemsCount.value = cartItems?.reduce((price, { quantity }) => price + quantity, 0) ?? 0;
-  },
-);
-
-watch(
-  () => isAuthenticationOpen.value,
-  () => (isLogin.value = true),
-);
-
-const logOut = () => handleLogout({ logout, toggle: accountDropdownToggle });
-
-const accountDropdown = computed(() => [
-  { label: t('account.heading'), link: localePath(paths.account) },
-  { label: t('account.ordersAndReturns.section.myOrders'), link: localePath(paths.accountMyOrders) },
-  { label: t('account.ordersAndReturns.section.returns'), link: localePath(paths.accountReturns) },
-  { label: t('account.logout') },
-]);
-
-const navigateToLogin = () => {
-  if (route.path !== localePath(paths.authLogin)) {
-    openAuthentication();
-  }
-};
+const categories = [
+  { label: '3D Druck', url: '/3d-druck' },
+  { label: 'Maschinen', url: '/maschinen' },
+  { label: 'Rasterelektronenmikroskope', url: '/rasterelektronenmikroskope' },
+  { label: 'Roboter', url: '/roboter' },
+  { label: 'Shaker / Schwingprüfanlagen', url: '/shaker-schwingpruefanlagen' },
+  { label: 'Wärme-Klimaschränke', url: '/waerme-klimaschraenke' },
+  { label: 'Begehbare Klimakammern', url: '/begehbare-klimakammern' },
+  { label: 'Salzsprühkammern', url: '/salzspruehkammern' },
+  { label: 'Bewitterungstechnik', url: '/bewitterungstechnik' },
+  { label: 'Elektronik', url: '/elektronik' },
+  { label: 'Frequenzumrichter', url: '/frequenzumrichter' },
+  { label: 'Laborartikel', url: '/laborartikel' },
+  { label: 'Lasertechnik', url: '/lasertechnik' },
+  { label: 'Materialprüfmaschinen', url: '/materialpruefmaschinen' },
+  { label: 'Mess- und Prüftechnik', url: '/mess-prueftechnik' },
+  { label: 'Monitore / Bedieneinheiten', url: '/monitore-bedieneinheiten' },
+  { label: 'Motoren und Antriebe', url: '/motoren-und-antriebe' },
+  { label: 'Pneumatik', url: '/pneumatik' },
+  { label: 'Pumpen', url: '/pumpen' },
+  { label: 'Sonstige Artikel', url: '/sonstige-artikel' },
+  { label: 'Thermisches Zubehör', url: '/thermisches-zubehoer' },
+  { label: 'Vakuum-Technik', url: '/vakuum-technik' },
+];
 </script>

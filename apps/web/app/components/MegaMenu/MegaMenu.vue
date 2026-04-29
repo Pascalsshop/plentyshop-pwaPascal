@@ -30,7 +30,7 @@
       <slot />
     </div>
 
-    <nav v-if="viewport.isGreaterOrEquals('lg')" ref="floatingRef" @mouseleave="isAmikonMegaMenuOpen = false">
+  <nav class="hidden lg:block" ref="floatingRef" @mouseleave="isAmikonMegaMenuOpen = false">
       <ul class="flex flex-wrap px-6 py-2 bg-white border-b border-b-neutral-200 border-b-solid">
         <li class="relative" @mouseenter="isAmikonMegaMenuOpen = true">
           <NuxtLink
@@ -72,7 +72,7 @@
       </div>
     </nav>
 
-    <template v-else>
+    <template v-if="viewport.isLessThan('lg')">
       <div v-if="isOpen" class="fixed z-[50] inset-0 bg-neutral-500 bg-opacity-50" />
       <SfDrawer
         ref="drawerReference"

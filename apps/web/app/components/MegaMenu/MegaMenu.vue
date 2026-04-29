@@ -13,7 +13,7 @@
           :aria-label="t('common.navigation.openMenu')"
           class="mr-5 hover:!bg-header-400"
           :style="{ color: iconColor }"
-          @click="openMenu([])"
+          @click="openMenu"
         >
           <SfIconMenu aria-hidden="true" />
         </UiButton>
@@ -30,118 +30,46 @@
       <slot />
     </div>
 
-    <nav v-if="viewport.isGreaterOrEquals('lg')" ref="floatingRef">
-      <ul
-        class="flex flex-wrap px-6 py-2 bg-white border-b border-b-neutral-200 border-b-solid"
-        @blur="
-          (event: FocusEvent) => {
-            if (!(event.currentTarget as Element).contains(event.relatedTarget as Element)) {
-              close();
-            }
-          }
-        "
-      >
-        <li v-if="categoryTree.length === 0" class="h-10" />
-
-        <li v-for="(menuNode, index) in categoryTree" v-else :key="index" @mouseenter="onCategoryMouseEnter(menuNode)">
+    <nav v-if="viewport.isGreaterOrEquals('lg')" ref="floatingRef" @mouseleave="isAmikonMegaMenuOpen = false">
+      <ul class="flex flex-wrap px-6 py-2 bg-white border-b border-b-neutral-200 border-b-solid">
+        <li class="relative" @mouseenter="isAmikonMegaMenuOpen = true">
           <NuxtLink
-            v-if="menuNode.childCount > 0"
-            ref="triggerReference"
-            :to="localePath(generateCategoryLink(menuNode))"
+            to="/kategorien/"
             data-testid="category-button"
             :class="categoryButtonClasses"
             tabindex="0"
             aria-haspopup="true"
-            :aria-expanded="isOpen && activeNode[0] === menuNode.id ? 'true' : 'false'"
-            @touchstart="onTouchStart"
-            @mousedown="onMouseDown"
-            @click.capture="onCategoryClickCapture($event, menuNode)"
-            @keydown.enter="onEnterKey"
-            @keydown.space.prevent="openMenuAndFocusFirst(menuNode)"
-            @keydown.down.prevent="openMenuAndFocusFirst(menuNode)"
-            @keydown.left="focusPreviousCategory(index)"
-            @keydown.right="focusNextCategory(index)"
+            :aria-expanded="isAmikonMegaMenuOpen ? 'true' : 'false'"
+            @focus="isAmikonMegaMenuOpen = true"
+            @keydown.esc="isAmikonMegaMenuOpen = false"
           >
-            <span>{{ categoryTreeGetters.getName(menuNode) }}</span>
+            <span>Kategorien</span>
             <SfIconChevronRight
               aria-hidden="true"
               class="rotate-90 text-neutral-500 group-hover:text-neutral-700 group-active:text-neutral-900"
             />
           </NuxtLink>
-
-          <NuxtLink
-            v-else
-            ref="triggerReference"
-            :to="localePath(generateCategoryLink(menuNode))"
-            data-testid="category-button"
-            :class="categoryButtonClasses"
-            tabindex="0"
-            @keydown.left="focusPreviousCategory(index)"
-            @keydown.right="focusNextCategory(index)"
-          >
-            <span>{{ categoryTreeGetters.getName(menuNode) }}</span>
-          </NuxtLink>
-
-          <div
-            v-if="
-              isOpen &&
-              activeMenu &&
-              activeNode.length === 1 &&
-              activeNode[0] === menuNode.id &&
-              menuNode.childCount > 0
-            "
-            :key="activeMenu.id"
-            ref="megaMenuReference"
-            :style="style"
-            class="hidden md:grid gap-x-6 grid-cols-4 bg-white shadow-lg p-6 pt-5 left-0 right-0 outline-none z-40 max-h-[calc(100vh-300px)] overflow-y-auto"
-            @mouseleave="onMouseLeave"
-            @keydown.esc="focusTrigger(index)"
-            @keydown.up="navigateDropdownItems($event, 'up')"
-            @keydown.down="navigateDropdownItems($event, 'down')"
-            @keydown.tab="handleTabInDropdown($event)"
-          >
-            <template v-for="node in activeMenu.children" :key="node.id">
-              <template v-if="node.childCount === 0">
-                <ul>
-                  <li>
-                    <SfListItem
-                      :tag="NuxtLink"
-                      size="sm"
-                      :href="localePath(generateCategoryLink(node))"
-                      class="mb-2 hover:bg-secondary-100 rounded font-medium typography-text-base"
-                    >
-                      {{ categoryTreeGetters.getName(node) }}
-                    </SfListItem>
-                  </li>
-                </ul>
-              </template>
-              <div v-else>
-                <SfListItem
-                  :tag="NuxtLink"
-                  size="sm"
-                  :href="localePath(generateCategoryLink(node))"
-                  class="typography-text-base font-medium text-neutral-900 px-4 py-1.5 border-b border-b-neutral-200 border-b-solid hover:bg-secondary-100 rounded whitespace-normal break-words"
-                >
-                  {{ categoryTreeGetters.getName(node) }}
-                </SfListItem>
-                <ul class="mt-2 mb-3">
-                  <li v-for="child in node.children" :key="child.id">
-                    <SfListItem
-                      v-if="categoryTreeGetters.getName(child)"
-                      :tag="NuxtLink"
-                      size="sm"
-                      :href="localePath(generateCategoryLink(child))"
-                      class="typography-text-sm py-1.5 hover:bg-secondary-100 rounded"
-                    >
-                      {{ categoryTreeGetters.getName(child) }}
-                    </SfListItem>
-                  </li>
-                </ul>
-              </div>
-            </template>
-          </div>
         </li>
       </ul>
+
+      <div
+        v-if="isAmikonMegaMenuOpen"
+        class="absolute left-0 right-0 z-40 bg-white shadow-lg border-b border-b-neutral-200 border-b-solid"
+        @mouseenter="isAmikonMegaMenuOpen = true"
+        @mouseleave="isAmikonMegaMenuOpen = false"
+      >
+        <div class="mx-auto grid max-w-screen-xl grid-cols-4 gap-4 p-6">
+          <NuxtLink
+            v-for="item in amikonCategories"
+            :key="item.label"
+            :to="item.url"
+            class="rounded border border-neutral-200 px-4 py-3 typography-text-sm font-medium text-neutral-900 hover:bg-secondary-100 hover:text-neutral-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:rounded-sm"
+            @click="isAmikonMegaMenuOpen = false"
+          >
+            {{ item.label }}
+          </NuxtLink>
+        </div>
+      </div>
     </nav>
 
     <template v-else>
@@ -165,60 +93,18 @@
               <SfIconClose aria-hidden="true" class="text-neutral-500" />
             </UiButton>
           </div>
-          <ul v-if="activeMenu" class="mt-2 mb-6">
-            <li v-if="activeMenu.id !== 0">
+          <ul class="mt-2 mb-6">
+            <li v-for="item in amikonCategories" :key="item.label">
               <SfListItem
                 size="lg"
-                tag="button"
-                type="button"
-                class="border-b border-b-neutral-200 border-b-solid hover:bg-secondary-100"
-                :aria-label="t('common.actions.back') + ' - ' + categoryTreeGetters.getName(activeMenu)"
-                @click="goBack()"
+                :tag="NuxtLink"
+                :href="item.url"
+                class="hover:bg-secondary-100"
+                @click="close()"
               >
-                <div class="flex items-center">
-                  <SfIconArrowBack aria-hidden="true" class="text-neutral-500" />
-                  <p class="ml-5 font-medium">{{ categoryTreeGetters.getName(activeMenu) }}</p>
-                </div>
+                <p class="text-left">{{ item.label }}</p>
               </SfListItem>
             </li>
-            <template v-for="node in activeMenu.children" :key="node.id">
-              <li v-if="node.childCount === 0">
-                <SfListItem
-                  size="lg"
-                  :tag="NuxtLink"
-                  :href="localePath(generateCategoryLink(node))"
-                  class="hover:bg-secondary-100"
-                  @click="close()"
-                >
-                  <div class="flex items-center">
-                    <p class="text-left">{{ categoryTreeGetters.getName(node) }}</p>
-                    <SfCounter class="ml-2">{{ categoryTreeGetters.getCount(node) }}</SfCounter>
-                  </div>
-                </SfListItem>
-              </li>
-              <li v-else>
-                <div class="flex items-center hover:bg-secondary-100">
-                  <NuxtLink
-                    class="flex-1 m-0 px-4 py-3 text-left"
-                    :to="localePath(generateCategoryLink(node))"
-                    @click="close()"
-                  >
-                    <div class="flex items-center">
-                      <p class="text-left typography-text-lg">{{ categoryTreeGetters.getName(node) }}</p>
-                      <SfCounter class="ml-2">{{ categoryTreeGetters.getCount(node) }}</SfCounter>
-                    </div>
-                  </NuxtLink>
-                  <button
-                    type="button"
-                    class="flex justify-center items-center h-full w-16 px-4"
-                    :aria-label="t('common.navigation.showSubcategories') + ' - ' + categoryTreeGetters.getName(node)"
-                    @click="goNext(node.id)"
-                  >
-                    <SfIconChevronRight aria-hidden="true" class="text-neutral-500" />
-                  </button>
-                </div>
-              </li>
-            </template>
           </ul>
         </nav>
       </SfDrawer>
@@ -227,19 +113,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  SfIconClose,
-  SfDrawer,
-  SfListItem,
-  SfIconChevronRight,
-  SfCounter,
-  SfIconArrowBack,
-  SfIconMenu,
-  useTrapFocus,
-  useDropdown,
-} from '@storefront-ui/vue';
-import { unrefElement } from '@vueuse/core';
-import { type CategoryTreeItem, categoryTreeGetters } from '@plentymarkets/shop-api';
+import { SfIconClose, SfDrawer, SfListItem, SfIconChevronRight, SfIconMenu, useTrapFocus } from '@storefront-ui/vue';
 import { paths } from '~/utils/paths';
 import type { MegaMenuProps } from '~/components/MegaMenu/types';
 
@@ -248,31 +122,47 @@ const NuxtLink = resolveComponent('NuxtLink');
 
 const viewport = useViewport();
 const localePath = useLocalePath();
-const { buildCategoryMenuLink } = useLocalization();
 const router = useRouter();
-const { close, open, isOpen, activeNode, category, setCategory } = useMegaMenu();
+const { close, open, isOpen } = useMegaMenu();
 const { setDrawerOpen } = useDrawerState();
 const { getSetting: getHeaderBackgroundColor } = useSiteSettings('headerBackgroundColor');
 const { getSetting: getIconColor } = useSiteSettings('iconColor');
-const { referenceRef, floatingRef, style } = useDropdown({
-  isOpen,
-  onClose: close,
-  placement: 'bottom-start',
-  middleware: [],
-});
+
+const referenceRef = ref();
+const floatingRef = ref();
+const drawerReference = ref();
 const iconColor = computed(() => props.iconColor || getIconColor());
 const headerBackgroundColor = computed(() => props.headerBackgroundColor || getHeaderBackgroundColor());
-
-const isUsingTouch = ref(false);
-const lastTouchTime = ref(0);
-const categoryTree = ref(categoryTreeGetters.getTree(props.categories));
-const drawerReference = ref();
-const megaMenuReference = ref();
-const triggerReference = ref();
-const tappedCategories = ref<Map<number, boolean>>(new Map());
-const TOUCH_DETECTION_THRESHOLD = 500;
+const headerClass = computed(() => ({ 'z-[10]': isOpen.value }));
+const isAmikonMegaMenuOpen = ref(false);
 const categoryButtonClasses =
   'inline-flex items-center justify-center gap-2 font-medium text-base rounded-md py-2 px-4 group mr-2 !text-neutral-900 hover:bg-secondary-100 hover:!text-neutral-700 active:!bg-neutral-300 active:!text-neutral-900';
+
+const amikonCategories = [
+  { label: '3D Druck', url: '/kategorien/3d-druck' },
+  { label: 'Maschinen', url: '/maschinen' },
+  { label: 'Rasterelektronenmikroskope', url: '/kategorien/rasterelektronenmikroskope' },
+  { label: 'Roboter', url: '/kategorien/roboter' },
+  { label: 'Shaker / Schwingprüfanlagen', url: '/kategorien/shaker-schwingpruefanlagen' },
+  { label: 'Wärme-Klimaschränke', url: '/kategorien/waerme-klimaschraenke' },
+  { label: 'Begehbare Klimakammern', url: '/kategorien/begehbare-klimakammern' },
+  { label: 'Salzsprühkammern', url: '/kategorien/salzspruehkammern' },
+  { label: 'Bewitterungstechnik', url: '/kategorien/bewitterungstechnik' },
+  { label: 'Elektronik', url: '/elektronik' },
+  { label: 'Frequenzumrichter', url: '/kategorien/frequenzumrichter' },
+  { label: 'Laborartikel', url: '/kategorien/laborartikel' },
+  { label: 'Lasertechnik', url: '/kategorien/lasertechnik' },
+  { label: 'Materialprüfmaschinen', url: '/kategorien/materialpruefmaschinen' },
+  { label: 'Mess- und Prüftechnik', url: '/kategorien/mess-und-prueftechnik' },
+  { label: 'Monitore / Bedieneinheiten', url: '/kategorien/monitore-bedieneinheiten' },
+  { label: 'Motoren und Antriebe', url: '/motoren-und-antriebe' },
+  { label: 'Pneumatik', url: '/kategorien/pneumatik' },
+  { label: 'Pumpen', url: '/kategorien/pumpen' },
+  { label: 'Sonstige Artikel', url: '/kategorien/sonstige-artikel' },
+  { label: 'Thermisches Zubehör', url: '/kategorien/thermisches-zubehoer' },
+  { label: 'Vakuum-Technik', url: '/kategorien/vakuum-technik' },
+];
+
 let removeHook: () => void;
 
 const trapFocusOptions = {
@@ -281,168 +171,19 @@ const trapFocusOptions = {
   initialFocus: false,
 } as const;
 
-const activeMenu = computed(() => (category.value ? findNode(activeNode.value, category.value) : null));
-const headerClass = computed(() => ({ 'z-[10]': isOpen.value }));
-
-const findNode = (keys: number[], node: CategoryTreeItem): CategoryTreeItem => {
-  if (keys.length > 1) {
-    const [currentKey, ...restKeys] = keys;
-    return findNode(restKeys, node.children?.find((child) => child.id === currentKey) || node);
-  } else {
-    return node.children?.find((child) => child.id === keys[0]) || node;
-  }
-};
-
-const generateCategoryLink = (category: CategoryTreeItem) => {
-  return buildCategoryMenuLink(category, categoryTree.value);
-};
-
-const openMenu = (menuType: number[]) => {
-  activeNode.value = menuType;
+const openMenu = () => {
   open();
   setDrawerOpen(true);
 };
 
-const goBack = () => {
-  activeNode.value = activeNode.value.slice(0, -1);
-};
-
-const goNext = (key: number) => {
-  activeNode.value = [...activeNode.value, key];
-};
-
-const focusTrigger = (index: number) => {
-  unrefElement(triggerReference.value[index])?.focus();
-};
-
-const focusNextCategory = (currentIndex: number) => {
-  const nextIndex = (currentIndex + 1) % categoryTree.value.length;
-  focusTrigger(nextIndex);
-};
-
-const focusPreviousCategory = (currentIndex: number) => {
-  const prevIndex = currentIndex === 0 ? categoryTree.value.length - 1 : currentIndex - 1;
-  focusTrigger(prevIndex);
-};
-
-const openMenuAndFocusFirst = (menuNode: CategoryTreeItem) => {
-  if (menuNode.childCount > 0) {
-    onCategoryMouseEnter(menuNode);
-    nextTick(() => {
-      const firstLink = megaMenuReference.value?.[0]?.querySelector('a');
-      firstLink?.focus();
-    });
-  }
-};
-
-const onEnterKey = () => {
-  close();
-  tappedCategories.value.clear();
-};
-
-const navigateDropdownItems = (event: KeyboardEvent, direction: 'up' | 'down') => {
-  event.preventDefault();
-  const dropdown = megaMenuReference.value?.[0];
-  if (!dropdown) return;
-
-  const focusableItems = Array.from(dropdown.querySelectorAll('a')) as HTMLElement[];
-  const currentIndex = focusableItems.findIndex((item) => item === document.activeElement);
-
-  const nextIndex =
-    direction === 'down'
-      ? currentIndex < focusableItems.length - 1
-        ? currentIndex + 1
-        : 0
-      : currentIndex > 0
-        ? currentIndex - 1
-        : focusableItems.length - 1;
-
-  focusableItems[nextIndex]?.focus();
-};
-
-const handleTabInDropdown = (event: KeyboardEvent) => {
-  const dropdown = megaMenuReference.value?.[0];
-  if (!dropdown) return;
-
-  const focusableItems = Array.from(dropdown.querySelectorAll('a')) as HTMLElement[];
-  const currentIndex = focusableItems.findIndex((item) => item === document.activeElement);
-
-  event.preventDefault();
-
-  const nextIndex = event.shiftKey
-    ? currentIndex > 0
-      ? currentIndex - 1
-      : focusableItems.length - 1
-    : currentIndex < focusableItems.length - 1
-      ? currentIndex + 1
-      : 0;
-
-  focusableItems[nextIndex]?.focus();
-};
-
-const onMouseLeave = () => {
-  close();
-  tappedCategories.value.clear();
-};
-
-const onCategoryMouseEnter = (menuNode: CategoryTreeItem) => {
-  if (!viewport.isGreaterOrEquals('lg')) return;
-
-  if (menuNode.childCount > 0) {
-    activeNode.value = [menuNode.id];
-    open();
-    setCategory([menuNode]);
-    return;
-  }
-
-  if (category.value !== null) category.value = null;
-};
-
-const onTouchStart = () => {
-  isUsingTouch.value = true;
-  lastTouchTime.value = Date.now();
-};
-
-const onMouseDown = () => {
-  const timeDiff = Date.now() - lastTouchTime.value;
-  if (timeDiff > TOUCH_DETECTION_THRESHOLD) {
-    isUsingTouch.value = false;
-  }
-};
-
-const handleFirstTouch = (menuNode: CategoryTreeItem) => {
-  tappedCategories.value.clear();
-  tappedCategories.value.set(menuNode.id, true);
-  onCategoryMouseEnter(menuNode);
-};
-
-const onCategoryClickCapture = (event: MouseEvent, menuNode: CategoryTreeItem) => {
-  if (isUsingTouch.value && menuNode.childCount > 0 && !tappedCategories.value.get(menuNode.id)) {
-    event.stopPropagation();
-    event.preventDefault();
-    handleFirstTouch(menuNode);
-    return;
-  }
-
-  close();
-  tappedCategories.value.clear();
-};
-
 onMounted(() => {
-  removeHook = router.afterEach(() => close());
+  removeHook = router.afterEach(() => {
+    close();
+    isAmikonMegaMenuOpen.value = false;
+  });
 });
 
 onBeforeUnmount(() => removeHook?.());
-
-watch(
-  () => props.categories,
-  (categories: CategoryTreeItem[]) => {
-    categoryTree.value = categoryTreeGetters.getTree(categories);
-    setCategory(categoryTree.value);
-  },
-);
-
-setCategory(categoryTree.value);
 
 useTrapFocus(drawerReference, trapFocusOptions);
 </script>

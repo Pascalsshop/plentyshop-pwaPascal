@@ -1,20 +1,7 @@
 <template>
-  <header class="relative w-full md:sticky md:shadow-md z-10">
-    <div
-      class="flex justify-between items-center px-4 md:px-10 py-5 w-full"
-      style="background-color: rgb(var(--colors-2-primary-500));"
-    >
-      <NuxtLink to="/" class="text-white font-bold">
-        Amikon
-      </NuxtLink>
-
-      <div class="flex gap-4 text-white">
-        <NuxtLink to="/kontakt">Kontakt</NuxtLink>
-        <NuxtLink to="/versand">Versand</NuxtLink>
-      </div>
-    </div>
-
-    <!-- MEGA MENU -->
+  <header class="relative w-full z-10">
+    
+    <!-- Desktop Navigation -->
     <nav class="hidden lg:block bg-white border-b border-neutral-200">
       <ul class="flex px-6 py-2">
         <li
@@ -47,6 +34,7 @@
         </li>
       </ul>
     </nav>
+
   </header>
 </template>
 

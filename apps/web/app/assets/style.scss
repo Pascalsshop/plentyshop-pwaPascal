@@ -81,3 +81,6 @@ apple-pay-button {
     vertical-align: middle;
   }
 }
+div[parent_slot="1"][slot_index="0"] {
+  display: none !important;
+}

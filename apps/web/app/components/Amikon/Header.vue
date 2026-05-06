@@ -44,48 +44,61 @@
       </nav>
     </div>
 
-    <!-- Category menu -->
-    <nav class="border-t border-slate-100 bg-slate-50">
-      <div class="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2 text-sm font-bold text-slate-700">
+        <!-- Category menu -->
+    <nav class="relative border-t border-slate-200 bg-white">
+      <div class="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2 text-sm font-bold text-slate-800">
         <button
           ref="menuButtonEl"
           type="button"
-          class="whitespace-nowrap rounded bg-white px-3 py-2 ring-1 ring-slate-200 hover:ring-slate-300"
+          class="whitespace-nowrap rounded-md bg-slate-900 px-3 py-2 text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300"
+          :aria-expanded="isMenuOpen ? 'true' : 'false'"
           @click="isMenuOpen = !isMenuOpen"
         >
           {{ copy.categories }}
         </button>
-        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.home)">
+
+        <!-- Links neben Kategorien (wie amikon-shop.de) -->
+        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath(paths.home)">
           {{ copy.homeLink }}
         </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/shipping')">
+        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/shipping')">
           {{ copy.shippingLink }}
         </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/privacy-policy')">
+        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/privacy-policy')">
           {{ copy.privacyLink }}
         </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/contact')">
+        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/contact')">
           {{ copy.contactLink }}
         </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/ankaufformular')">
+        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/ankaufformular')">
           {{ copy.purchaseLink }}
         </NuxtLink>
       </div>
 
-      <!-- Dropdown -->
-      <div v-if="isMenuOpen" ref="menuPanelEl" class="border-t border-slate-200 bg-white">
+      <!-- Mega Dropdown -->
+      <div
+        v-if="isMenuOpen"
+        ref="menuPanelEl"
+        class="absolute left-0 right-0 top-full z-50 border-t border-slate-200 bg-white shadow-lg"
+      >
         <div class="mx-auto max-w-7xl px-4 py-4">
-          <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            <li v-for="cat in categoryLinks" :key="cat.path">
-              <NuxtLink
-                class="block rounded px-3 py-2 font-bold text-slate-900 hover:bg-slate-50 hover:text-orange-600"
-                :to="localePath(cat.path)"
-                @click="isMenuOpen = false"
-              >
-                {{ cat.label }}
-              </NuxtLink>
-            </li>
-          </ul>
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <ul
+              v-for="(col, idx) in categoryColumns"
+              :key="idx"
+              class="rounded-md border border-slate-100 bg-white p-2"
+            >
+              <li v-for="cat in col" :key="cat.path" class="border-b border-slate-100 last:border-b-0">
+                <NuxtLink
+                  class="block rounded px-3 py-2 font-bold text-slate-900 hover:bg-slate-50 hover:text-orange-600"
+                  :to="localePath(cat.path)"
+                  @click="isMenuOpen = false"
+                >
+                  {{ cat.label }}
+                </NuxtLink>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
@@ -123,6 +136,15 @@ const categoryLinks = [
   { path: '/thermisches-zubehoer', label: 'Thermisches Zubehör' },
   { path: '/vakuum-technik', label: 'Vakuum-Technik' },
 ] as const;
+
+const splitIntoColumns = <T,>(items: T[], columns: number): T[][] => {
+  const colLen = Math.ceil(items.length / columns);
+  return Array.from({ length: columns }, (_, i) => items.slice(i * colLen, (i + 1) * colLen)).filter((c) => c.length);
+};
+
+// Wir bauen feste Spalten (4) und lassen das Grid je nach Breakpoint umbrechen.
+const categoryColumns = computed(() => splitIntoColumns(categoryLinks, 4));
+
 
 
 const isMenuOpen = ref(false);

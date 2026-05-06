@@ -55,40 +55,35 @@
         >
           {{ copy.categories }}
         </button>
-
-        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.search)">
-          {{ copy.searchLink }}
+        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.home)">
+          {{ copy.homeLink }}
         </NuxtLink>
         <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/shipping')">
           {{ copy.shippingLink }}
         </NuxtLink>
+        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/privacy-policy')">
+          {{ copy.privacyLink }}
+        </NuxtLink>
         <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/contact')">
           {{ copy.contactLink }}
+        </NuxtLink>
+        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/ankaufformular')">
+          {{ copy.purchaseLink }}
         </NuxtLink>
       </div>
 
       <!-- Dropdown -->
       <div v-if="isMenuOpen" ref="menuPanelEl" class="border-t border-slate-200 bg-white">
         <div class="mx-auto max-w-7xl px-4 py-4">
-          <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            <li v-for="cat in topLevelCategories" :key="cat.id" class="min-w-0">
+          <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <li v-for="cat in categoryLinks" :key="cat.path">
               <NuxtLink
-                class="block rounded px-3 py-2 font-bold text-slate-900 hover:bg-slate-50"
-                :to="localePath(buildCategoryMenuLink(cat, categoryTree))"
+                class="block rounded px-3 py-2 font-bold text-slate-900 hover:bg-slate-50 hover:text-orange-600"
+                :to="localePath(cat.path)"
+                @click="isMenuOpen = false"
               >
-                {{ categoryTreeGetters.getName(cat) }}
+                {{ cat.label }}
               </NuxtLink>
-
-              <ul v-if="categoryTreeGetters.getItems(cat)?.length" class="mt-1 space-y-1 pl-2">
-                <li v-for="child in categoryTreeGetters.getItems(cat)" :key="child.id">
-                  <NuxtLink
-                    class="block truncate rounded px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-orange-600"
-                    :to="localePath(buildCategoryMenuLink(child, categoryTree))"
-                  >
-                    {{ categoryTreeGetters.getName(child) }}
-                  </NuxtLink>
-                </li>
-              </ul>
             </li>
           </ul>
         </div>
@@ -98,19 +93,37 @@
 </template>
 
 <script setup lang="ts">
-import { categoryTreeGetters } from '@plentymarkets/shop-api';
-import type { CategoryTreeItem } from '@plentymarkets/shop-api';
 import { onClickOutside } from '@vueuse/core';
 
 const localePath = useLocalePath();
 const { locale } = useI18n();
 const searchTerm = ref('');
 
-const { data: categoryTreeData, getCategoryTree } = useCategoryTree();
-const { buildCategoryMenuLink } = useLocalization();
+const categoryLinks = [
+  { path: '/3d-druck', label: '3D-Druck' },
+  { path: '/maschinen', label: 'Maschinen' },
+  { path: '/rasterelektronenmikroskope', label: 'Rasterelektronenmikroskope' },
+  { path: '/roboter', label: 'Roboter' },
+  { path: '/shaker-schwingpruefanlagen', label: 'Shaker / Schwingprüfanlagen' },
+  { path: '/waerme-klimaschraenke', label: 'Wärme-Klimaschränke' },
+  { path: '/begehbare-klimakammern', label: 'Begehbare Klimakammern' },
+  { path: '/salzspruehkammern', label: 'Salzsprühkammern' },
+  { path: '/bewitterungstechnik', label: 'Bewitterungstechnik' },
+  { path: '/elektronik', label: 'Elektronik' },
+  { path: '/frequenzumrichter', label: 'Frequenzumrichter' },
+  { path: '/laborartikel', label: 'Laborartikel' },
+  { path: '/lasertechnik', label: 'Lasertechnik' },
+  { path: '/materialpruefmaschinen', label: 'Materialprüfmaschinen' },
+  { path: '/mess-prueftechnik', label: 'Mess- und Prüftechnik' },
+  { path: '/monitore-bedieneinheiten', label: 'Monitor / Bedieneinheiten' },
+  { path: '/motoren-und-antriebe', label: 'Motoren und Antriebe' },
+  { path: '/pneumatik', label: 'Pneumatik' },
+  { path: '/pumpen', label: 'Pumpen' },
+  { path: '/sonstige-artikel', label: 'Sonstige Artikel' },
+  { path: '/thermisches-zubehoer', label: 'Thermisches Zubehör' },
+  { path: '/vakuum-technik', label: 'Vakuum-Technik' },
+] as const;
 
-const categoryTree = computed<CategoryTreeItem[]>(() => categoryTreeData.value ?? []);
-await getCategoryTree().catch(() => undefined);
 
 const isMenuOpen = ref(false);
 const menuPanelEl = ref<HTMLElement | null>(null);
@@ -122,7 +135,6 @@ onClickOutside(menuPanelEl, (e) => {
   isMenuOpen.value = false;
 });
 
-const topLevelCategories = computed(() => categoryTree.value);
 
 const de = {
   topline: 'Gebrauchte Industrieelektronik, Maschinen und Automatisierungstechnik',
@@ -134,9 +146,11 @@ const de = {
   account: 'Konto',
   cart: 'Warenkorb',
   categories: 'Kategorien',
-  searchLink: 'Suche',
+  homeLink: 'Startseite',
   shippingLink: 'Versand',
+  privacyLink: 'Datenschutz',
   contactLink: 'Kontakt',
+  purchaseLink: 'Ankaufformular',
 };
 
 const en = {
@@ -149,9 +163,11 @@ const en = {
   account: 'Account',
   cart: 'Cart',
   categories: 'Categories',
-  searchLink: 'Search',
+  homeLink: 'Home',
   shippingLink: 'Shipping',
+  privacyLink: 'Privacy',
   contactLink: 'Contact',
+  purchaseLink: 'Purchase form',
 };
 
 const copy = computed(() => (locale.value === 'de' ? de : en));

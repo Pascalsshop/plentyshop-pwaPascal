@@ -1,6 +1,6 @@
 <template>
   <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-    <!-- Top info bar -->
+    <!-- Topline -->
     <div class="bg-slate-900 text-white">
       <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-sm md:flex-row md:items-center md:justify-between">
         <p class="font-medium">{{ copy.topline }}</p>
@@ -25,10 +25,9 @@
       <form class="flex min-w-0 flex-1 lg:max-w-2xl" @submit.prevent="submitSearch">
         <input
           v-model="searchTerm"
-          class="min-w-0 flex-1 rounded-l border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200"
+          class="min-w-0 flex-1 rounded-l border border-slate-300 px-4 py-3 text-sm outline-none focus:border-slate-900"
           :placeholder="copy.searchPlaceholder"
           type="search"
-          autocomplete="off"
         />
         <button class="rounded-r bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600" type="submit">
           {{ copy.search }}
@@ -45,92 +44,85 @@
       </nav>
     </div>
 
-    <!-- Category navigation -->
-    <div class="border-t border-slate-100 bg-slate-50">
-      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
-        <div class="relative">
-          <button
-            class="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-sm font-black text-slate-800 shadow-sm ring-1 ring-slate-200 hover:bg-slate-50"
-            type="button"
-            :aria-expanded="isMenuOpen ? 'true' : 'false'"
-            @click="toggleMenu"
-          >
-            <span>{{ copy.categories }}</span>
-            <span class="text-slate-400">▾</span>
-          </button>
+    <!-- Category menu -->
+    <nav class="border-t border-slate-100 bg-slate-50">
+      <div class="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2 text-sm font-bold text-slate-700">
+        <button
+          ref="menuButtonEl"
+          type="button"
+          class="whitespace-nowrap rounded bg-white px-3 py-2 ring-1 ring-slate-200 hover:ring-slate-300"
+          @click="isMenuOpen = !isMenuOpen"
+        >
+          {{ copy.categories }}
+        </button>
 
-          <div v-if="isMenuOpen" class="fixed inset-0 z-40" @click="closeMenu" aria-hidden="true" />
-          <!-- Dropdown -->
-          <div
-            v-if="isMenuOpen"
-            class="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-[min(56rem,90vw)] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl"
-            @mouseleave="activeId = null"
-          >
-            <div class="grid grid-cols-1 gap-0 lg:grid-cols-[18rem_1fr]">
-              <!-- Level 1 -->
-              <div class="max-h-[70vh] overflow-auto border-b border-slate-100 lg:border-b-0 lg:border-r">
-                <NuxtLink
-                  v-for="cat in topCategories"
-                  :key="categoryTreeGetters.getId(cat)"
-                  class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-bold text-slate-800 hover:bg-slate-50"
-                  :class="activeId === categoryTreeGetters.getId(cat) ? 'bg-slate-50' : ''"
-                  :to="localePath(buildCategoryMenuLink(cat, categoryTree))"
-                  @mouseenter="activeId = categoryTreeGetters.getId(cat)"
-                  @click="closeMenu"
-                >
-                  <span class="truncate">{{ categoryTreeGetters.getName(cat) }}</span>
-                  <span v-if="categoryTreeGetters.getItems(cat)?.length" class="text-slate-300">›</span>
-                </NuxtLink>
-              </div>
+        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.search)">
+          {{ copy.searchLink }}
+        </NuxtLink>
+        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/shipping')">
+          {{ copy.shippingLink }}
+        </NuxtLink>
+        <NuxtLink class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath('/contact')">
+          {{ copy.contactLink }}
+        </NuxtLink>
+      </div>
 
-              <!-- Level 2 -->
-              <div class="hidden max-h-[70vh] overflow-auto p-4 lg:block">
-                <div v-if="activeCategory" class="grid grid-cols-2 gap-2">
+      <!-- Dropdown -->
+      <div v-if="isMenuOpen" ref="menuPanelEl" class="border-t border-slate-200 bg-white">
+        <div class="mx-auto max-w-7xl px-4 py-4">
+          <ul class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <li v-for="cat in topLevelCategories" :key="cat.id" class="min-w-0">
+              <NuxtLink
+                class="block rounded px-3 py-2 font-bold text-slate-900 hover:bg-slate-50"
+                :to="localePath(buildCategoryMenuLink(cat, categoryTree))"
+              >
+                {{ categoryTreeGetters.getName(cat) }}
+              </NuxtLink>
+
+              <ul v-if="categoryTreeGetters.getItems(cat)?.length" class="mt-1 space-y-1 pl-2">
+                <li v-for="child in categoryTreeGetters.getItems(cat)" :key="child.id">
                   <NuxtLink
-                    v-for="child in children"
-                    :key="categoryTreeGetters.getId(child)"
-                    class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-orange-600"
+                    class="block truncate rounded px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-orange-600"
                     :to="localePath(buildCategoryMenuLink(child, categoryTree))"
-                    @click="closeMenu"
                   >
                     {{ categoryTreeGetters.getName(child) }}
                   </NuxtLink>
-                </div>
-
-                <div v-else class="text-sm text-slate-500">
-                  {{ copy.categoriesHint }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick links (optional) -->
-        <div class="hidden items-center gap-2 text-sm font-bold text-slate-700 md:flex">
-          <NuxtLink class="rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.shipping)">
-            {{ copy.shippingLink }}
-          </NuxtLink>
-          <NuxtLink class="rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.contact)">
-            {{ copy.contactLink }}
-          </NuxtLink>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+    </nav>
   </header>
 </template>
 
 <script setup lang="ts">
 import { categoryTreeGetters } from '@plentymarkets/shop-api';
 import type { CategoryTreeItem } from '@plentymarkets/shop-api';
+import { onClickOutside } from '@vueuse/core';
 
 const localePath = useLocalePath();
 const { locale } = useI18n();
-const { data: categoryTree } = useCategoryTree();
+const searchTerm = ref('');
+
+const { data: categoryTreeData, getCategoryTree } = useCategoryTree();
 const { buildCategoryMenuLink } = useLocalization();
 
-const searchTerm = ref('');
+const categoryTree = computed<CategoryTreeItem[]>(() => categoryTreeData.value ?? []);
+await getCategoryTree().catch(() => undefined);
+
 const isMenuOpen = ref(false);
-const activeId = ref<number | null>(null);
+const menuPanelEl = ref<HTMLElement | null>(null);
+const menuButtonEl = ref<HTMLElement | null>(null);
+
+onClickOutside(menuPanelEl, (e) => {
+  // allow click on the button
+  if (menuButtonEl.value && (e.target instanceof Node) && menuButtonEl.value.contains(e.target)) return;
+  isMenuOpen.value = false;
+});
+
+const topLevelCategories = computed(() => categoryTree.value);
 
 const de = {
   topline: 'Gebrauchte Industrieelektronik, Maschinen und Automatisierungstechnik',
@@ -142,7 +134,7 @@ const de = {
   account: 'Konto',
   cart: 'Warenkorb',
   categories: 'Kategorien',
-  categoriesHint: 'Kategorie auswählen …',
+  searchLink: 'Suche',
   shippingLink: 'Versand',
   contactLink: 'Kontakt',
 };
@@ -157,57 +149,16 @@ const en = {
   account: 'Account',
   cart: 'Cart',
   categories: 'Categories',
-  categoriesHint: 'Select a category …',
+  searchLink: 'Search',
   shippingLink: 'Shipping',
   contactLink: 'Contact',
 };
 
 const copy = computed(() => (locale.value === 'de' ? de : en));
 
-const topCategories = computed<CategoryTreeItem[]>(() => {
-  const tree = categoryTree.value;
-  if (!tree) return [];
-  return categoryTreeGetters.getItems(tree) ?? [];
-});
-
-const activeCategory = computed<CategoryTreeItem | null>(() => {
-  const id = activeId.value;
-  if (!id) return null;
-  return topCategories.value.find((c) => categoryTreeGetters.getId(c) === id) ?? null;
-});
-
-const children = computed<CategoryTreeItem[]>(() => {
-  const cat = activeCategory.value;
-  if (!cat) return [];
-  return categoryTreeGetters.getItems(cat) ?? [];
-});
-
-watchEffect(() => {
-  // Set initial hover selection when opening
-  if (isMenuOpen.value && !activeId.value && topCategories.value.length) {
-    activeId.value = categoryTreeGetters.getId(topCategories.value[0]);
-  }
-});
-
 const submitSearch = () => {
   const term = searchTerm.value.trim();
   if (!term) return;
-  closeMenu();
   navigateTo(localePath({ path: paths.search, query: { term } }));
 };
-
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-};
-
-const closeMenu = () => {
-  isMenuOpen.value = false;
-};
-
-onClickOutside(
-  computed(() => document.querySelector('header')),
-  () => {
-    isMenuOpen.value = false;
-  },
-);
 </script>

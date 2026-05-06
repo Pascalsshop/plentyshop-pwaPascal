@@ -1,118 +1,170 @@
 <template>
   <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-    <!-- Topline -->
+    <!-- top line -->
     <div class="bg-slate-900 text-white">
       <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-sm md:flex-row md:items-center md:justify-between">
         <p class="font-medium">{{ copy.topline }}</p>
         <div class="flex flex-wrap gap-x-5 gap-y-1 text-slate-200">
-          <span>{{ copy.service }}</span>
-          <span>{{ copy.shipping }}</span>
-          <span>{{ copy.b2b }}</span>
+          <span class="whitespace-nowrap">{{ copy.service }}</span>
+          <span class="whitespace-nowrap">{{ copy.shipping }}</span>
+          <span class="whitespace-nowrap">{{ copy.b2b }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Main row -->
-    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
-      <NuxtLink :to="localePath(paths.home)" class="flex items-center gap-3" aria-label="Amikon Startseite">
-        <div class="flex h-11 w-11 items-center justify-center rounded bg-slate-900 text-lg font-black text-white">A</div>
-        <div>
-          <p class="text-2xl font-black tracking-tight text-slate-950">AMIKON</p>
-          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Industrial Components</p>
-        </div>
+    <!-- main nav -->
+    <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3">
+      <!-- brand -->
+      <NuxtLink :to="localePath(paths.home)" class="flex items-center gap-2">
+        <span class="text-lg font-semibold tracking-tight text-slate-900">AMIKON</span>
+        <span class="hidden text-xs text-slate-500 md:inline">industrial</span>
       </NuxtLink>
 
-      <form class="flex min-w-0 flex-1 lg:max-w-2xl" @submit.prevent="submitSearch">
+      <!-- categories dropdown -->
+      <div class="relative" ref="menuRoot">
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-md bg-slate-900 px-3 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400"
+          @click="toggleMenu"
+          :aria-expanded="menuOpen"
+          aria-haspopup="true"
+        >
+          <span>{{ navLabels.categories }}</span>
+          <span class="text-xs opacity-80">▾</span>
+        </button>
+
+        <!-- mega menu -->
+        <transition
+          enter-active-class="transition duration-150 ease-out"
+          enter-from-class="opacity-0 translate-y-1"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="transition duration-100 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-1"
+        >
+          <div
+            v-if="menuOpen"
+            class="absolute left-0 mt-2 w-[min(900px,calc(100vw-2rem))] rounded-xl border border-slate-200 bg-white shadow-lg"
+          >
+            <div class="max-h-[70vh] overflow-auto p-3">
+              <ul class="grid grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <li v-for="cat in categoryLinks" :key="cat.path">
+                  <NuxtLink
+                    :to="localePath(cat.path)"
+                    class="block rounded-lg px-3 py-2 text-sm font-medium text-slate-800 hover:bg-orange-50 hover:text-orange-700"
+                    @click="closeMenu"
+                  >
+                    {{ cat.label }}
+                  </NuxtLink>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </transition>
+      </div>
+
+      <!-- top links (not inside dropdown) -->
+      <nav class="hidden items-center gap-4 md:flex">
+        <NuxtLink :to="localePath(paths.home)" class="text-sm font-medium text-slate-700 hover:text-orange-700">
+          {{ navLabels.home }}
+        </NuxtLink>
+        <NuxtLink :to="localePath(paths.shipping)" class="text-sm font-medium text-slate-700 hover:text-orange-700">
+          {{ navLabels.shipping }}
+        </NuxtLink>
+        <NuxtLink :to="localePath(paths.privacy)" class="text-sm font-medium text-slate-700 hover:text-orange-700">
+          {{ navLabels.privacy }}
+        </NuxtLink>
+        <NuxtLink :to="localePath(paths.contact)" class="text-sm font-medium text-slate-700 hover:text-orange-700">
+          {{ navLabels.contact }}
+        </NuxtLink>
+        <NuxtLink :to="localePath(paths.purchase)" class="text-sm font-medium text-slate-700 hover:text-orange-700">
+          {{ navLabels.purchase }}
+        </NuxtLink>
+      </nav>
+
+      <!-- search -->
+      <form class="ml-auto hidden w-full max-w-md items-center gap-2 md:flex" @submit.prevent="submitSearch">
         <input
           v-model="searchTerm"
-          class="min-w-0 flex-1 rounded-l border border-slate-300 px-4 py-3 text-sm outline-none focus:border-slate-900"
           :placeholder="copy.searchPlaceholder"
-          type="search"
+          class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200"
         />
-        <button class="rounded-r bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600" type="submit">
+        <button
+          type="submit"
+          class="rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white hover:bg-orange-500"
+        >
           {{ copy.search }}
         </button>
       </form>
-
-      <nav class="flex items-center gap-2 text-sm font-semibold">
-        <NuxtLink class="rounded px-3 py-2 text-slate-700 hover:bg-slate-100" :to="localePath(paths.account)">
-          {{ copy.account }}
-        </NuxtLink>
-        <NuxtLink class="rounded bg-slate-900 px-3 py-2 text-white hover:bg-slate-800" :to="localePath(paths.cart)">
-          {{ copy.cart }}
-        </NuxtLink>
-      </nav>
     </div>
-
-        <!-- Category menu -->
-    <nav class="relative border-t border-slate-200 bg-white">
-      <div class="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2 text-sm font-bold text-slate-800">
-        <button
-          ref="menuButtonEl"
-          type="button"
-          class="whitespace-nowrap rounded-md bg-slate-900 px-3 py-2 text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300"
-          :aria-expanded="isMenuOpen ? 'true' : 'false'"
-          @click="isMenuOpen = !isMenuOpen"
-        >
-          {{ copy.categories }}
-        </button>
-
-        <!-- Links neben Kategorien (wie amikon-shop.de) -->
-        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath(paths.home)">
-          {{ copy.homeLink }}
-        </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/shipping')">
-          {{ copy.shippingLink }}
-        </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/privacy-policy')">
-          {{ copy.privacyLink }}
-        </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/contact')">
-          {{ copy.contactLink }}
-        </NuxtLink>
-        <NuxtLink class="whitespace-nowrap rounded-md px-3 py-2 hover:bg-slate-50 hover:text-orange-600" :to="localePath('/ankaufformular')">
-          {{ copy.purchaseLink }}
-        </NuxtLink>
-      </div>
-
-      <!-- Mega Dropdown -->
-      <div
-        v-if="isMenuOpen"
-        ref="menuPanelEl"
-        class="absolute left-0 right-0 top-full z-50 border-t border-slate-200 bg-white shadow-lg"
-      >
-        <div class="mx-auto max-w-7xl px-4 py-4">
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <ul
-              v-for="(col, idx) in categoryColumns"
-              :key="idx"
-              class="rounded-md border border-slate-100 bg-white p-2"
-            >
-              <li v-for="cat in col" :key="cat.path" class="border-b border-slate-100 last:border-b-0">
-                <NuxtLink
-                  class="block rounded px-3 py-2 font-bold text-slate-900 hover:bg-slate-50 hover:text-orange-600"
-                  :to="localePath(cat.path)"
-                  @click="isMenuOpen = false"
-                >
-                  {{ cat.label }}
-                </NuxtLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </nav>
   </header>
 </template>
 
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core';
 
+type NavLink = { path: string; label: string };
+
 const localePath = useLocalePath();
 const { locale } = useI18n();
 const searchTerm = ref('');
 
-const categoryLinks = [
+const menuOpen = ref(false);
+const menuRoot = ref<HTMLElement | null>(null);
+
+onClickOutside(menuRoot, () => {
+  menuOpen.value = false;
+});
+
+const toggleMenu = () => {
+  menuOpen.value = !menuOpen.value;
+};
+const closeMenu = () => {
+  menuOpen.value = false;
+};
+
+const de = {
+  topline: 'Gebrauchte Industrieelektronik, Maschinen und Automatisierungstechnik',
+  service: 'Service Mo–Fr',
+  shipping: 'Internationaler Versand',
+  b2b: 'Nur für Gewerbekunden',
+  searchPlaceholder: 'Artikelnummer, Hersteller oder Produkt suchen',
+  search: 'Suchen',
+};
+
+const en = {
+  topline: 'Used industrial electronics, machinery and automation technology',
+  service: 'Service Mon–Fri',
+  shipping: 'International shipping',
+  b2b: 'Business customers only',
+  searchPlaceholder: 'Search item number, manufacturer or product',
+  search: 'Search',
+};
+
+const copy = computed(() => (locale.value === 'de' ? de : en));
+
+const navLabels = computed(() =>
+  locale.value === 'de'
+    ? {
+        categories: 'Kategorien',
+        home: 'Startseite',
+        shipping: 'Versand',
+        privacy: 'Datenschutz',
+        contact: 'Kontakt',
+        purchase: 'Ankaufformular',
+      }
+    : {
+        categories: 'Categories',
+        home: 'Home',
+        shipping: 'Shipping',
+        privacy: 'Privacy',
+        contact: 'Contact',
+        purchase: 'Purchase form',
+      },
+);
+
+// IMPORTANT: define as a mutable array (no `as const`) to avoid readonly assignability issues in TS.
+const categoryLinks: NavLink[] = [
   { path: '/3d-druck', label: '3D-Druck' },
   { path: '/maschinen', label: 'Maschinen' },
   { path: '/rasterelektronenmikroskope', label: 'Rasterelektronenmikroskope' },
@@ -135,68 +187,22 @@ const categoryLinks = [
   { path: '/sonstige-artikel', label: 'Sonstige Artikel' },
   { path: '/thermisches-zubehoer', label: 'Thermisches Zubehör' },
   { path: '/vakuum-technik', label: 'Vakuum-Technik' },
-] as const;
+];
 
-const splitIntoColumns = <T,>(items: T[], columns: number): T[][] => {
-  const colLen = Math.ceil(items.length / columns);
-  return Array.from({ length: columns }, (_, i) => items.slice(i * colLen, (i + 1) * colLen)).filter((c) => c.length);
-};
-
-// Wir bauen feste Spalten (4) und lassen das Grid je nach Breakpoint umbrechen.
-const categoryColumns = computed(() => splitIntoColumns(categoryLinks, 4));
-
-
-
-const isMenuOpen = ref(false);
-const menuPanelEl = ref<HTMLElement | null>(null);
-const menuButtonEl = ref<HTMLElement | null>(null);
-
-onClickOutside(menuPanelEl, (e) => {
-  // allow click on the button
-  if (menuButtonEl.value && (e.target instanceof Node) && menuButtonEl.value.contains(e.target)) return;
-  isMenuOpen.value = false;
-});
-
-
-const de = {
-  topline: 'Gebrauchte Industrieelektronik, Maschinen und Automatisierungstechnik',
-  service: 'Service Mo–Fr',
-  shipping: 'Internationaler Versand',
-  b2b: 'Nur für Gewerbekunden',
-  searchPlaceholder: 'Artikelnummer, Hersteller oder Produkt suchen',
-  search: 'Suchen',
-  account: 'Konto',
-  cart: 'Warenkorb',
-  categories: 'Kategorien',
-  homeLink: 'Startseite',
-  shippingLink: 'Versand',
-  privacyLink: 'Datenschutz',
-  contactLink: 'Kontakt',
-  purchaseLink: 'Ankaufformular',
-};
-
-const en = {
-  topline: 'Used industrial electronics, machinery and automation technology',
-  service: 'Service Mon–Fri',
-  shipping: 'International shipping',
-  b2b: 'Business customers only',
-  searchPlaceholder: 'Search item number, manufacturer or product',
-  search: 'Search',
-  account: 'Account',
-  cart: 'Cart',
-  categories: 'Categories',
-  homeLink: 'Home',
-  shippingLink: 'Shipping',
-  privacyLink: 'Privacy',
-  contactLink: 'Contact',
-  purchaseLink: 'Purchase form',
-};
-
-const copy = computed(() => (locale.value === 'de' ? de : en));
+const paths = {
+  home: '/',
+  search: '/search',
+  // adjust if your shop uses different slugs
+  shipping: '/versand',
+  privacy: '/privacy-policy',
+  contact: '/contact',
+  purchase: '/ankaufformular',
+} as const;
 
 const submitSearch = () => {
   const term = searchTerm.value.trim();
   if (!term) return;
+  menuOpen.value = false;
   navigateTo(localePath({ path: paths.search, query: { term } }));
 };
 </script>

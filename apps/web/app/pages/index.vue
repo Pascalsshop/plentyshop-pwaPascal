@@ -80,6 +80,7 @@
       </div>
     </section>
 </template>
+
 <script lang="ts" setup>
 import type { Locale } from '#i18n';
 

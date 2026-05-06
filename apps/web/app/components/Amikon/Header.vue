@@ -1,5 +1,6 @@
 <template>
   <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <!-- Top info bar -->
     <div class="bg-slate-900 text-white">
       <div class="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-sm md:flex-row md:items-center md:justify-between">
         <p class="font-medium">{{ copy.topline }}</p>
@@ -11,6 +12,7 @@
       </div>
     </div>
 
+    <!-- Main row -->
     <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
       <NuxtLink :to="localePath(paths.home)" class="flex items-center gap-3" aria-label="Amikon Startseite">
         <div class="flex h-11 w-11 items-center justify-center rounded bg-slate-900 text-lg font-black text-white">A</div>
@@ -23,9 +25,10 @@
       <form class="flex min-w-0 flex-1 lg:max-w-2xl" @submit.prevent="submitSearch">
         <input
           v-model="searchTerm"
-          class="min-w-0 flex-1 rounded-l border border-slate-300 px-4 py-3 text-sm outline-none focus:border-slate-900"
+          class="min-w-0 flex-1 rounded-l border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 placeholder:text-slate-400 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-200"
           :placeholder="copy.searchPlaceholder"
           type="search"
+          autocomplete="off"
         />
         <button class="rounded-r bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600" type="submit">
           {{ copy.search }}
@@ -42,25 +45,92 @@
       </nav>
     </div>
 
-    <nav class="border-t border-slate-100 bg-slate-50">
-      <div class="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-3 text-sm font-bold text-slate-700">
-        <NuxtLink
-          v-for="item in navigation"
-          :key="item.term"
-          class="whitespace-nowrap rounded px-3 py-2 hover:bg-white hover:text-orange-600"
-          :to="localePath({ path: paths.search, query: { term: item.term } })"
-        >
-          {{ item.label }}
-        </NuxtLink>
+    <!-- Category navigation -->
+    <div class="border-t border-slate-100 bg-slate-50">
+      <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+        <div class="relative">
+          <button
+            class="inline-flex items-center gap-2 rounded bg-white px-4 py-2 text-sm font-black text-slate-800 shadow-sm ring-1 ring-slate-200 hover:bg-slate-50"
+            type="button"
+            :aria-expanded="isMenuOpen ? 'true' : 'false'"
+            @click="toggleMenu"
+          >
+            <span>{{ copy.categories }}</span>
+            <span class="text-slate-400">▾</span>
+          </button>
+
+          <div v-if="isMenuOpen" class="fixed inset-0 z-40" @click="closeMenu" aria-hidden="true" />
+          <!-- Dropdown -->
+          <div
+            v-if="isMenuOpen"
+            class="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-[min(56rem,90vw)] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl"
+            @mouseleave="activeId = null"
+          >
+            <div class="grid grid-cols-1 gap-0 lg:grid-cols-[18rem_1fr]">
+              <!-- Level 1 -->
+              <div class="max-h-[70vh] overflow-auto border-b border-slate-100 lg:border-b-0 lg:border-r">
+                <NuxtLink
+                  v-for="cat in topCategories"
+                  :key="categoryTreeGetters.getId(cat)"
+                  class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-bold text-slate-800 hover:bg-slate-50"
+                  :class="activeId === categoryTreeGetters.getId(cat) ? 'bg-slate-50' : ''"
+                  :to="localePath(buildCategoryMenuLink(cat, categoryTree))"
+                  @mouseenter="activeId = categoryTreeGetters.getId(cat)"
+                  @click="closeMenu"
+                >
+                  <span class="truncate">{{ categoryTreeGetters.getName(cat) }}</span>
+                  <span v-if="categoryTreeGetters.getItems(cat)?.length" class="text-slate-300">›</span>
+                </NuxtLink>
+              </div>
+
+              <!-- Level 2 -->
+              <div class="hidden max-h-[70vh] overflow-auto p-4 lg:block">
+                <div v-if="activeCategory" class="grid grid-cols-2 gap-2">
+                  <NuxtLink
+                    v-for="child in children"
+                    :key="categoryTreeGetters.getId(child)"
+                    class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-orange-600"
+                    :to="localePath(buildCategoryMenuLink(child, categoryTree))"
+                    @click="closeMenu"
+                  >
+                    {{ categoryTreeGetters.getName(child) }}
+                  </NuxtLink>
+                </div>
+
+                <div v-else class="text-sm text-slate-500">
+                  {{ copy.categoriesHint }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick links (optional) -->
+        <div class="hidden items-center gap-2 text-sm font-bold text-slate-700 md:flex">
+          <NuxtLink class="rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.shipping)">
+            {{ copy.shippingLink }}
+          </NuxtLink>
+          <NuxtLink class="rounded px-3 py-2 hover:bg-white hover:text-orange-600" :to="localePath(paths.contact)">
+            {{ copy.contactLink }}
+          </NuxtLink>
+        </div>
       </div>
-    </nav>
+    </div>
   </header>
 </template>
 
 <script setup lang="ts">
+import { categoryTreeGetters } from '@plentymarkets/shop-api';
+import type { CategoryTreeItem } from '@plentymarkets/shop-api';
+
 const localePath = useLocalePath();
 const { locale } = useI18n();
+const { data: categoryTree } = useCategoryTree();
+const { buildCategoryMenuLink } = useLocalization();
+
 const searchTerm = ref('');
+const isMenuOpen = ref(false);
+const activeId = ref<number | null>(null);
 
 const de = {
   topline: 'Gebrauchte Industrieelektronik, Maschinen und Automatisierungstechnik',
@@ -71,6 +141,10 @@ const de = {
   search: 'Suchen',
   account: 'Konto',
   cart: 'Warenkorb',
+  categories: 'Kategorien',
+  categoriesHint: 'Kategorie auswählen …',
+  shippingLink: 'Versand',
+  contactLink: 'Kontakt',
 };
 
 const en = {
@@ -82,33 +156,58 @@ const en = {
   search: 'Search',
   account: 'Account',
   cart: 'Cart',
+  categories: 'Categories',
+  categoriesHint: 'Select a category …',
+  shippingLink: 'Shipping',
+  contactLink: 'Contact',
 };
 
 const copy = computed(() => (locale.value === 'de' ? de : en));
 
-const navigation = computed(() =>
-  locale.value === 'de'
-    ? [
-        { label: 'Elektronik', term: 'Elektronik' },
-        { label: 'Maschinen', term: 'Maschinen' },
-        { label: 'Robotik', term: 'Robotik' },
-        { label: 'Antriebe & Motoren', term: 'Antrieb Motor' },
-        { label: 'Displays & Bedienpanels', term: 'Display Bedienpanel' },
-        { label: 'Labor & Prüftechnik', term: 'Labor Prüftechnik' },
-      ]
-    : [
-        { label: 'Electronics', term: 'Electronics' },
-        { label: 'Machinery', term: 'Machinery' },
-        { label: 'Robotics', term: 'Robotics' },
-        { label: 'Drives & motors', term: 'Drive Motor' },
-        { label: 'Displays & panels', term: 'Display Panel' },
-        { label: 'Lab & testing', term: 'Laboratory testing' },
-      ],
-);
+const topCategories = computed<CategoryTreeItem[]>(() => {
+  const tree = categoryTree.value;
+  if (!tree) return [];
+  return categoryTreeGetters.getItems(tree) ?? [];
+});
+
+const activeCategory = computed<CategoryTreeItem | null>(() => {
+  const id = activeId.value;
+  if (!id) return null;
+  return topCategories.value.find((c) => categoryTreeGetters.getId(c) === id) ?? null;
+});
+
+const children = computed<CategoryTreeItem[]>(() => {
+  const cat = activeCategory.value;
+  if (!cat) return [];
+  return categoryTreeGetters.getItems(cat) ?? [];
+});
+
+watchEffect(() => {
+  // Set initial hover selection when opening
+  if (isMenuOpen.value && !activeId.value && topCategories.value.length) {
+    activeId.value = categoryTreeGetters.getId(topCategories.value[0]);
+  }
+});
 
 const submitSearch = () => {
   const term = searchTerm.value.trim();
   if (!term) return;
+  closeMenu();
   navigateTo(localePath({ path: paths.search, query: { term } }));
 };
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+const closeMenu = () => {
+  isMenuOpen.value = false;
+};
+
+onClickOutside(
+  computed(() => document.querySelector('header')),
+  () => {
+    isMenuOpen.value = false;
+  },
+);
 </script>

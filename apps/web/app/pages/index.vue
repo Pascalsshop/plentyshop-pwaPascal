@@ -1,6 +1,5 @@
 <template>
-  <NuxtLayout name="default">
-    <section class="bg-slate-950 text-white">
+<section class="bg-slate-950 text-white">
       <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-20">
         <div>
           <p class="text-sm font-black uppercase tracking-[0.28em] text-orange-400">{{ copy.kicker }}</p>
@@ -80,9 +79,7 @@
         </div>
       </div>
     </section>
-  </NuxtLayout>
 </template>
-
 <script lang="ts" setup>
 import type { Locale } from '#i18n';
 

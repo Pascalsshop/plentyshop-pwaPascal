@@ -8,7 +8,7 @@
   >
     <div class="flex items-center gap-2 min-w-0 flex-1">
       <slot name="arrow">
-        <div class="shrink-0 w-4" />
+        <div class="shrink-0 w-6" />
       </slot>
 
       <div class="shrink-0 w-5 h-5 relative">
@@ -86,7 +86,6 @@
 
 <script setup lang="ts">
 import { SfIconDelete, SfIconVisibility, SfIconVisibilityOff, SfTooltip } from '@storefront-ui/vue';
-import { getBlockIconSvg } from '~/utils/blocks/block-icons';
 import defaultBlockIcon from '~/assets/icons/paths/block-default-icon.svg';
 import dragIcon from '~/assets/icons/paths/drag.svg';
 import type { TableOfContentsItemContentProps } from './types';
@@ -94,7 +93,7 @@ import type { Block } from '@plentymarkets/shop-api';
 
 const props = defineProps<TableOfContentsItemContentProps>();
 
-const { deleteBlock } = useBlockManager();
+const { deleteBlockHard } = useBlockManager();
 const { isBlockVisible, toggleBlockVisibility } = useBlocksVisibility();
 const { hoveredUuid } = useTableOfContents();
 const { headerContainer } = useBlocks();
@@ -113,7 +112,7 @@ const handleToggleVisibility = () => {
 };
 
 const handleDelete = () => {
-  deleteBlock(props.uuid);
+  deleteBlockHard(props.uuid);
 };
 </script>
 

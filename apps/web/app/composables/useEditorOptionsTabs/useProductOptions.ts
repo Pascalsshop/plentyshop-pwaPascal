@@ -1,6 +1,3 @@
-import type { EditorTarget } from '~/composables/useEditorOptionsTabs/types';
-import type { TranslateFn } from '~/composables/useItemDataTable/types';
-
 export const useProductOptions = (getTarget: () => EditorTarget, t: TranslateFn) => {
   const itemCountPositionOptions = computed(() => [
     { value: 'left' as ItemCountPosition, label: t('position-left'), testId: 'item-count-left' },
@@ -63,6 +60,11 @@ export const useProductOptions = (getTarget: () => EditorTarget, t: TranslateFn)
       testId: 'recommended-form-source-product',
     },
     { value: 'category' as SourceType, label: t('source-type-category'), testId: 'recommended-form-source-category' },
+    {
+      value: 'last_seen' as SourceType,
+      label: t('source-type-last-seen'),
+      testId: 'recommended-form-source-last-seen',
+    },
   ]);
 
   const sourceTypeModel = computed<SourceType>({

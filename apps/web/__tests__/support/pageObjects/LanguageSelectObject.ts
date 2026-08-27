@@ -38,6 +38,16 @@ export class LanguageSelectObject extends PageObject {
     return this;
   }
 
+  checkUrlExcludes(url: string) {
+    cy.url().should('not.include', url);
+    return this;
+  }
+
+  checkHtmlLang(lang: string) {
+    cy.get('html').should('have.attr', 'lang', lang);
+    return this;
+  }
+
   openMobileModal() {
     cy.getByTestId('open-languageselect-button').first().click();
     cy.getByTestId('modal').first().should('be.visible');

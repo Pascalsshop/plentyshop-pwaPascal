@@ -1,7 +1,5 @@
 import type { ApiError, Block, GetBlocksResponse } from '@plentymarkets/shop-api';
 import type { UseBlocksState, UseBlocksReturn } from './types';
-import { assembleBlocks } from '~/utils/blocks/block-helpers';
-
 declare module '#app' {
   interface NuxtApp {
     _settleTimer?: ReturnType<typeof setTimeout> | null;
@@ -41,6 +39,15 @@ export const useBlocks: UseBlocksReturn = () => {
       state.value.isSettling = false;
       nuxtApp._settleTimer = null;
     }, 150);
+  };
+
+  const cancelCleanDataSync = () => {
+    const nuxtApp = useNuxtApp();
+    if (nuxtApp._settleTimer) {
+      clearTimeout(nuxtApp._settleTimer);
+      nuxtApp._settleTimer = null;
+    }
+    state.value.isSettling = false;
   };
 
   const headerContainer = computed(() => state.value.data.HeaderContainer);
@@ -101,13 +108,10 @@ export const useBlocks: UseBlocksReturn = () => {
 
       state.value.hasSnapshot = true;
 
-      const assembled = assembleBlocks(
-        (response?.data as unknown as GetBlocksResponse) ?? state.value.data,
-        type,
-        identifier,
-        state.value.hasSnapshot,
-      );
+      const assembled = assembleBlocks(response?.data ?? state.value.data, type, identifier, state.value.hasSnapshot);
       setBlocks(assembled);
+
+      clearNuxtData((key) => key.startsWith('blocks-'));
 
       return true;
     } catch (error) {
@@ -120,19 +124,49 @@ export const useBlocks: UseBlocksReturn = () => {
   };
 
   const updateBlocks = (blocks: Block[]) => {
-    state.value.data.blocks = blocks;
+    const current = state.value.data.blocks;
+    if (Array.isArray(current)) {
+      current.splice(0, current.length, ...blocks);
+    } else {
+      state.value.data.blocks = blocks;
+    }
   };
 
   const reorderHeaderBlocks = (blocks: Block[]) => {
-    if (!state.value.data.HeaderContainer) return;
-    (state.value.data.HeaderContainer as { content: Block[] }).content = blocks.map((block, index) => ({
-      ...block,
-      parent_slot: index,
-    }));
+    if (!state.value.data.HeaderContainer) {
+      return;
+    }
+
+    if (!isValidHeaderOrder(blocks)) {
+      return;
+    }
+
+    const container = state.value.data.HeaderContainer as { content: Block[] };
+    const reordered = blocks.map((block, index) => ({ ...block, parent_slot: index }));
+    if (Array.isArray(container.content)) {
+      container.content.splice(0, container.content.length, ...reordered);
+    } else {
+      container.content = reordered;
+    }
+  };
+
+  const reorderFooterBlocks = (blocks: Block[]) => {
+    if (!state.value.data.Footer) return;
+    const container = state.value.data.Footer as { content: Block[] };
+    const reordered = blocks.map((block, index) => ({ ...block, parent_slot: index }));
+    if (Array.isArray(container.content)) {
+      container.content.splice(0, container.content.length, ...reordered);
+    } else {
+      container.content = reordered;
+    }
   };
 
   const discardChanges = () => {
     state.value.data = deepClone(state.value.cleanData);
+  };
+
+  const restoreBlocks = (data: GetBlocksResponse) => {
+    state.value.data = deepClone(data);
   };
 
   const setDefaultTemplate = (blocks: Block[]) => {
@@ -154,9 +188,12 @@ export const useBlocks: UseBlocksReturn = () => {
     saveBlocks,
     updateBlocks,
     reorderHeaderBlocks,
+    reorderFooterBlocks,
     discardChanges,
+    restoreBlocks,
     setDefaultTemplate,
     scheduleCleanDataSync,
+    cancelCleanDataSync,
     isSettling: computed(() => state.value.isSettling),
   };
 };

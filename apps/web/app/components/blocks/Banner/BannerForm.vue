@@ -1,32 +1,19 @@
 <template>
   <div class="block-slider-edit">
     <div :data-testid="`slide-settings-${activeSlide}`">
-      <UiAccordionItem
+      <EditorFormPanel
         v-model="imagesOpen"
-        summary-active-class="bg-neutral-100"
-        summary-class="w-full hover:bg-neutral-100 px-4 py-5 flex justify-between items-center select-none border-b"
-        data-testid="slider-image-group"
+        :title="getEditorTranslation('images-group-label')"
+        data-testid="slider-image-group-title"
       >
-        <template #summary>
-          <h2 data-testid="slider-image-group-title">{{ getEditorTranslation('images-group-label') }}</h2>
-        </template>
-
-        <div class="images">
-          <UiImagePicker
-            v-for="type in imageTypes"
-            :key="type"
-            :label="labels[type]"
-            :image="banner.content.image[type]"
-            :placeholder="placeholderImg"
-            :dimensions="imageDimensions[type]"
-            :selected-image-type="type"
-            @add="(payload) => handleImageAddBanner(payload)"
-            @delete="deleteImage(banner.content.image, type)"
-          />
-        </div>
+        <UiResponsiveImagePicker
+          :image="banner.content.image"
+          @add="handleImageAddBanner"
+          @delete="handleImageDeleteBanner"
+        />
 
         <div class="mb-6">
-          <label class="block text-sm font-medium mb-4">Brightness</label>
+          <label for="banner-brightness" class="block text-sm font-medium mb-4">Brightness</label>
           <div class="flex items-center gap-4">
             <div class="flex-1 space-y-1">
               <div class="flex justify-between text-xs text-gray-500">
@@ -34,6 +21,7 @@
                 <span>100%</span>
               </div>
               <input
+                id="banner-brightness"
                 v-model.number="banner.content.image.brightness"
                 type="range"
                 min="0"
@@ -45,11 +33,13 @@
 
             <div class="relative">
               <input
+                id="banner-brightness-number"
                 v-model.number="banner.content.image.brightness"
                 type="number"
                 min="0"
                 max="1"
                 class="w-20 px-2 py-1 border rounded text-color-red-500"
+                aria-label="Brightness value"
                 @input="clampBrightness($event, 'image')"
               />
             </div>
@@ -61,18 +51,13 @@
           <SfInput v-model="banner.content.image.alt" name="alt" type="text" data-testid="slide-alt-text" />
           <div class="typography-text-xs text-gray-500 flex gap-1 mt-2 sm:mb-0">Alternative image text</div>
         </div>
-      </UiAccordionItem>
+      </EditorFormPanel>
 
-      <UiAccordionItem
+      <EditorFormPanel
         v-model="textOpen"
-        summary-active-class="bg-neutral-100"
-        summary-class="w-full hover:bg-neutral-100 px-4 py-5 flex justify-between items-center select-none border-b"
-        data-testid="banner-text-group"
+        :title="getEditorTranslation('text-group-label')"
+        data-testid="slider-text-group-title"
       >
-        <template #summary>
-          <h2 data-testid="slider-text-group-title">{{ getEditorTranslation('text-group-label') }}</h2>
-        </template>
-
         <div>
           <EditorRichTextEditorForm
             :model-value="banner.content.text.htmlDescription ?? ''"
@@ -105,7 +90,9 @@
             </EditorColorPicker>
           </div>
           <div v-if="banner.content.text.background" class="mb-6">
-            <label class="block text-sm font-medium mb-4">{{ getEditorTranslation('textbox-opacity-label') }}</label>
+            <label for="banner-opacity" class="block text-sm font-medium mb-4">
+              {{ getEditorTranslation('textbox-opacity-label') }}
+            </label>
             <div class="flex items-center gap-4">
               <div class="flex-1 space-y-1">
                 <div class="flex justify-between text-xs text-gray-500">
@@ -113,21 +100,25 @@
                   <span>100%</span>
                 </div>
                 <input
+                  id="banner-opacity"
                   v-model.number="banner.content.text.bgopacity"
                   type="range"
                   min="0"
                   max="1"
                   step="0.01"
                   class="w-full"
+                  aria-label="Opacity slider"
                 />
               </div>
 
               <div class="relative">
                 <input
+                  id="banner-opacity-number"
                   v-model.number="banner.content.text.bgopacity"
                   type="number"
                   min="0"
                   max="1"
+                  aria-label="Opacity value"
                   class="w-20 px-2 py-1 border rounded text-color-red-500"
                   @input="clampBrightness($event, 'text')"
                 />
@@ -138,7 +129,7 @@
           <div class="mb-6">
             <EditorOptionsTabs
               v-model="textboxAlignXModel"
-              :legend="getEditorTranslation('textbox-align-x-label')"
+              :legend="getEditorTranslation('textbox-align-main-label')"
               test-id-prefix="slider-textbox-align-x"
               :options="textboxAlignXOptions"
             />
@@ -147,35 +138,32 @@
           <div class="mb-6">
             <EditorOptionsTabs
               v-model="textboxAlignYModel"
-              :legend="getEditorTranslation('textbox-align-y-label')"
+              :legend="getEditorTranslation('textbox-align-cross-label')"
               test-id-prefix="slider-textbox-align-y"
               :options="textboxAlignYOptions"
             />
           </div>
         </div>
-      </UiAccordionItem>
+      </EditorFormPanel>
 
-      <UiAccordionItem
+      <EditorFormPanel
         v-model="buttonOpen"
-        summary-active-class="bg-neutral-100"
-        summary-class="w-full hover:bg-neutral-100 px-4 py-5 flex justify-between items-center select-none border-b"
+        :title="getEditorTranslation('button-group-label')"
+        data-testid="slider-button-group-title"
       >
-        <template #summary>
-          <h2 data-testid="slider-button-group-title">{{ getEditorTranslation('button-group-label') }}</h2>
-        </template>
-
         <div class="images">
           <div class="mb-6 mt-4">
-            <label>
-              <UiFormLabel class="mb-1">{{ getEditorTranslation('button-text-label') }}</UiFormLabel>
-              <SfInput
-                v-model="banner.content.button.label"
-                data-testid="slider-button-label"
-                name="label"
-                type="text"
-                :placeholder="getEditorTranslation('button-text-placeholder')"
-              />
-            </label>
+            <UiFormLabel for="banner-button-label" class="mb-1">{{
+              getEditorTranslation('button-text-label')
+            }}</UiFormLabel>
+            <SfInput
+              id="banner-button-label"
+              v-model="banner.content.button.label"
+              data-testid="slider-button-label"
+              name="label"
+              type="text"
+              :placeholder="getEditorTranslation('button-text-placeholder')"
+            />
           </div>
           <div class="mb-6">
             <UiFormLabel class="mb-1">{{ getEditorTranslation('button-link-label') }}</UiFormLabel>
@@ -205,7 +193,7 @@
             />
           </div>
         </div>
-      </UiAccordionItem>
+      </EditorFormPanel>
     </div>
   </div>
 </template>
@@ -214,12 +202,16 @@
 import { clamp } from '@storefront-ui/shared';
 import { SfInput, SfSwitch } from '@storefront-ui/vue';
 import type { BannerFormProps, BannerProps } from './types';
+import type {
+  ResponsiveImagePickerAddPayload,
+  ResponsiveImagePickerDeletePayload,
+} from '~/components/ui/ResponsiveImagePicker/types';
 
 const { blockUuid } = useSiteConfiguration();
 const { activeSlideIndex } = useCarousel();
 const { allBlocks: data } = useBlocks();
 const { findOrDeleteBlockByUuid } = useBlockManager();
-const { placeholderImg, labels, imageDimensions, imageTypes, deleteImage } = usePickerHelper();
+const { imageTypes, deleteImage } = usePickerHelper();
 
 const props = defineProps<BannerFormProps>();
 
@@ -244,9 +236,16 @@ const clampBrightness = (event: Event, type: string) => {
   }
 };
 
-const handleImageAddBanner = ({ image, type }: { image: string; type: string }) => {
-  const { handleImageAdd } = useImageAdd(banner.value?.content?.image);
-  handleImageAdd({ image, type });
+const handleImageAddBanner = ({ image, type, applyToAllSizes }: ResponsiveImagePickerAddPayload) => {
+  const targets = applyToAllSizes ? imageTypes : [type];
+  targets.forEach((sizeType) => {
+    banner.value.content.image[sizeType] = image;
+  });
+};
+
+const handleImageDeleteBanner = ({ type, applyToAllSizes }: ResponsiveImagePickerDeletePayload) => {
+  const targets = applyToAllSizes ? imageTypes : [type];
+  targets.forEach((sizeType) => deleteImage(banner.value.content.image, sizeType));
 };
 const {
   textboxAlignXModel,
@@ -283,15 +282,15 @@ input[type='number'] {
     "textbox-color-label": "Textbox Colour",
     "textbox-opacity-label": "Textbox Opacity",
 
-    "textbox-align-x-label": "Textbox Alignment (x)",
-    "textbox-align-x-left-label": "Left",
-    "textbox-align-x-center-label": "Center",
-    "textbox-align-x-right-label": "Right",
+    "textbox-align-main-label": "Textbox Alignment (main axis)",
+    "textbox-align-main-top-label": "Top",
+    "textbox-align-main-center-label": "Center",
+    "textbox-align-main-bottom-label": "Bottom",
 
-    "textbox-align-y-label": "Textbox Alignment (y)",
-    "textbox-align-y-top-label": "Top",
-    "textbox-align-y-center-label": "Center",
-    "textbox-align-y-bottom-label": "Bottom",
+    "textbox-align-cross-label": "Textbox Alignment (cross axis)",
+    "textbox-align-cross-left-label": "Left",
+    "textbox-align-cross-center-label": "Center",
+    "textbox-align-cross-right-label": "Right",
 
     "button-align-label": "Button Alignment (x)",
     "button-align-option-left-label": "Left",
@@ -315,15 +314,15 @@ input[type='number'] {
     "textbox-color-label": "Textbox Colour",
     "textbox-opacity-label": "Textbox Opacity",
 
-    "textbox-align-x-label": "Textbox Alignment (x)",
-    "textbox-align-x-left-label": "Left",
-    "textbox-align-x-center-label": "Center",
-    "textbox-align-x-right-label": "Right",
+    "textbox-align-main-label": "Textbox Alignment (main axis)",
+    "textbox-align-main-top-label": "Top",
+    "textbox-align-main-center-label": "Center",
+    "textbox-align-main-bottom-label": "Bottom",
 
-    "textbox-align-y-label": "Textbox Alignment (y)",
-    "textbox-align-y-top-label": "Top",
-    "textbox-align-y-center-label": "Center",
-    "textbox-align-y-bottom-label": "Bottom",
+    "textbox-align-cross-label": "Textbox Alignment (cross axis)",
+    "textbox-align-cross-left-label": "Left",
+    "textbox-align-cross-center-label": "Center",
+    "textbox-align-cross-right-label": "Right",
 
     "button-align-label": "Button Alignment (x)",
     "button-align-option-left-label": "Left",

@@ -1,4 +1,3 @@
-import type { useCategorySettingsReturn, useCategoryConfigurationState } from '~/composables/useCategorySettings/types';
 import type { CategoryEntry } from '@plentymarkets/shop-api';
 
 export const useCategorySettings: useCategorySettingsReturn = (settingsId = '') => {
@@ -66,8 +65,10 @@ export const useCategorySettings: useCategorySettingsReturn = (settingsId = '') 
           message: getEditorUITranslation('deleteSuccess', { pageName, id }),
           type: 'positive',
         });
+        const { resolvePathTrailingSlash } = useUrlTrailingSlash();
         const lang = locale.value;
-        router.push(lang && lang !== defaultLocale ? `/${lang}` : '/');
+        const targetPath = lang && lang !== defaultLocale ? `/${lang}` : '/';
+        router.push(resolvePathTrailingSlash(targetPath));
       }
     } catch (error) {
       let errorMessage = '';

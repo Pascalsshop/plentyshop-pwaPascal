@@ -1,11 +1,4 @@
 import { ApiError } from '@plentymarkets/shop-api';
-import type {
-  UseMakeOrderState,
-  UseMakeOrderReturn,
-  CreateOrder,
-  MakeOrderParams,
-} from '~/composables/useMakeOrder/types';
-
 /**
  * @description Composable for managing order creation.
  * @return UseMakeOrderReturn
@@ -23,7 +16,7 @@ export const useMakeOrder: UseMakeOrderReturn = () => {
   const handleMakeOrderError = (error: unknown) => {
     if (error) useHandleError(error as ApiError);
     state.value.loading = false;
-    useProcessingOrder().processingOrder.value = false;
+    useDynamicPaymentButtons().createOrderLoading.value = false;
     return null;
   };
 

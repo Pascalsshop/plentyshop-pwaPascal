@@ -5,7 +5,7 @@
   <EditorColorPicker
     data-testid="rte-highlight-color"
     :model-value="highlightColor"
-    dropdown-align="rte"
+    align="center"
     @update:model-value="setHighlightColor($event)"
   >
     <template #trigger="{ color, toggle }">
@@ -73,8 +73,6 @@
 </template>
 
 <script setup lang="ts">
-import type { RteCommand } from '~/composables/useRichTextEditor/types';
-
 defineProps<{
   cmd: (name: RteCommand) => void;
   isActive: (name: string) => boolean;

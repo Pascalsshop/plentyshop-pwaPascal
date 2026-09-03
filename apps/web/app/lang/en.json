@@ -24,6 +24,58 @@
     "outOfStock": "The product is currently out of stock",
     "readAndAccepted": "I have read and accepted the {privacyPolicy}"
   },
+  "amikonHeader": {
+    "actions": {
+      "login": "Sign in",
+      "register": "Register"
+    },
+    "aria": {
+      "categoryNavigation": "Product categories",
+      "customerNavigation": "Customer area",
+      "mainNavigation": "Main navigation",
+      "mobileMenu": "Mobile navigation menu"
+    },
+    "categories": {
+      "climateChambers": "Climate chambers",
+      "electronMicroscopes": "Scanning electron microscopes",
+      "electronics": "Electronics",
+      "frequencyConverters": "Frequency converters",
+      "laboratoryEquipment": "Laboratory equipment",
+      "laserTechnology": "Laser technology",
+      "machines": "Machines",
+      "materialTesting": "Material testing machines",
+      "measurementTesting": "Measurement and testing",
+      "monitors": "Monitors / control panels",
+      "motorsDrives": "Motors and drives",
+      "otherItems": "Other items",
+      "pneumatics": "Pneumatics",
+      "pumps": "Pumps",
+      "robots": "Robots",
+      "saltSprayChambers": "Salt spray chambers",
+      "shakers": "Shakers / vibration testing",
+      "thermalAccessories": "Thermal accessories",
+      "threeDPrinting": "3D printing",
+      "vacuumTechnology": "Vacuum technology",
+      "walkInChambers": "Walk-in climate chambers",
+      "weatheringTechnology": "Weathering technology"
+    },
+    "logoAlt": "Amikon-Shop.de – buying and selling used industrial electronics",
+    "navigation": {
+      "categories": "Categories",
+      "contact": "Contact",
+      "home": "Home",
+      "newsletter": "Newsletter",
+      "privacy": "Privacy",
+      "purchaseForm": "Purchase form",
+      "shipping": "Shipping"
+    },
+    "searchPlaceholder": "Search term",
+    "service": {
+      "internationalShipping": "International shipping",
+      "noHiddenCosts": "No hidden costs",
+      "questions": "Questions?"
+    }
+  },
   "account": {
     "accountSettings": {
       "billingDetails": {

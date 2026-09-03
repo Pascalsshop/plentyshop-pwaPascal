@@ -24,6 +24,58 @@
     "outOfStock": "Der Artikel ist aktuell nicht auf Lager",
     "readAndAccepted": "Ich habe die {privacyPolicy} gelesen und akzeptiert"
   },
+  "amikonHeader": {
+    "actions": {
+      "login": "Anmelden",
+      "register": "Registrieren"
+    },
+    "aria": {
+      "categoryNavigation": "Produktkategorien",
+      "customerNavigation": "Kundenbereich",
+      "mainNavigation": "Hauptnavigation",
+      "mobileMenu": "Mobiles Navigationsmenü"
+    },
+    "categories": {
+      "climateChambers": "Wärme-Klimaschränke",
+      "electronMicroscopes": "Rasterelektronenmikroskope",
+      "electronics": "Elektronik",
+      "frequencyConverters": "Frequenzumrichter",
+      "laboratoryEquipment": "Laborartikel",
+      "laserTechnology": "Lasertechnik",
+      "machines": "Maschinen",
+      "materialTesting": "Materialprüfmaschinen",
+      "measurementTesting": "Mess- und Prüftechnik",
+      "monitors": "Monitore / Bedieneinheiten",
+      "motorsDrives": "Motoren und Antriebe",
+      "otherItems": "Sonstige Artikel",
+      "pneumatics": "Pneumatik",
+      "pumps": "Pumpen",
+      "robots": "Roboter",
+      "saltSprayChambers": "Salzsprühkammern",
+      "shakers": "Shaker / Schwingprüfanlagen",
+      "thermalAccessories": "Thermisches Zubehör",
+      "threeDPrinting": "3D-Druck",
+      "vacuumTechnology": "Vakuum-Technik",
+      "walkInChambers": "Begehbare Klimakammern",
+      "weatheringTechnology": "Bewitterungstechnik"
+    },
+    "logoAlt": "Amikon-Shop.de – An- und Verkauf gebrauchter Industrieelektronik",
+    "navigation": {
+      "categories": "Kategorien",
+      "contact": "Kontakt",
+      "home": "Startseite",
+      "newsletter": "Newsletter",
+      "privacy": "Datenschutz",
+      "purchaseForm": "Ankaufformular",
+      "shipping": "Versand"
+    },
+    "searchPlaceholder": "Suchbegriff",
+    "service": {
+      "internationalShipping": "Internationaler Versand",
+      "noHiddenCosts": "Keine versteckten Kosten",
+      "questions": "Fragen?"
+    }
+  },
   "account": {
     "accountSettings": {
       "billingDetails": {

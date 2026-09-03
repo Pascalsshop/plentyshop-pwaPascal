@@ -54,6 +54,10 @@ export default {
         editor: ['Red Hat Text', ...defaultTheme.fontFamily.sans],
       },
       colors: {
+        amikon: {
+          '600': '#392F6E',
+          '700': '#26204A',
+        },
         primary: {
           '50': 'rgb(var(--colors-2-primary-50) / <alpha-value>)',
           '100': 'rgb(var(--colors-2-primary-100) / <alpha-value>)',

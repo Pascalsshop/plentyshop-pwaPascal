@@ -1,10 +1,10 @@
 <template>
-  <section class="border-y border-slate-200 bg-white">
-    <div class="mx-auto grid max-w-7xl gap-4 px-4 py-6 md:grid-cols-4">
-      <article v-for="item in items" :key="item.title" class="rounded-lg border border-slate-200 p-4">
-        <p class="text-sm font-black uppercase tracking-wide text-orange-600">{{ item.kicker }}</p>
-        <h3 class="mt-1 font-bold text-slate-950">{{ item.title }}</h3>
-        <p class="mt-2 text-sm text-slate-600">{{ item.text }}</p>
+  <section class="border-y border-neutral-200 bg-white">
+    <div class="mx-auto grid max-w-screen-2xl gap-px bg-neutral-200 @md:grid-cols-2 @lg:grid-cols-4">
+      <article v-for="item in items" :key="item.title" class="bg-white px-6 py-8 text-center @lg:min-h-44">
+        <p class="text-xs font-bold uppercase tracking-[0.18em] text-amikon-600">{{ item.kicker }}</p>
+        <h3 class="mt-2 font-semibold text-neutral-950">{{ item.title }}</h3>
+        <p class="mt-3 text-sm leading-6 text-neutral-600">{{ item.text }}</p>
       </article>
     </div>
   </section>
@@ -16,16 +16,48 @@ const { locale } = useI18n();
 const items = computed(() =>
   locale.value === 'de'
     ? [
-        { kicker: 'B2B', title: 'Für Gewerbekunden', text: 'Sortiment und Bestellprozess sind auf industrielle Beschaffung ausgelegt.' },
-        { kicker: 'Lagerware', title: 'Schnelle Verfügbarkeit', text: 'Gebrauchte Komponenten, Maschinen und Ersatzteile aus dem Lagerbestand.' },
-        { kicker: 'Export', title: 'Weltweiter Versand', text: 'Internationale Lieferung mit klaren Versand- und Zahlungsinformationen.' },
-        { kicker: 'Service', title: 'Persönliche Unterstützung', text: 'Hilfe bei Hersteller, Modell, Artikelnummer und passenden Alternativen.' },
+        {
+          kicker: 'Versand',
+          title: 'Gratisversand (DE)¹',
+          text: 'UPS-Paketversand ab 100 € Bestellwert. Zustellung am Samstag möglich.',
+        },
+        {
+          kicker: 'Service',
+          title: 'Persönlicher Kundenservice',
+          text: 'Mo.–Do. 07:30–16:00 Uhr, Fr. 07:30–15:00 Uhr. Tel. 02861 6853 00.',
+        },
+        {
+          kicker: 'Sortiment',
+          title: 'Einzigartige Produkte',
+          text: 'Viele exklusive und außergewöhnliche Industrieprodukte aus zweiter Hand.',
+        },
+        {
+          kicker: 'Sicherheit',
+          title: 'Sicher einkaufen',
+          text: 'Verschlüsselte Übertragung und ein Bestellprozess für gewerbliche Kunden.',
+        },
       ]
     : [
-        { kicker: 'B2B', title: 'For business customers', text: 'Catalog and checkout are designed for industrial procurement.' },
-        { kicker: 'Stock', title: 'Fast availability', text: 'Used components, machinery and spare parts from existing stock.' },
-        { kicker: 'Export', title: 'Worldwide shipping', text: 'International delivery with clear shipping and payment information.' },
-        { kicker: 'Service', title: 'Personal support', text: 'Support for manufacturer, model, item number and suitable alternatives.' },
+        {
+          kicker: 'Shipping',
+          title: 'Free shipping (DE)¹',
+          text: 'UPS parcel shipping from €100 order value. Saturday delivery is available.',
+        },
+        {
+          kicker: 'Service',
+          title: 'Personal customer service',
+          text: 'Mon–Thu 07:30–16:00, Fri 07:30–15:00. Phone +49 2861 6853 00.',
+        },
+        {
+          kicker: 'Range',
+          title: 'Unique products',
+          text: 'Many exclusive and unusual second-hand industrial products.',
+        },
+        {
+          kicker: 'Security',
+          title: 'Shop securely',
+          text: 'Encrypted transmission and an ordering process designed for business customers.',
+        },
       ],
 );
 </script>

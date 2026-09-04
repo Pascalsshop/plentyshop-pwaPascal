@@ -1,84 +1,163 @@
 <template>
-<section class="bg-slate-950 text-white">
-      <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-20">
-        <div>
-          <p class="text-sm font-black uppercase tracking-[0.28em] text-orange-400">{{ copy.kicker }}</p>
-          <h1 class="mt-4 text-4xl font-black tracking-tight md:text-6xl">
-            {{ copy.title }}
+  <main class="bg-neutral-50 text-neutral-900" data-testid="amikon-homepage">
+    <section class="border-b border-neutral-200 bg-[#f5f5f7]" :aria-label="copy.categoryNavigationLabel">
+      <div
+        class="mx-auto grid max-w-screen-2xl grid-cols-2 gap-3 px-4 py-6 @md:grid-cols-3 @lg:grid-cols-5 @lg:gap-6 @lg:py-10"
+      >
+        <NuxtLink
+          v-for="category in featuredCategories"
+          :key="category.slug"
+          :to="localePath(category.slug)"
+          class="group relative overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-neutral-200 transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amikon-600"
+        >
+          <img
+            :src="category.image"
+            :alt="category.imageAlt"
+            class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+            width="520"
+            height="390"
+          />
+          <span
+            class="absolute bottom-3 left-1/2 max-w-[calc(100%-1rem)] -translate-x-1/2 whitespace-nowrap bg-white/95 px-3 py-2 text-center text-xs font-semibold uppercase shadow-sm @md:text-sm @lg:text-base"
+          >
+            {{ category.label }}
+          </span>
+        </NuxtLink>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-screen-2xl px-4 py-6 @lg:py-10">
+      <div
+        class="relative min-h-[320px] overflow-hidden rounded-md bg-neutral-900 shadow-sm @md:min-h-[440px] @xl:min-h-[540px]"
+      >
+        <img
+          :src="homeImages.company"
+          :alt="copy.companyImageAlt"
+          class="absolute inset-0 h-full w-full object-cover"
+          width="2560"
+          height="984"
+          fetchpriority="high"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-black/65 via-black/25 to-transparent" />
+        <div
+          class="relative flex min-h-[320px] max-w-4xl flex-col justify-center px-6 py-12 text-white @md:min-h-[440px] @md:px-10 @xl:min-h-[540px] @xl:px-14"
+        >
+          <p class="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-white/80">{{ copy.heroKicker }}</p>
+          <h1 class="max-w-3xl text-4xl font-light uppercase leading-tight tracking-tight @md:text-6xl @xl:text-7xl">
+            {{ copy.heroTitle }}
           </h1>
-          <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-            {{ copy.intro }}
-          </p>
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <NuxtLink
-              :to="localePath({ path: paths.search, query: { term: copy.primaryTerm } })"
-              class="rounded bg-orange-500 px-6 py-3 text-center font-bold text-white hover:bg-orange-600"
-            >
-              {{ copy.primaryCta }}
-            </NuxtLink>
-            <NuxtLink
-              :to="localePath(paths.contact)"
-              class="rounded border border-white/30 px-6 py-3 text-center font-bold text-white hover:bg-white hover:text-slate-950"
-            >
-              {{ copy.secondaryCta }}
-            </NuxtLink>
+          <NuxtLink
+            :to="localePath(paths.search)"
+            class="mt-8 inline-flex w-fit items-center bg-amikon-600 px-6 py-3 text-sm font-bold uppercase text-white no-underline transition hover:bg-amikon-700 focus:outline-none focus:ring-2 focus:ring-white"
+          >
+            {{ copy.heroCta }}
+          </NuxtLink>
+        </div>
+      </div>
+
+      <div class="mx-auto max-w-screen-xl py-8 @lg:py-10">
+        <h2 class="sr-only">{{ copy.welcomeHeading }}</h2>
+        <p class="text-base leading-7 text-neutral-700 @lg:text-lg @lg:leading-8">{{ copy.intro }}</p>
+      </div>
+    </section>
+
+    <section class="border-y border-neutral-200 bg-white">
+      <div class="mx-auto max-w-screen-2xl px-4 py-12 @lg:py-16">
+        <div
+          class="flex flex-col gap-4 border-l-4 border-amikon-600 pl-4 @md:flex-row @md:items-end @md:justify-between"
+        >
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-amikon-600">{{ copy.climateKicker }}</p>
+            <h2 class="mt-1 text-2xl font-medium uppercase @lg:text-3xl">{{ copy.climateTitle }}</h2>
           </div>
+          <NuxtLink :to="localePath('/waerme-klimaschraenke')" class="font-semibold text-amikon-600 hover:underline">
+            {{ copy.viewAll }}
+          </NuxtLink>
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl">
-          <h2 class="text-xl font-black">{{ copy.procurementTitle }}</h2>
-          <ul class="mt-5 space-y-4">
-            <li v-for="item in copy.procurement" :key="item" class="flex gap-3 text-slate-200">
-              <span class="mt-1 h-2.5 w-2.5 rounded-full bg-orange-400" />
-              <span>{{ item }}</span>
-            </li>
-          </ul>
+        <div class="mt-8 grid gap-5 @md:grid-cols-3">
+          <NuxtLink
+            v-for="entry in climateEntries"
+            :key="entry.slug"
+            :to="localePath(entry.slug)"
+            class="group flex min-h-48 flex-col justify-end overflow-hidden border border-neutral-200 bg-neutral-50 p-6 no-underline transition hover:border-amikon-600 hover:shadow-md"
+          >
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-amikon-600">{{ entry.kicker }}</p>
+            <h3 class="mt-2 text-xl font-semibold group-hover:text-amikon-600">{{ entry.title }}</h3>
+            <p class="mt-3 max-w-md text-sm leading-6 text-neutral-600">{{ entry.text }}</p>
+            <span class="mt-5 text-sm font-bold text-amikon-600">{{ copy.openCategory }} →</span>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-neutral-100">
+      <div class="mx-auto max-w-screen-2xl px-4 py-12 @lg:py-16">
+        <div class="border-l-4 border-amikon-600 pl-4">
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-amikon-600">{{ copy.newKicker }}</p>
+          <h2 class="mt-1 text-2xl font-medium uppercase @lg:text-3xl">{{ copy.newTitle }}</h2>
+        </div>
+
+        <div class="mt-8 grid grid-cols-2 gap-3 @md:grid-cols-4 @lg:gap-5">
+          <NuxtLink
+            v-for="entry in newEntries"
+            :key="entry.term"
+            :to="{ path: localePath(paths.search), query: { term: entry.term } }"
+            class="group flex min-h-36 flex-col justify-between bg-white p-5 no-underline shadow-sm ring-1 ring-neutral-200 transition hover:-translate-y-1 hover:shadow-md @lg:min-h-44 @lg:p-6"
+          >
+            <span class="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500">{{ copy.quickSearch }}</span>
+            <span class="mt-6 text-lg font-semibold group-hover:text-amikon-600 @lg:text-xl">{{ entry.label }}</span>
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white">
+      <div class="mx-auto grid max-w-screen-2xl gap-5 px-4 py-12 @lg:grid-cols-2 @lg:py-16">
+        <NuxtLink
+          :to="localePath('/ankaufformular')"
+          class="group relative overflow-hidden bg-amikon-600 px-7 py-10 text-white no-underline shadow-sm @md:px-10"
+        >
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-white/70">{{ copy.purchaseKicker }}</p>
+          <h2 class="mt-3 text-3xl font-semibold">{{ copy.purchaseTitle }}</h2>
+          <p class="mt-4 max-w-xl leading-7 text-white/80">{{ copy.purchaseText }}</p>
+          <span class="mt-7 inline-flex border-b border-white pb-1 font-bold">{{ copy.purchaseCta }} →</span>
+        </NuxtLink>
+
+        <a
+          href="https://www.amikon.de/"
+          class="group border border-neutral-200 bg-neutral-100 px-7 py-10 text-neutral-900 no-underline shadow-sm transition hover:border-amikon-600 @md:px-10"
+        >
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-amikon-600">AMIKON.DE</p>
+          <h2 class="mt-3 text-3xl font-semibold">{{ copy.companyTitle }}</h2>
+          <p class="mt-4 max-w-xl leading-7 text-neutral-600">{{ copy.companyText }}</p>
+          <span class="mt-7 inline-flex border-b border-amikon-600 pb-1 font-bold text-amikon-600"
+            >{{ copy.companyCta }} →</span
+          >
+        </a>
+      </div>
+    </section>
+
+    <section class="border-t border-neutral-200 bg-neutral-50">
+      <div class="mx-auto max-w-screen-2xl px-4 py-10 text-center">
+        <h2 class="text-lg font-semibold">{{ copy.brandsTitle }}</h2>
+        <div
+          class="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-bold uppercase tracking-wide text-neutral-500 @lg:text-base"
+        >
+          <NuxtLink
+            v-for="brand in brands"
+            :key="brand"
+            :to="{ path: localePath(paths.search), query: { term: brand } }"
+            class="hover:text-amikon-600"
+          >
+            {{ brand }}
+          </NuxtLink>
         </div>
       </div>
     </section>
 
     <AmikonTrustBar />
-
-    <section class="mx-auto max-w-7xl px-4 py-14">
-      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p class="text-sm font-black uppercase tracking-[0.22em] text-orange-600">{{ copy.categoriesKicker }}</p>
-          <h2 class="mt-2 text-3xl font-black text-slate-950">{{ copy.categoriesTitle }}</h2>
-        </div>
-        <NuxtLink :to="localePath(paths.search)" class="font-bold text-orange-600 hover:text-orange-700">
-          {{ copy.allProducts }}
-        </NuxtLink>
-      </div>
-
-      <div class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-        <NuxtLink
-          v-for="category in categories"
-          :key="category.term"
-          :to="localePath({ path: paths.search, query: { term: category.term } })"
-          class="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-orange-300 hover:shadow-md"
-        >
-          <p class="text-sm font-black uppercase tracking-wide text-orange-600">{{ category.kicker }}</p>
-          <h3 class="mt-2 text-xl font-black text-slate-950 group-hover:text-orange-600">{{ category.title }}</h3>
-          <p class="mt-3 text-sm leading-6 text-slate-600">{{ category.text }}</p>
-        </NuxtLink>
-      </div>
-    </section>
-
-    <section class="bg-slate-100">
-      <div class="mx-auto grid max-w-7xl gap-8 px-4 py-14 lg:grid-cols-2">
-        <div class="rounded-2xl bg-white p-8 shadow-sm">
-          <h2 class="text-2xl font-black text-slate-950">{{ copy.b2bTitle }}</h2>
-          <p class="mt-4 leading-7 text-slate-600">{{ copy.b2bText }}</p>
-        </div>
-        <div class="rounded-2xl bg-white p-8 shadow-sm">
-          <h2 class="text-2xl font-black text-slate-950">{{ copy.sellTitle }}</h2>
-          <p class="mt-4 leading-7 text-slate-600">{{ copy.sellText }}</p>
-          <NuxtLink :to="localePath(paths.contact)" class="mt-6 inline-flex font-bold text-orange-600 hover:text-orange-700">
-            {{ copy.sellCta }}
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
+  </main>
 </template>
 
 <script lang="ts" setup>
@@ -93,75 +172,206 @@ definePageMeta({
   middleware: ['newsletter-confirmation-client', 'notifyme-interactions-client'],
 });
 
-const localePath = useLocalePath();
+const localePath = useLocalizedPath();
 const { locale } = useI18n();
 const { setPageMeta } = usePageMeta();
 
+const homeImages = {
+  company: '/_nuxt-plenty/images/amikon/home/company-building.jpg',
+  climate: '/_nuxt-plenty/images/amikon/home/category-climate.jpg',
+  robotics: '/_nuxt-plenty/images/amikon/home/category-robotics.jpg',
+  materialTesting: '/_nuxt-plenty/images/amikon/home/category-material-testing.jpg',
+  threeDPrinting: '/_nuxt-plenty/images/amikon/home/category-3d-printing.jpg',
+  shaker: '/_nuxt-plenty/images/amikon/home/category-shaker.jpg',
+};
+
 const de = {
-  kicker: 'Industriebedarf aus zweiter Hand',
-  title: 'Gebrauchte Automatisierungstechnik schnell und sicher beschaffen.',
+  categoryNavigationLabel: 'Ausgewählte Produktkategorien',
+  companyImageAlt: 'Firmengebäude der Amikon GmbH in Borken',
+  heroKicker: 'An- und Verkauf von Industrieequipment',
+  heroTitle: 'Willkommen bei Amikon GmbH',
+  heroCta: 'Sortiment entdecken',
+  welcomeHeading: 'Über Amikon',
   intro:
-    'Amikon bündelt Industrieelektronik, Maschinenkomponenten, Robotik, Antriebe und Ersatzteile für gewerbliche Einkäufer mit internationalem Versand.',
-  primaryCta: 'Produkte suchen',
-  secondaryCta: 'Anfrage stellen',
-  primaryTerm: 'Siemens',
-  procurementTitle: 'Ausgerichtet auf industrielle Beschaffung',
-  procurement: ['Hersteller, Modell und Artikelnummer im Fokus', 'B2B-Bestellprozess mit Konto, Warenkorb und Checkout', 'Klare Informationen zu Verfügbarkeit, Versand und Zahlung'],
-  categoriesKicker: 'Sortiment',
-  categoriesTitle: 'Kategorien für Instandhaltung, Einkauf und Produktion',
-  allProducts: 'Alle Produkte anzeigen',
-  b2bTitle: 'B2B-Positionierung klar sichtbar',
-  b2bText:
-    'Der neue Store kommuniziert konsequent, dass der Verkauf an Unternehmer, Gewerbetreibende, Freiberufler und öffentliche Institutionen gerichtet ist.',
-  sellTitle: 'Ankauf und Wiedervermarktung',
-  sellText:
-    'Neben dem Verkauf kann der Store auch Anfragen für gebrauchte Industriekomponenten und Maschinen aufnehmen und zur internen Bearbeitung weiterleiten.',
-  sellCta: 'Kontakt aufnehmen',
+    'Viele Unternehmen veräußern ihre Geräte nach Beendigung ihrer Projekte oder nachdem Investitionen vollständig abgeschrieben sind. Das bedeutet keinesfalls, dass diese Geräte nicht noch viele Jahre einwandfrei betrieben werden können. Die Amikon GmbH hat sich auf den An- und Verkauf von gebrauchtem Industrieequipment spezialisiert. Mit unserem Unternehmenskonzept geben wir Geräten einen zweiten Nutzungszyklus – Qualität und Nachhaltigkeit stehen dabei im Vordergrund.',
+  climateKicker: 'Gefragtes Sortiment',
+  climateTitle: 'Aktuelle Klimakammern',
+  viewAll: 'Alle ansehen',
+  openCategory: 'Kategorie öffnen',
+  newKicker: 'Frisch im Sortiment',
+  newTitle: 'Neuheiten',
+  quickSearch: 'Direkt suchen',
+  purchaseKicker: 'Maschinen und Ersatzteile verkaufen',
+  purchaseTitle: 'Ankaufformular',
+  purchaseText: 'Bieten Sie uns gebrauchte Maschinen, Industrieelektronik oder Ersatzteile direkt zur Prüfung an.',
+  purchaseCta: 'Anfrage starten',
+  companyTitle: 'Mehr über Amikon',
+  companyText:
+    'Erfahren Sie mehr über unsere Tätigkeitsbereiche, Leistungen und den nachhaltigen zweiten Lebenszyklus für Industrieequipment.',
+  companyCta: 'Zur Unternehmensseite',
+  brandsTitle: 'Auszug von TOP-Marken unserer angebotenen Produkte',
 };
 
 const en = {
-  kicker: 'Second-hand industrial supply',
-  title: 'Source used automation technology quickly and safely.',
+  categoryNavigationLabel: 'Selected product categories',
+  companyImageAlt: 'Amikon GmbH company building in Borken',
+  heroKicker: 'Buying and selling industrial equipment',
+  heroTitle: 'Welcome to Amikon GmbH',
+  heroCta: 'Explore our range',
+  welcomeHeading: 'About Amikon',
   intro:
-    'Amikon brings together industrial electronics, machinery components, robotics, drives and spare parts for professional buyers with international shipping.',
-  primaryCta: 'Search products',
-  secondaryCta: 'Send inquiry',
-  primaryTerm: 'Siemens',
-  procurementTitle: 'Designed for industrial procurement',
-  procurement: ['Manufacturer, model and item number in focus', 'B2B buying flow with account, cart and checkout', 'Clear availability, shipping and payment information'],
-  categoriesKicker: 'Catalog',
-  categoriesTitle: 'Categories for maintenance, purchasing and production',
-  allProducts: 'View all products',
-  b2bTitle: 'Clear B2B positioning',
-  b2bText:
-    'The new storefront consistently communicates that sales are directed to companies, traders, freelancers and public institutions.',
-  sellTitle: 'Purchasing and remarketing',
-  sellText:
-    'In addition to sales, the storefront can capture inquiries for used industrial components and machinery and route them for internal processing.',
-  sellCta: 'Contact us',
+    'Many companies sell their equipment after projects have ended or investments have been fully depreciated. This does not mean that the equipment cannot continue to operate reliably for many years. Amikon GmbH specializes in buying and selling used industrial equipment. Our business model gives equipment a second life, with quality and sustainability at its core.',
+  climateKicker: 'Popular range',
+  climateTitle: 'Current climate chambers',
+  viewAll: 'View all',
+  openCategory: 'Open category',
+  newKicker: 'Fresh stock',
+  newTitle: 'New arrivals',
+  quickSearch: 'Quick search',
+  purchaseKicker: 'Sell machinery and spare parts',
+  purchaseTitle: 'Purchase form',
+  purchaseText: 'Offer us your used machinery, industrial electronics or spare parts directly for review.',
+  purchaseCta: 'Start inquiry',
+  companyTitle: 'More about Amikon',
+  companyText:
+    'Learn more about our fields of activity, services and the sustainable second life cycle for industrial equipment.',
+  companyCta: 'Visit company website',
+  brandsTitle: 'A selection of top brands in our product range',
 };
 
 const copy = computed(() => (locale.value === 'de' ? de : en));
 
-const categories = computed(() =>
+const featuredCategories = computed(() =>
   locale.value === 'de'
     ? [
-        { kicker: 'Automation', title: 'SPS & Industrieelektronik', term: 'SPS Industrieelektronik', text: 'Steuerungen, Module, Netzteile, Frequenzumrichter und Ersatzteile.' },
-        { kicker: 'Mechanik', title: 'Maschinen & Anlagen', term: 'Maschinen Anlagen', text: 'Gebrauchte Maschinenkomponenten für Produktion und Instandhaltung.' },
-        { kicker: 'Robotik', title: 'Roboter & Zubehör', term: 'Robotik Roboter', text: 'Robotersysteme, Controller, Teach Panels und Peripherie.' },
-        { kicker: 'Antrieb', title: 'Motoren & Drives', term: 'Motor Antrieb', text: 'Servomotoren, Getriebe, Umrichter und Antriebstechnik.' },
-        { kicker: 'Bedienung', title: 'Displays & Panels', term: 'Display Panel', text: 'HMI, Bedienpanels, Monitore und Anzeigeeinheiten.' },
-        { kicker: 'Prüfung', title: 'Labor & Messtechnik', term: 'Labor Messtechnik', text: 'Prüfgeräte, Messsysteme und technische Laborausstattung.' },
+        {
+          label: 'Klimakammern',
+          imageAlt: 'Wärme- und Klimaschränke',
+          image: homeImages.climate,
+          slug: '/waerme-klimaschraenke',
+        },
+        { label: 'Roboter', imageAlt: 'Industrieroboter', image: homeImages.robotics, slug: '/roboter' },
+        {
+          label: 'Materialprüfung',
+          imageAlt: 'Materialprüfmaschine',
+          image: homeImages.materialTesting,
+          slug: '/materialpruefmaschinen',
+        },
+        {
+          label: '3D-Druck',
+          imageAlt: 'Industrieller 3D-Drucker',
+          image: homeImages.threeDPrinting,
+          slug: '/3d-druck',
+        },
+        {
+          label: 'Shaker',
+          imageAlt: 'Schwingprüfanlage',
+          image: homeImages.shaker,
+          slug: '/shaker-schwingpruefanlagen',
+        },
       ]
     : [
-        { kicker: 'Automation', title: 'PLC & industrial electronics', term: 'PLC industrial electronics', text: 'Controllers, modules, power supplies, inverters and spare parts.' },
-        { kicker: 'Mechanics', title: 'Machinery & equipment', term: 'Machinery equipment', text: 'Used machinery components for production and maintenance.' },
-        { kicker: 'Robotics', title: 'Robots & accessories', term: 'Robotics robot', text: 'Robot systems, controllers, teach panels and peripherals.' },
-        { kicker: 'Drive', title: 'Motors & drives', term: 'Motor drive', text: 'Servo motors, gearboxes, inverters and drive technology.' },
-        { kicker: 'Operation', title: 'Displays & panels', term: 'Display panel', text: 'HMI, operator panels, monitors and display units.' },
-        { kicker: 'Testing', title: 'Lab & measurement', term: 'Lab measurement', text: 'Testing devices, measuring systems and technical lab equipment.' },
+        {
+          label: 'Climate chambers',
+          imageAlt: 'Temperature and climate chambers',
+          image: homeImages.climate,
+          slug: '/waerme-klimaschraenke',
+        },
+        { label: 'Robots', imageAlt: 'Industrial robot', image: homeImages.robotics, slug: '/roboter' },
+        {
+          label: 'Material testing',
+          imageAlt: 'Material testing machine',
+          image: homeImages.materialTesting,
+          slug: '/materialpruefmaschinen',
+        },
+        {
+          label: '3D printing',
+          imageAlt: 'Industrial 3D printer',
+          image: homeImages.threeDPrinting,
+          slug: '/3d-druck',
+        },
+        {
+          label: 'Shakers',
+          imageAlt: 'Vibration test system',
+          image: homeImages.shaker,
+          slug: '/shaker-schwingpruefanlagen',
+        },
       ],
 );
+
+const climateEntries = computed(() =>
+  locale.value === 'de'
+    ? [
+        {
+          kicker: 'Temperatur & Feuchte',
+          title: 'Wärme- und Klimaschränke',
+          text: 'Prüfschränke und Klimakammern für reproduzierbare Umweltbedingungen.',
+          slug: '/waerme-klimaschraenke',
+        },
+        {
+          kicker: 'Große Prüfvolumen',
+          title: 'Begehbare Klimakammern',
+          text: 'Klimaprüfräume für Bauteile, Baugruppen und komplette Systeme.',
+          slug: '/begehbare-klimakammern',
+        },
+        {
+          kicker: 'Korrosionsprüfung',
+          title: 'Salzsprühkammern',
+          text: 'Prüftechnik für Salzsprüh- und Korrosionsbeständigkeitstests.',
+          slug: '/salzspruehkammern',
+        },
+      ]
+    : [
+        {
+          kicker: 'Temperature & humidity',
+          title: 'Climate chambers',
+          text: 'Test chambers for reproducible environmental conditions.',
+          slug: '/waerme-klimaschraenke',
+        },
+        {
+          kicker: 'Large test volumes',
+          title: 'Walk-in chambers',
+          text: 'Climate test rooms for components, assemblies and complete systems.',
+          slug: '/begehbare-klimakammern',
+        },
+        {
+          kicker: 'Corrosion testing',
+          title: 'Salt spray chambers',
+          text: 'Test equipment for salt spray and corrosion resistance tests.',
+          slug: '/salzspruehkammern',
+        },
+      ],
+);
+
+const newEntries = computed(() =>
+  locale.value === 'de'
+    ? [
+        { label: 'Siemens SIMATIC', term: 'Siemens SIMATIC' },
+        { label: 'Festo Pneumatik', term: 'Festo' },
+        { label: 'Bedienpanels & HMI', term: 'HMI Panel' },
+        { label: 'Mess- und Prüftechnik', term: 'Messtechnik' },
+      ]
+    : [
+        { label: 'Siemens SIMATIC', term: 'Siemens SIMATIC' },
+        { label: 'Festo pneumatics', term: 'Festo' },
+        { label: 'Operator panels & HMI', term: 'HMI Panel' },
+        { label: 'Measurement & testing', term: 'Measurement technology' },
+      ],
+);
+
+const brands = [
+  'Vötsch',
+  'Weiss',
+  'CTS',
+  'Memmert',
+  'Espec',
+  'Nabertherm',
+  'Binder',
+  'Siemens',
+  'KUKA',
+  'Stäubli',
+  'ABB',
+];
 
 setPageMeta(locale.value === 'de' ? 'Amikon Industriebedarf' : 'Amikon industrial supply', 'home');
 

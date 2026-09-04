@@ -170,6 +170,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { Product } from '@plentymarkets/shop-api';
 import type { Locale } from '#i18n';
 
 defineI18nRoute({
@@ -250,30 +251,34 @@ const en = {
 
 const copy = computed(() => (locale.value === 'de' ? de : en));
 
-const { data: climateProductsCatalog, fetchProducts: fetchClimateProducts } = useProducts(
-  `amikon-home-climate-${locale.value}`,
-);
-const { data: newProductsCatalog, fetchProducts: fetchNewProducts } = useProducts(`amikon-home-new-${locale.value}`);
+const sdk = useSdk();
+const climateProducts = ref<Product[]>([]);
+const newProducts = ref<Product[]>([]);
 
 onMounted(() => {
   void Promise.allSettled([
-    fetchClimateProducts({
+    sdk.plentysystems.getFacet({
       categoryUrlPath: '/waerme-klimaschraenke',
       itemsPerPage: 12,
       page: 1,
       sort: 'variation.createdAt_desc',
     }),
-    fetchNewProducts({
+    sdk.plentysystems.getFacet({
       type: 'all',
       itemsPerPage: 12,
       page: 1,
       sort: 'variation.createdAt_desc',
     }),
-  ]);
-});
+  ]).then(([climateResult, newResult]) => {
+    if (climateResult.status === 'fulfilled') {
+      climateProducts.value = climateResult.value.data?.products?.slice(0, 12) ?? [];
+    }
 
-const climateProducts = computed(() => climateProductsCatalog.value.products?.slice(0, 12) ?? []);
-const newProducts = computed(() => newProductsCatalog.value.products?.slice(0, 12) ?? []);
+    if (newResult.status === 'fulfilled') {
+      newProducts.value = newResult.value.data?.products?.slice(0, 12) ?? [];
+    }
+  });
+});
 
 const featuredCategories = computed(() =>
   locale.value === 'de'

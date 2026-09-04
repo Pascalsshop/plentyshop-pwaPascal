@@ -75,7 +75,14 @@
           </NuxtLink>
         </div>
 
-        <div class="mt-8 grid gap-5 @md:grid-cols-3">
+        <ProductSlider
+          v-if="climateProducts.length"
+          :items="climateProducts"
+          class="mt-8"
+          data-testid="amikon-climate-products"
+        />
+
+        <div v-else class="mt-8 grid gap-5 @md:grid-cols-3" data-testid="amikon-climate-fallback">
           <NuxtLink
             v-for="entry in climateEntries"
             :key="entry.slug"
@@ -98,7 +105,9 @@
           <h2 class="mt-1 text-2xl font-medium uppercase @lg:text-3xl">{{ copy.newTitle }}</h2>
         </div>
 
-        <div class="mt-8 grid grid-cols-2 gap-3 @md:grid-cols-4 @lg:gap-5">
+        <ProductSlider v-if="newProducts.length" :items="newProducts" class="mt-8" data-testid="amikon-new-products" />
+
+        <div v-else class="mt-8 grid grid-cols-2 gap-3 @md:grid-cols-4 @lg:gap-5" data-testid="amikon-new-fallback">
           <NuxtLink
             v-for="entry in newEntries"
             :key="entry.term"
@@ -240,6 +249,31 @@ const en = {
 };
 
 const copy = computed(() => (locale.value === 'de' ? de : en));
+
+const { data: climateProductsCatalog, fetchProducts: fetchClimateProducts } = useProducts(
+  `amikon-home-climate-${locale.value}`,
+);
+const { data: newProductsCatalog, fetchProducts: fetchNewProducts } = useProducts(`amikon-home-new-${locale.value}`);
+
+onMounted(() => {
+  void Promise.allSettled([
+    fetchClimateProducts({
+      categoryUrlPath: '/waerme-klimaschraenke',
+      itemsPerPage: 12,
+      page: 1,
+      sort: 'variation.createdAt_desc',
+    }),
+    fetchNewProducts({
+      type: 'all',
+      itemsPerPage: 12,
+      page: 1,
+      sort: 'variation.createdAt_desc',
+    }),
+  ]);
+});
+
+const climateProducts = computed(() => climateProductsCatalog.value.products?.slice(0, 12) ?? []);
+const newProducts = computed(() => newProductsCatalog.value.products?.slice(0, 12) ?? []);
 
 const featuredCategories = computed(() =>
   locale.value === 'de'

@@ -4,7 +4,7 @@ export const AMIKON_PURCHASE_FORM_PATH = '/ankaufformular';
 export const AMIKON_NEWSLETTER_URL = 'https://www.amikon.de/newsletter/';
 export const AMIKON_PHONE_HREF = 'tel:+492861685300';
 export const AMIKON_PHONE_LABEL = '+49 2861 – 68 53 00';
-export const AMIKON_LOGO_PATH = '/amikon/logo.gif';
+export const AMIKON_LOGO_PATH = '/_nuxt-plenty/images/amikon/logo.gif';
 
 export const AMIKON_FALLBACK_CATEGORIES = [
   { slug: '/3d-druck', translationKey: 'amikonHeader.categories.threeDPrinting' },

@@ -375,7 +375,7 @@ const { t, locale } = useI18n();
 const localePath = useLocalizedPath();
 const router = useRouter();
 const route = useRoute();
-const { data: categoryTree, getCategoryTree } = useCategoryTree();
+const { data: categoryTree } = useCategoryTree();
 const { buildCategoryMenuLink, toggle: toggleLanguageSelect } = useLocalization();
 const { data: cart } = useCart();
 const { wishlistItemIds } = useWishlist();
@@ -444,12 +444,6 @@ const closeMenus = () => {
   desktopMenuOpen.value = false;
   mobileMenuOpen.value = false;
 };
-
-onNuxtReady(async () => {
-  if (categoryTree.value.length === 0) {
-    await getCategoryTree();
-  }
-});
 
 const submitSearch = () => {
   const term = searchTerm.value.trim();

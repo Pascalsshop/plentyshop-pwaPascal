@@ -397,19 +397,17 @@ const accountLabel = computed(
 const cartItemsCount = computed(() => cart.value?.items?.reduce((count, { quantity }) => count + quantity, 0) ?? 0);
 const cartTotal = computed(() => format(cartGetters.getTotals(cart.value).total ?? 0));
 
-const liveCategoryTree = computed(() => categoryTreeGetters.getTree(categoryTree.value));
-
 const categoryMenuItems = computed<AmikonNavigationItem[]>(() => {
   const liveItems: AmikonNavigationItem[] = [];
 
-  for (const category of liveCategoryTree.value) {
+  for (const category of categoryTree.value) {
     const label = categoryTreeGetters.getName(category);
 
     if (label) {
       liveItems.push({
         id: category.id,
         label,
-        link: localePath(buildCategoryMenuLink(category, liveCategoryTree.value)),
+        link: localePath(buildCategoryMenuLink(category, categoryTree.value)),
       });
     }
   }

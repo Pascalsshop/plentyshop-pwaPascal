@@ -53,65 +53,8 @@
       </div>
     </section>
 
-    <section class="border-y border-neutral-200 bg-white">
-      <div class="mx-auto max-w-screen-2xl px-4 py-12 @lg:py-16">
-        <div
-          class="flex flex-col gap-4 border-l-4 border-amikon-600 pl-4 @md:flex-row @md:items-end @md:justify-between"
-        >
-          <div>
-            <p class="text-xs font-bold uppercase tracking-[0.2em] text-amikon-600">{{ copy.climateKicker }}</p>
-            <h2 class="mt-1 text-2xl font-medium uppercase @lg:text-3xl">{{ copy.climateTitle }}</h2>
-          </div>
-          <NuxtLink :to="localePath('/waerme-klimaschraenke')" class="font-semibold text-amikon-600 hover:underline">
-            {{ copy.viewAll }}
-          </NuxtLink>
-        </div>
-
-        <ProductSlider
-          v-if="climateProducts.length"
-          :items="climateProducts"
-          class="mt-8"
-          data-testid="amikon-climate-products"
-        />
-
-        <div v-else class="mt-8 grid gap-5 @md:grid-cols-3" data-testid="amikon-climate-fallback">
-          <NuxtLink
-            v-for="entry in climateEntries"
-            :key="entry.slug"
-            :to="localePath(entry.slug)"
-            class="group flex min-h-48 flex-col justify-end overflow-hidden border border-neutral-200 bg-neutral-50 p-6 no-underline transition hover:border-amikon-600 hover:shadow-md"
-          >
-            <p class="text-xs font-bold uppercase tracking-[0.16em] text-amikon-600">{{ entry.kicker }}</p>
-            <h3 class="mt-2 text-xl font-semibold group-hover:text-amikon-600">{{ entry.title }}</h3>
-            <p class="mt-3 max-w-md text-sm leading-6 text-neutral-600">{{ entry.text }}</p>
-            <span class="mt-5 text-sm font-bold text-amikon-600">{{ copy.openCategory }} →</span>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-neutral-100">
-      <div class="mx-auto max-w-screen-2xl px-4 py-12 @lg:py-16">
-        <div class="border-l-4 border-amikon-600 pl-4">
-          <p class="text-xs font-bold uppercase tracking-[0.2em] text-amikon-600">{{ copy.newKicker }}</p>
-          <h2 class="mt-1 text-2xl font-medium uppercase @lg:text-3xl">{{ copy.newTitle }}</h2>
-        </div>
-
-        <ProductSlider v-if="newProducts.length" :items="newProducts" class="mt-8" data-testid="amikon-new-products" />
-
-        <div v-else class="mt-8 grid grid-cols-2 gap-3 @md:grid-cols-4 @lg:gap-5" data-testid="amikon-new-fallback">
-          <NuxtLink
-            v-for="entry in newEntries"
-            :key="entry.term"
-            :to="{ path: localePath(paths.search), query: { term: entry.term } }"
-            class="group flex min-h-36 flex-col justify-between bg-white p-5 no-underline shadow-sm ring-1 ring-neutral-200 transition hover:-translate-y-1 hover:shadow-md @lg:min-h-44 @lg:p-6"
-          >
-            <span class="text-xs font-bold uppercase tracking-[0.16em] text-neutral-500">{{ copy.quickSearch }}</span>
-            <span class="mt-6 text-lg font-semibold group-hover:text-amikon-600 @lg:text-xl">{{ entry.label }}</span>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
+    <AmikonHomeProducts kind="climate" :title="copy.climateTitle" category-path="/waerme-klimaschraenke" />
+    <AmikonHomeProducts kind="new" :title="copy.newTitle" />
 
     <section class="bg-white">
       <div class="mx-auto grid max-w-screen-2xl gap-5 px-4 py-12 @lg:grid-cols-2 @lg:py-16">
@@ -162,7 +105,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { Product } from '@plentymarkets/shop-api';
 import type { Locale } from '#i18n';
 
 defineI18nRoute({
@@ -243,35 +185,6 @@ const en = {
 
 const copy = computed(() => (locale.value === 'de' ? de : en));
 
-const sdk = useSdk();
-const climateProducts = ref<Product[]>([]);
-const newProducts = ref<Product[]>([]);
-
-onMounted(() => {
-  void Promise.allSettled([
-    sdk.plentysystems.getFacet({
-      categoryUrlPath: '/waerme-klimaschraenke',
-      itemsPerPage: 12,
-      page: 1,
-      sort: 'variation.createdAt_desc',
-    }),
-    sdk.plentysystems.getFacet({
-      type: 'all',
-      itemsPerPage: 12,
-      page: 1,
-      sort: 'variation.createdAt_desc',
-    }),
-  ]).then(([climateResult, newResult]) => {
-    if (climateResult.status === 'fulfilled') {
-      climateProducts.value = climateResult.value.data?.products?.slice(0, 12) ?? [];
-    }
-
-    if (newResult.status === 'fulfilled') {
-      newProducts.value = newResult.value.data?.products?.slice(0, 12) ?? [];
-    }
-  });
-});
-
 const featuredCategories = computed(() =>
   locale.value === 'de'
     ? [
@@ -327,66 +240,6 @@ const featuredCategories = computed(() =>
           image: homeImages.shaker,
           slug: '/shaker-schwingpruefanlagen',
         },
-      ],
-);
-
-const climateEntries = computed(() =>
-  locale.value === 'de'
-    ? [
-        {
-          kicker: 'Temperatur & Feuchte',
-          title: 'Wärme- und Klimaschränke',
-          text: 'Prüfschränke und Klimakammern für reproduzierbare Umweltbedingungen.',
-          slug: '/waerme-klimaschraenke',
-        },
-        {
-          kicker: 'Große Prüfvolumen',
-          title: 'Begehbare Klimakammern',
-          text: 'Klimaprüfräume für Bauteile, Baugruppen und komplette Systeme.',
-          slug: '/begehbare-klimakammern',
-        },
-        {
-          kicker: 'Korrosionsprüfung',
-          title: 'Salzsprühkammern',
-          text: 'Prüftechnik für Salzsprüh- und Korrosionsbeständigkeitstests.',
-          slug: '/salzspruehkammern',
-        },
-      ]
-    : [
-        {
-          kicker: 'Temperature & humidity',
-          title: 'Climate chambers',
-          text: 'Test chambers for reproducible environmental conditions.',
-          slug: '/waerme-klimaschraenke',
-        },
-        {
-          kicker: 'Large test volumes',
-          title: 'Walk-in chambers',
-          text: 'Climate test rooms for components, assemblies and complete systems.',
-          slug: '/begehbare-klimakammern',
-        },
-        {
-          kicker: 'Corrosion testing',
-          title: 'Salt spray chambers',
-          text: 'Test equipment for salt spray and corrosion resistance tests.',
-          slug: '/salzspruehkammern',
-        },
-      ],
-);
-
-const newEntries = computed(() =>
-  locale.value === 'de'
-    ? [
-        { label: 'Siemens SIMATIC', term: 'Siemens SIMATIC' },
-        { label: 'Festo Pneumatik', term: 'Festo' },
-        { label: 'Bedienpanels & HMI', term: 'HMI Panel' },
-        { label: 'Mess- und Prüftechnik', term: 'Messtechnik' },
-      ]
-    : [
-        { label: 'Siemens SIMATIC', term: 'Siemens SIMATIC' },
-        { label: 'Festo pneumatics', term: 'Festo' },
-        { label: 'Operator panels & HMI', term: 'HMI Panel' },
-        { label: 'Measurement & testing', term: 'Measurement technology' },
       ],
 );
 

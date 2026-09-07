@@ -15,7 +15,10 @@ export const useSliderImagePreload = (options: UseSliderImagePreloadOptions) => 
     const el = scrollContainerRef.value;
     if (!el) return;
 
-    const itemFullWidth = ITEM_WIDTH + ITEM_GAP;
+    const firstCard = el.querySelector<HTMLElement>('[data-testid="product-card"]');
+    const measuredWidth = firstCard?.getBoundingClientRect().width;
+    const measuredGap = Number.parseFloat(window.getComputedStyle(el).columnGap);
+    const itemFullWidth = (measuredWidth || ITEM_WIDTH) + (Number.isFinite(measuredGap) ? measuredGap : ITEM_GAP);
     const firstVisibleIndex = Math.floor(el.scrollLeft / itemFullWidth);
     const visibleCount = Math.max(1, Math.ceil(el.clientWidth / itemFullWidth));
 

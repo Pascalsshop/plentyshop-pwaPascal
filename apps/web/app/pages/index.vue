@@ -1,5 +1,5 @@
 <template>
-  <main class="bg-neutral-50 text-neutral-900" data-testid="amikon-homepage">
+  <main class="amikon-home bg-neutral-50 text-neutral-900" data-testid="amikon-homepage">
     <section class="border-b border-neutral-200 bg-[#f5f5f7]" :aria-label="copy.categoryNavigationLabel">
       <div
         class="mx-auto grid max-w-screen-2xl grid-cols-2 gap-3 px-4 py-6 @md:grid-cols-3 @lg:grid-cols-5 @lg:gap-6 @lg:py-10"
@@ -13,7 +13,7 @@
           <img
             :src="category.image"
             :alt="category.imageAlt"
-            class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+            class="amikon-category-image aspect-square w-full object-contain transition duration-300"
             width="520"
             height="390"
           />
@@ -38,20 +38,12 @@
           height="984"
           fetchpriority="high"
         />
-        <div class="absolute inset-0 bg-gradient-to-r from-black/65 via-black/25 to-transparent" />
         <div
           class="relative flex min-h-[320px] max-w-4xl flex-col justify-center px-6 py-12 text-white @md:min-h-[440px] @md:px-10 @xl:min-h-[540px] @xl:px-14"
         >
-          <p class="mb-4 text-sm font-bold uppercase tracking-[0.24em] text-white/80">{{ copy.heroKicker }}</p>
           <h1 class="max-w-3xl text-4xl font-light uppercase leading-tight tracking-tight @md:text-6xl @xl:text-7xl">
             {{ copy.heroTitle }}
           </h1>
-          <NuxtLink
-            :to="localePath(paths.search)"
-            class="mt-8 inline-flex w-fit items-center bg-amikon-600 px-6 py-3 text-sm font-bold uppercase text-white no-underline transition hover:bg-amikon-700 focus:outline-none focus:ring-2 focus:ring-white"
-          >
-            {{ copy.heroCta }}
-          </NuxtLink>
         </div>
       </div>
 
@@ -418,3 +410,84 @@ const { getRobots, setRobotForStaticPage } = useRobots();
 getRobots();
 setRobotForStaticPage('Homepage');
 </script>
+
+<style scoped>
+.amikon-home {
+  background: #f7f7f9;
+}
+.amikon-home > section > .max-w-screen-2xl,
+.amikon-home > .max-w-screen-2xl {
+  max-width: 1600px;
+}
+.amikon-home > section:first-child {
+  border: 0;
+  background: transparent;
+}
+.amikon-home > section:first-child > div {
+  gap: 30px;
+  padding: 40px 15px;
+}
+.amikon-home > section:first-child a {
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+.amikon-category-image {
+  filter: saturate(0.5);
+}
+a:hover .amikon-category-image {
+  filter: saturate(0.8);
+}
+.amikon-home > section:first-child span {
+  bottom: 15px;
+  padding: 10px 20px;
+  font-weight: 400;
+  box-shadow: none;
+}
+.amikon-home > section:nth-child(2) {
+  padding: 0 15px;
+}
+.amikon-home > section:nth-child(2) > div:first-child {
+  min-height: 0;
+  aspect-ratio: 3 / 1;
+  box-shadow: none;
+}
+.amikon-home > section:nth-child(2) > div:first-child > div {
+  min-height: 0;
+  height: 100%;
+  max-width: 100%;
+  padding: 30px;
+}
+.amikon-home h1 {
+  max-width: 100%;
+  font-size: clamp(2.4rem, 6.2vw, 6rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+.amikon-home > section:nth-child(2) > div:last-child {
+  max-width: 100%;
+  padding: 28px 0;
+}
+.amikon-home > section:nth-child(2) p {
+  font-size: 16px;
+  line-height: 1.65;
+  text-align: justify;
+}
+@media (max-width: 767px) {
+  .amikon-home > section:first-child > div {
+    gap: 16px;
+    padding: 24px 15px;
+  }
+  .amikon-home > section:first-child span {
+    white-space: normal;
+    padding: 8px;
+    font-size: 12px;
+  }
+  .amikon-home > section:nth-child(2) > div:first-child {
+    aspect-ratio: 4 / 3;
+  }
+  .amikon-home > section:nth-child(2) > div:first-child > div {
+    padding: 20px;
+  }
+}
+</style>

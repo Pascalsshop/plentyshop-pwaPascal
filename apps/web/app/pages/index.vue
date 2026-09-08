@@ -56,49 +56,7 @@
     <AmikonHomeProducts kind="climate" :title="copy.climateTitle" category-path="/waerme-klimaschraenke" />
     <AmikonHomeProducts kind="new" :title="copy.newTitle" />
 
-    <section class="bg-white">
-      <div class="mx-auto grid max-w-screen-2xl gap-5 px-4 py-12 @lg:grid-cols-2 @lg:py-16">
-        <NuxtLink
-          :to="localePath('/ankaufformular')"
-          class="group relative overflow-hidden bg-amikon-600 px-7 py-10 text-white no-underline shadow-sm @md:px-10"
-        >
-          <p class="text-xs font-bold uppercase tracking-[0.2em] text-white/70">{{ copy.purchaseKicker }}</p>
-          <h2 class="mt-3 text-3xl font-semibold">{{ copy.purchaseTitle }}</h2>
-          <p class="mt-4 max-w-xl leading-7 text-white/80">{{ copy.purchaseText }}</p>
-          <span class="mt-7 inline-flex border-b border-white pb-1 font-bold">{{ copy.purchaseCta }} →</span>
-        </NuxtLink>
-
-        <a
-          href="https://www.amikon.de/"
-          class="group border border-neutral-200 bg-neutral-100 px-7 py-10 text-neutral-900 no-underline shadow-sm transition hover:border-amikon-600 @md:px-10"
-        >
-          <p class="text-xs font-bold uppercase tracking-[0.2em] text-amikon-600">AMIKON.DE</p>
-          <h2 class="mt-3 text-3xl font-semibold">{{ copy.companyTitle }}</h2>
-          <p class="mt-4 max-w-xl leading-7 text-neutral-600">{{ copy.companyText }}</p>
-          <span class="mt-7 inline-flex border-b border-amikon-600 pb-1 font-bold text-amikon-600"
-            >{{ copy.companyCta }} →</span
-          >
-        </a>
-      </div>
-    </section>
-
-    <section class="border-t border-neutral-200 bg-neutral-50">
-      <div class="mx-auto max-w-screen-2xl px-4 py-10 text-center">
-        <h2 class="text-lg font-semibold">{{ copy.brandsTitle }}</h2>
-        <div
-          class="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-bold uppercase tracking-wide text-neutral-500 @lg:text-base"
-        >
-          <NuxtLink
-            v-for="brand in brands"
-            :key="brand"
-            :to="{ path: localePath(paths.search), query: { term: brand } }"
-            class="hover:text-amikon-600"
-          >
-            {{ brand }}
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
+    <AmikonHomeBusiness />
 
     <AmikonTrustBar />
   </main>
@@ -242,20 +200,6 @@ const featuredCategories = computed(() =>
         },
       ],
 );
-
-const brands = [
-  'Vötsch',
-  'Weiss',
-  'CTS',
-  'Memmert',
-  'Espec',
-  'Nabertherm',
-  'Binder',
-  'Siemens',
-  'KUKA',
-  'Stäubli',
-  'ABB',
-];
 
 setPageMeta(locale.value === 'de' ? 'Amikon Industriebedarf' : 'Amikon industrial supply', 'home');
 

@@ -1,10 +1,11 @@
 <template>
-  <section class="border-y border-neutral-200 bg-white">
-    <div class="mx-auto grid max-w-screen-2xl gap-px bg-neutral-200 @md:grid-cols-2 @lg:grid-cols-4">
-      <article v-for="item in items" :key="item.title" class="bg-white px-6 py-8 text-center @lg:min-h-44">
-        <p class="text-xs font-bold uppercase tracking-[0.18em] text-amikon-600">{{ item.kicker }}</p>
-        <h3 class="mt-2 font-semibold text-neutral-950">{{ item.title }}</h3>
-        <p class="mt-3 text-sm leading-6 text-neutral-600">{{ item.text }}</p>
+  <section class="bg-white">
+    <div class="amikon-trust-grid">
+      <article v-for="item in items" :key="item.title" class="text-center">
+        <h3 class="text-sm font-semibold">
+          <span aria-hidden="true" class="text-amikon-600">✓</span> {{ item.title }}
+        </h3>
+        <p class="mt-1 text-sm leading-6 text-neutral-700">{{ item.text }}</p>
       </article>
     </div>
   </section>
@@ -61,3 +62,25 @@ const items = computed(() =>
       ],
 );
 </script>
+
+<style scoped>
+.amikon-trust-grid {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 30px;
+  padding: 28px 15px;
+}
+@media (max-width: 991px) {
+  .amikon-trust-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 479px) {
+  .amikon-trust-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+</style>

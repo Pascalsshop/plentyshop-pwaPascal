@@ -6,12 +6,14 @@
     :class="{ 'pointer-events-none opacity-50': loading }"
   >
     <SfLoaderCircular v-if="loading" class="fixed top-[50%] right-0 left-0 m-auto z-max" size="2xl" />
-    <EditableBlocks
-      :identifier="identifier"
-      :type="'category'"
-      data-testid="category-page-content"
-      :prevent-blocks-request="productsCatalog.category?.type === 'item'"
-    />
+    <AmikonCategoryAppearance :enabled="isItemCategoryPage">
+      <EditableBlocks
+        :identifier="identifier"
+        :type="'category'"
+        data-testid="category-page-content"
+        :prevent-blocks-request="productsCatalog.category?.type === 'item'"
+      />
+    </AmikonCategoryAppearance>
   </NuxtLayout>
 </template>
 

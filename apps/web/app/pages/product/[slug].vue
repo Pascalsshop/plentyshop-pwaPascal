@@ -1,6 +1,8 @@
 <template>
   <NuxtLayout name="default" :breadcrumbs="breadcrumbs">
-    <EditableBlocks :identifier="'0'" :type="'product'" prevent-blocks-request />
+    <AmikonProductAppearance>
+      <EditableBlocks :identifier="'0'" :type="'product'" prevent-blocks-request />
+    </AmikonProductAppearance>
     <UiReviewModal />
     <ProductLegalDetailsDrawer v-if="open" :product="product" />
   </NuxtLayout>

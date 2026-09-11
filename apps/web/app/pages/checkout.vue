@@ -1,63 +1,69 @@
 <template>
-  <NuxtLayout
-    name="checkout"
-    :back-label-desktop="t('common.actions.back')"
-    :back-label-mobile="t('common.actions.back')"
-    :heading="t('common.labels.checkout')"
-  >
-    <div v-if="cart" class="@lg:grid @lg:grid-cols-12 @lg:gap-x-6">
-      <div class="col-span-6 @xl:col-span-7 mb-10 @lg:mb-0">
-        <UiDivider id="top-contact-information-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
-        <ContactInformation id="contact-information" />
-        <UiDivider id="top-shipping-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
-        <AddressContainer id="shipping-address" :key="0" :type="AddressType.Shipping" />
-        <UiDivider id="top-billing-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
-        <div v-if="showBillingAddressSection">
-          <AddressContainer id="billing-address" :key="1" :type="AddressType.Billing" />
-          <UiDivider id="bottom-billing-divider" class-name="w-screen @md:w-auto -mx-4 @md:mx-0" />
-        </div>
-        <div class="relative" :class="{ 'pointer-events-none opacity-50': disableShippingPayment }">
-          <ShippingMethod
-            :disabled="disableShippingPayment"
-            :loading="!checkoutReady"
-            @update:shipping-method="handleShippingMethodUpdate"
-          />
-          <SfLoaderCircular
-            v-if="disableShippingPayment"
-            class="absolute mt-5 right-0 left-0 m-auto z-loader"
-            size="2xl"
-          />
+  <AmikonCheckoutAppearance>
+    <NuxtLayout
+      name="checkout"
+      :back-label-desktop="t('common.actions.back')"
+      :back-label-mobile="t('common.actions.back')"
+      :heading="t('common.labels.checkout')"
+    >
+      <div v-if="cart" class="@lg:grid @lg:grid-cols-12 @lg:gap-x-6">
+        <div class="col-span-6 @xl:col-span-7 mb-10 @lg:mb-0">
+          <UiDivider id="top-contact-information-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <ContactInformation id="contact-information" />
+          <UiDivider id="top-shipping-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <AddressContainer id="shipping-address" :key="0" :type="AddressType.Shipping" />
+          <UiDivider id="top-billing-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <div v-if="showBillingAddressSection">
+            <AddressContainer id="billing-address" :key="1" :type="AddressType.Billing" />
+            <UiDivider id="bottom-billing-divider" class-name="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          </div>
+          <div class="relative" :class="{ 'pointer-events-none opacity-50': disableShippingPayment }">
+            <ShippingMethod
+              :disabled="disableShippingPayment"
+              :loading="!checkoutReady"
+              @update:shipping-method="handleShippingMethodUpdate"
+            />
+            <SfLoaderCircular
+              v-if="disableShippingPayment"
+              class="absolute mt-5 right-0 left-0 m-auto z-loader"
+              size="2xl"
+            />
+            <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+            <PreferredDeliveryPackstationFinder v-if="countryHasDelivery" />
+            <PreferredDelivery v-if="countryHasDelivery" />
+            <UiDivider v-if="preferredDeliveryAvailable" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+            <CheckoutPayment :disabled="disableShippingPayment" @update:active-payment="handlePaymentMethodUpdate" />
+          </div>
           <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0" />
-          <PreferredDeliveryPackstationFinder v-if="countryHasDelivery" />
-          <PreferredDelivery v-if="countryHasDelivery" />
-          <UiDivider v-if="preferredDeliveryAvailable" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
-          <CheckoutPayment :disabled="disableShippingPayment" @update:active-payment="handlePaymentMethodUpdate" />
+          <CustomerReference />
+          <CustomerWish />
+          <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0 mb-10" />
+          <CheckoutGeneralTerms />
         </div>
-        <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0" />
-        <CustomerReference />
-        <CustomerWish />
-        <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0 mb-10" />
-        <CheckoutGeneralTerms />
+        <div class="col-span-6 @xl:col-span-5">
+          <div v-for="(cartItem, index) in cart?.items" :key="cartItem.id">
+            <UiCartProductCard :cart-item="cartItem" :class="{ 'border-t': index === 0 }" />
+          </div>
+          <div class="relative @md:sticky @md:top-20 h-fit" :class="{ 'pointer-events-none opacity-50': cartLoading }">
+            <SfLoaderCircular
+              v-if="cartLoading"
+              class="absolute top-[130px] right-0 left-0 m-auto z-loader"
+              size="2xl"
+            />
+            <Coupon />
+            <OrderSummary v-if="cart" :cart="cart" class="mt-4">
+              <CheckoutExportDeliveryHint v-if="cart.isExportDelivery" />
+              <ClientOnly>
+                <PaymentButtons />
+              </ClientOnly>
+              <ModuleComponentRendering area="checkout.afterBuyButton" />
+              <GuaranteeNotice v-if="showGuaranteeNotice" />
+            </OrderSummary>
+          </div>
+        </div>
       </div>
-      <div class="col-span-6 @xl:col-span-5">
-        <div v-for="(cartItem, index) in cart?.items" :key="cartItem.id">
-          <UiCartProductCard :cart-item="cartItem" :class="{ 'border-t': index === 0 }" />
-        </div>
-        <div class="relative @md:sticky @md:top-20 h-fit" :class="{ 'pointer-events-none opacity-50': cartLoading }">
-          <SfLoaderCircular v-if="cartLoading" class="absolute top-[130px] right-0 left-0 m-auto z-loader" size="2xl" />
-          <Coupon />
-          <OrderSummary v-if="cart" :cart="cart" class="mt-4">
-            <CheckoutExportDeliveryHint v-if="cart.isExportDelivery" />
-            <ClientOnly>
-              <PaymentButtons />
-            </ClientOnly>
-            <ModuleComponentRendering area="checkout.afterBuyButton" />
-            <GuaranteeNotice v-if="showGuaranteeNotice" />
-          </OrderSummary>
-        </div>
-      </div>
-    </div>
-  </NuxtLayout>
+    </NuxtLayout>
+  </AmikonCheckoutAppearance>
 </template>
 
 <script setup lang="ts">

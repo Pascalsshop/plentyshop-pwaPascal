@@ -81,6 +81,22 @@ withDefaults(defineProps<{ enabled?: boolean }>(), { enabled: true });
 .amikon-category :deep(select:focus-visible) {
   outline-color: #392f6e;
 }
+@media (max-width: 1023px) {
+  .amikon-category :deep([data-testid='pagination-previous']),
+  .amikon-category :deep([data-testid='pagination-next']) {
+    padding-left: 12px;
+    padding-right: 12px;
+    flex-shrink: 0;
+  }
+  .amikon-category :deep([data-testid='pagination-previous'] > span),
+  .amikon-category :deep([data-testid='pagination-next'] > span) {
+    display: none;
+  }
+  .amikon-category :deep([data-testid='pagination'] li button) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
 @media (max-width: 767px) {
   .amikon-category {
     padding-top: 16px;

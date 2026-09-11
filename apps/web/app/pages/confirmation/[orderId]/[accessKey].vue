@@ -1,7 +1,9 @@
 <template>
   <NuxtLazyHydrate when-visible>
     <template v-if="data">
-      <ConfirmationPageContent :order="data" />
+      <AmikonConfirmationAppearance>
+        <ConfirmationPageContent :order="data" />
+      </AmikonConfirmationAppearance>
     </template>
   </NuxtLazyHydrate>
   <NuxtLazyHydrate when-visible>

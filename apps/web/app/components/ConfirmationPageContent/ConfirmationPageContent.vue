@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 @md:px-0 flex items-center flex-col" data-testid="order-success-page">
-    <div class="p-4 @md:p-6 flex flex-col max-w-2xl mx-auto">
+    <div class="confirmation-intro p-4 @md:p-6 flex flex-col max-w-2xl mx-auto">
       <h1 class="mt-6 mb-1 text-2xl text-center" data-testid="success-header">
         {{ !orderGetters.isReturn(order) ? t('order.successHeader') : t('order.successReturnHeader') }}
       </h1>
@@ -10,9 +10,11 @@
       </div>
     </div>
 
-    <div class="flex flex-col @md:flex-row w-full @md:w-auto @lg:w-3/4 flex-wrap gap-x-6">
+    <div class="confirmation-columns flex flex-col @md:flex-row w-full @md:w-auto @lg:w-3/4 flex-wrap gap-x-6">
       <div class="flex-1">
-        <div class="border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full my-4 text-sm">
+        <div
+          class="confirmation-panel border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full my-4 text-sm"
+        >
           <OrderDetails :order="order" />
         </div>
 
@@ -28,12 +30,16 @@
           </div>
         </div>
 
-        <div class="border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full my-4 text-sm">
+        <div
+          class="confirmation-panel border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full my-4 text-sm"
+        >
           <OrderTotals :order="order" />
         </div>
       </div>
       <div class="flex-1">
-        <div class="border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full my-4 text-sm">
+        <div
+          class="confirmation-panel border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full my-4 text-sm"
+        >
           <OrderShippingSummary :order="order" />
           <OrderPaymentSummary :order="order" />
           <OrderBankDetails v-if="bankDetails" :bank-details="bankDetails" />
@@ -42,7 +48,7 @@
 
         <div
           v-if="!isAuthorized"
-          class="border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full mt-4 text-sm items-center flex flex-col"
+          class="confirmation-panel border border-1 border-neutral-200 rounded bg-neutral-100 p-4 w-full mt-4 text-sm items-center flex flex-col"
         >
           <div class="font-bold text-primary-700 @md:text-lg text-center mt-5">
             {{ t('orderConfirmation.saveOrderToAccount') }}

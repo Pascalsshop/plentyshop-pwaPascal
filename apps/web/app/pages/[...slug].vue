@@ -8,6 +8,7 @@
     <SfLoaderCircular v-if="loading" class="fixed top-[50%] right-0 left-0 m-auto z-max" size="2xl" />
     <AmikonCategoryAppearance :enabled="isItemCategoryPage">
       <EditableBlocks
+        :blocks="categoryDisplayBlocks"
         :identifier="identifier"
         :type="'category'"
         data-testid="category-page-content"
@@ -36,6 +37,15 @@ const { getFacetsFromURL } = useCategoryFilter();
 const { data: productsCatalog, loading } = useProducts();
 const localePath = useLocalizedPath();
 const isItemCategoryPage = computed(() => productsCatalog.value.category?.type === 'item');
+const { pageBlocks } = useBlocks();
+const { isInEditor } = useEditorState();
+const defaultItemGrid = findAmikonItemGrid(createCategory());
+const categoryDisplayBlocks = computed(() => {
+  if (!isItemCategoryPage.value || isInEditor.value || !productsCatalog.value.products?.length || !defaultItemGrid) {
+    return pageBlocks.value;
+  }
+  return withAmikonCategoryGrid(pageBlocks.value, defaultItemGrid);
+});
 
 const identifier = computed(() =>
   productsCatalog.value.category?.type === 'content' ? productsCatalog.value.category?.id : 0,

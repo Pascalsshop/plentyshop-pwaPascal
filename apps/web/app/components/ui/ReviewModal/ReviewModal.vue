@@ -1,6 +1,6 @@
 <template>
   <UiModal
-    v-if="isReviewModalOpen"
+    v-if="AMIKON_CUSTOMER_REVIEWS_ENABLED && isReviewModalOpen"
     v-model="isReviewModalOpen"
     aria-labelledby="review-modal"
     tag="section"
@@ -34,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
 import { productGetters } from '@plentymarkets/shop-api';
 import { SfIconClose } from '@storefront-ui/vue';
 const { currentProduct } = useProducts();

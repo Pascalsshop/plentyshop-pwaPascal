@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="AMIKON_CUSTOMER_REVIEWS_ENABLED"
     ref="reviewArea"
     class="relative col-span-5 h-fit"
     :class="{ 'pointer-events-none opacity-50': loadingReviews }"
@@ -81,6 +82,7 @@
 </template>
 
 <script lang="ts" setup>
+import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
 import { productGetters, reviewGetters } from '@plentymarkets/shop-api';
 import { SfLoaderCircular } from '@storefront-ui/vue';
 import type { ProductAccordionPropsType } from '~/components/ReviewsAccordion/types';

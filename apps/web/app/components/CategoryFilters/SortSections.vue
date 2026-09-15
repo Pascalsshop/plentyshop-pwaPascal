@@ -1,5 +1,5 @@
 <template>
-  <div v-if="shouldRenderFacet">
+  <div v-if="facet && shouldRenderFacet && (AMIKON_CUSTOMER_REVIEWS_ENABLED || facetGetters.getType(facet) !== 'feedback')">
     <SfAccordionItem v-if="facet" v-model="open">
       <template #summary>
         <div class="flex justify-between py-1 px-4 mb-2 select-none bg-primary-50/50">
@@ -105,6 +105,7 @@
 </template>
 
 <script setup lang="ts">
+import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
 import { type Filter, type FilterGroup, facetGetters } from '@plentymarkets/shop-api';
 import {
   SfInput,

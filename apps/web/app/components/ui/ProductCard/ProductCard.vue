@@ -111,7 +111,7 @@
             {{ manufacturer.externalName }}
           </div>
         </template>
-        <template v-if="key === 'rating' && configuration?.fields?.rating">
+        <template v-if="AMIKON_CUSTOMER_REVIEWS_ENABLED && key === 'rating' && configuration?.fields?.rating">
           <div class="flex items-center pt-1 gap-1 mb-2">
             <SfRating size="xs" :half-increment="true" :value="rating ?? 0" :max="5" />
             <SfCounter size="xs">{{ ratingCount }}</SfCounter>
@@ -178,6 +178,7 @@
 </template>
 
 <script setup lang="ts">
+import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
 import { productGetters, productImageGetters } from '@plentymarkets/shop-api';
 import { SfIconShoppingCart, SfLoaderCircular, SfRating, SfCounter } from '@storefront-ui/vue';
 import type { ProductCardProps } from '~/components/ui/ProductCard/types';

@@ -63,7 +63,9 @@
                 <VariationProperties :product="product" />
               </div>
             </template>
-            <template v-if="key === 'starRating' && configuration?.fields.starRating">
+            <template
+              v-if="AMIKON_CUSTOMER_REVIEWS_ENABLED && key === 'starRating' && configuration?.fields.starRating"
+            >
               <div class="inline-flex items-center mb-2">
                 <SfRating
                   :half-increment="true"
@@ -238,6 +240,7 @@
 </template>
 
 <script lang="ts" setup>
+import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
 import { productGetters, reviewGetters, productBundleGetters } from '@plentymarkets/shop-api';
 import { SfCounter, SfRating, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
 import type { PriceCardPadding, PriceCardTextBlockItem, PurchaseCardProps } from '~/components/ui/PurchaseCard/types';

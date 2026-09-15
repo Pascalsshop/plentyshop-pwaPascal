@@ -160,6 +160,7 @@
         </NuxtLink>
 
         <button
+          ref="mobileMenuTrigger"
           type="button"
           class="flex h-11 w-11 items-center justify-center rounded hover:bg-neutral-100 @lg:hidden"
           :aria-label="t('common.navigation.openMenu')"
@@ -259,10 +260,12 @@
       >
         <aside
           id="amikon-mobile-menu"
+          ref="mobileMenuPanel"
           class="h-full w-11/12 max-w-sm overflow-y-auto bg-white shadow-xl z-drawer"
           role="dialog"
           aria-modal="true"
           :aria-label="t('amikonHeader.aria.mobileMenu')"
+          @keydown.tab="keepMobileMenuFocus"
         >
           <div class="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
             <NuxtLink :to="localePath(paths.home)" class="font-bold uppercase" @click="closeMenus">
@@ -358,7 +361,7 @@ import {
   SfIconShoppingCart,
 } from '@storefront-ui/vue';
 import { cartGetters, categoryTreeGetters } from '@plentymarkets/shop-api';
-import { onClickOutside } from '@vueuse/core';
+import { onClickOutside, useResizeObserver, useScrollLock } from '@vueuse/core';
 import { flagImports } from '~/components/LanguageSelector/flags';
 import type { AmikonNavigationItem } from './Amikon.types';
 import {
@@ -387,6 +390,34 @@ const { format } = usePriceFormatter();
 const headerRoot = ref<HTMLElement | null>(null);
 const desktopMenuOpen = ref(false);
 const mobileMenuOpen = ref(false);
+const mobileMenuTrigger = ref<HTMLButtonElement | null>(null);
+const mobileMenuPanel = ref<HTMLElement | null>(null);
+const pageScrollLocked = useScrollLock(import.meta.client ? document.body : null);
+
+const keepMobileMenuFocus = (event: KeyboardEvent) => {
+  const controls = mobileMenuPanel.value?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])');
+  if (!controls?.length) return;
+  const first = controls[0];
+  const last = controls[controls.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last?.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first?.focus();
+  }
+};
+
+watch(mobileMenuOpen, async (open) => {
+  pageScrollLocked.value = open;
+  await nextTick();
+  if (open) mobileMenuPanel.value?.querySelector<HTMLButtonElement>('button')?.focus();
+  else mobileMenuTrigger.value?.focus();
+});
+
+onBeforeUnmount(() => {
+  pageScrollLocked.value = false;
+});
 const searchTerm = ref('');
 
 const currentLanguageLabel = computed(() => locale.value.toUpperCase());
@@ -457,6 +488,9 @@ const submitSearch = () => {
 };
 
 onClickOutside(headerRoot, closeDesktopMenu);
+useResizeObserver(headerRoot, () => {
+  if (mobileMenuOpen.value && mobileMenuTrigger.value?.getClientRects().length === 0) closeMenus();
+});
 
 watch(
   () => route.fullPath,

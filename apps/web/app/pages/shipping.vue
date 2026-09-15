@@ -12,9 +12,7 @@
     :prevent-blocks-request="true"
   />
 
-  <div v-else class="w-full p-5 break-words flex items-center justify-center text-center min-h-[200px]">
-    {{ t('shipping.noShippingMessage') }}
-  </div>
+  <AmikonShippingInformation v-else />
 </template>
 
 <script setup lang="ts">

@@ -5,6 +5,7 @@
         {{ t('contact.contact') }}
       </h1>
       <p class="mb-10">{{ t('contact.contactShopMessage') }}</p>
+      <AmikonContactDetails />
       <div
         v-if="turnstileSiteKey.length === 0 || contactShopEmail.length === 0"
         class="flex items-start bg-warning-100 shadow-md pr-4 pl-4 ring-1 ring-warning-200 typography-text-sm @md:typography-text-base py-1 rounded-md mb-4"

@@ -14,6 +14,7 @@
       :disable-esc="true"
       class="w-full rounded shadow-none @md:translate-x-0 z-editor-toolbar @md:z-base @md:static @md:!block -translate-x-full shrink-0 bg-white overflow-y-auto"
       data-testid="category-sidebar"
+      @keydown.esc="isOpen && $emit('close')"
     >
       <div class="grid grid-rows-category-sidebar @md:h-full @md:block">
         <div class="p-4 flex justify-between items-center @md:hidden">

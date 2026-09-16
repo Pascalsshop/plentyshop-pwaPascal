@@ -3,6 +3,13 @@
     <h1 class="mb-6 text-3xl font-semibold text-[#392f6e]">
       {{ english ? 'Shipping and collection' : 'Versand und Abholung' }}
     </h1>
+    <p class="mb-6 rounded border border-[#392f6e] p-4">
+      {{
+        english
+          ? 'Free UPS parcel shipping within Germany for orders of €100 or more AND parcels up to 10 kg. Excludes bulky goods, freight forwarding and international shipping.'
+          : 'Gratis-UPS-Paketversand innerhalb Deutschlands ab 100 € Bestellwert UND bis 10 kg Paketgewicht. Ausgenommen sind Sperrgut, Spedition und Versand ins Ausland.'
+      }}
+    </p>
     <div class="grid gap-5 @md:grid-cols-2">
       <section
         v-for="section in sections"
@@ -41,12 +48,13 @@
         {{ english ? 'Contact us' : 'Kontakt aufnehmen' }}
       </NuxtLink>
     </div>
+    <AmikonShippingDetails />
   </article>
 </template>
 
 <script setup lang="ts">
 // Source: https://www.amikon-shop.de/content/versand-zahlung
-// Conflicting free-shipping thresholds are deliberately not copied without confirmation.
+// Free-shipping thresholds confirmed together by the merchant on 2026-09-16.
 const { locale } = useI18n();
 const localePath = useLocalizedPath();
 const english = computed(() => locale.value.startsWith('en'));

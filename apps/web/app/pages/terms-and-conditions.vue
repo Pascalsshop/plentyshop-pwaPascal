@@ -1,5 +1,7 @@
 <template>
-  <div class="w-full p-5 overflow-x-auto break-words no-preflight" v-html="getHTMLTexts()" />
+  <AmikonInformationAppearance>
+    <div class="no-preflight" v-html="getHTMLTexts()" />
+  </AmikonInformationAppearance>
 </template>
 
 <script setup lang="ts">

@@ -17,7 +17,7 @@
             <NuxtLink :to="localePath(paths.checkout)">{{ copy.checkout }}</NuxtLink>
           </li>
           <li>
-            <a href="https://www.amikon-shop.de/content/hilfe/">{{ copy.help }}</a>
+            <NuxtLink :to="localePath('/content/hilfe')">{{ copy.help }}</NuxtLink>
           </li>
         </ul>
       </nav>
@@ -34,7 +34,7 @@
             <NuxtLink :to="localePath(paths.privacyPolicy)">{{ copy.privacy }}</NuxtLink>
           </li>
           <li>
-            <a href="https://www.amikon-shop.de/content/batterieverordnung">{{ copy.batteries }}</a>
+            <NuxtLink :to="localePath('/content/batterieverordnung')">{{ copy.batteries }}</NuxtLink>
           </li>
           <li>
             <NuxtLink :to="localePath(paths.termsAndConditions)">{{ copy.terms }}</NuxtLink>

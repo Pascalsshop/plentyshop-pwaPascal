@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="default">
-    <div class="@md:max-w-[677px] mx-auto px-4 pt-4 pb-20 @md:px-0 @md:mt-4">
+    <AmikonInformationAppearance>
       <h1 class="font-bold mb-10 typography-headline-3 @md:typography-headline-2">
         {{ t('contact.contact') }}
       </h1>
@@ -146,7 +146,7 @@
           <ErrorMessage as="div" name="turnstile" class="text-negative-700 text-left text-sm pt-[0.2rem]" />
         </div>
       </form>
-    </div>
+    </AmikonInformationAppearance>
   </NuxtLayout>
 </template>
 

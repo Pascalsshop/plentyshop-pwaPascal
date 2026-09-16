@@ -20,7 +20,7 @@ const items = computed(() =>
         {
           kicker: 'Versand',
           title: 'Gratisversand (DE)¹',
-          text: 'UPS-Paketversand ab 100 € Bestellwert. Zustellung am Samstag möglich.',
+          text: 'UPS-Paketversand ab 100 € Bestellwert und bis 10 kg Paketgewicht. Zustellung am Samstag möglich.',
         },
         {
           kicker: 'Service',
@@ -42,7 +42,7 @@ const items = computed(() =>
         {
           kicker: 'Shipping',
           title: 'Free shipping (DE)¹',
-          text: 'UPS parcel shipping from €100 order value. Saturday delivery is available.',
+          text: 'UPS parcel shipping for orders of €100 or more and parcels up to 10 kg. Saturday delivery is available.',
         },
         {
           kicker: 'Service',

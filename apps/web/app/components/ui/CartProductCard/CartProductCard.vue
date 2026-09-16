@@ -110,7 +110,7 @@
 
         <UiQuantitySelector
           ref="quantitySelectorReference"
-          :disabled="disabled"
+          :disabled="disabled || quantityUpdating || deleteLoading"
           :value="itemQuantitySelector"
           :min-value="productGetters.getMinimumOrderQuantity(cartItem.variation || ({} as Product))"
           :max-value="maximumOrderQuantity"
@@ -129,6 +129,7 @@
       v-else-if="!disabled"
       square
       data-testid="remove-item-from-basket"
+      :disabled="quantityUpdating"
       :aria-label="t('common.actions.removeItemFromBasket')"
       variant="tertiary"
       size="sm"
@@ -151,7 +152,7 @@ const { cartItem, disabled = false } = defineProps<CartProductCardProps>();
 const emit = defineEmits(['load']);
 
 const { addModernImageExtension, getImageForViewport } = useModernImage();
-const { data: cartData, setCartItemQuantity, deleteCartItem } = useCart();
+const { quantityLimits, setCartItemQuantity, deleteCartItem } = useCart();
 const { send } = useNotification();
 const { format } = usePriceFormatter();
 const localePath = useLocalizedPath();
@@ -159,6 +160,7 @@ const localePath = useLocalizedPath();
 const imageLoaded = ref(false);
 const img = ref();
 const deleteLoading = ref(false);
+const quantityUpdating = ref(false);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const quantitySelectorReference = ref(null as any);
 const itemQuantitySelector = ref(cartGetters.getItemQty(cartItem));
@@ -187,21 +189,19 @@ onMounted(() => {
 });
 
 const handleMaximumQuantityCheck = async (quantityCast: number) => {
-  if (!cartData.value?.itemQuantity || quantityCast <= cartData.value.itemQuantity) {
+  const availableStock = quantityLimits.value[cartItem.id];
+  const minimum = productGetters.getMinimumOrderQuantity(cartItem.variation || ({} as Product));
+  if (
+    availableStock === undefined ||
+    availableStock < minimum ||
+    availableStock <= 0 ||
+    quantityCast <= availableStock
+  ) {
     maximumOrderQuantity.value = undefined;
     return;
   }
 
-  maximumOrderQuantity.value = cartData.value.itemQuantity;
-
-  if (quantitySelectorReference.value) {
-    const event = new Event('input');
-    Object.defineProperty(event, 'target', {
-      value: { value: maximumOrderQuantity.value },
-      writable: true,
-    });
-    quantitySelectorReference.value.handleOnChange(event);
-  }
+  maximumOrderQuantity.value = availableStock;
 
   await setCartItemQuantity({
     quantity: maximumOrderQuantity.value,
@@ -212,20 +212,45 @@ const handleMaximumQuantityCheck = async (quantityCast: number) => {
 
 const changeQuantity = async (quantity: string) => {
   const quantityCast = Number(quantity);
-  if (Number.isNaN(quantityCast) || quantityCast === cartData.value.itemQuantity) return;
+  if (
+    quantityUpdating.value ||
+    deleteLoading.value ||
+    !Number.isFinite(quantityCast) ||
+    quantityCast === itemQuantity.value
+  )
+    return;
 
-  await setCartItemQuantity({
-    quantity: quantityCast,
-    cartItemId: cartItem.id,
-    productId: cartItem.variationId,
-  }).then(async () => await handleMaximumQuantityCheck(quantityCast));
+  quantityUpdating.value = true;
+  try {
+    await setCartItemQuantity({
+      quantity: quantityCast,
+      cartItemId: cartItem.id,
+      productId: cartItem.variationId,
+    });
+    await handleMaximumQuantityCheck(quantityCast);
+  } finally {
+    quantityUpdating.value = false;
+    // Always display the server-confirmed quantity, including after a rejected change.
+    // Do not retain a stale cap if the corrective request also failed.
+    if (maximumOrderQuantity.value !== undefined && itemQuantity.value > maximumOrderQuantity.value)
+      maximumOrderQuantity.value = undefined;
+    quantitySelectorReference.value?.handleOnChange({
+      target: { value: String(itemQuantity.value) },
+    } as unknown as Event);
+  }
 };
 
 const deleteItem = async () => {
+  debounceQuantity.cancel();
   deleteLoading.value = true;
-  await deleteCartItem(cartItem);
-  send({ message: t('cart.itemRemoved'), type: 'positive' });
-  deleteLoading.value = false;
+  try {
+    const updatedCart = await deleteCartItem(cartItem);
+    if (updatedCart?.items && !updatedCart.items.some((item) => item.id === cartItem.id)) {
+      send({ message: t('cart.itemRemoved'), type: 'positive' });
+    }
+  } finally {
+    deleteLoading.value = false;
+  }
 };
 
 const currentFullPrice = computed(() => {
@@ -240,6 +265,7 @@ const cartItemImage = computed(() => {
 });
 
 const debounceQuantity = debounce(changeQuantity, 500);
+onBeforeUnmount(() => debounceQuantity.cancel());
 
 const NuxtLink = resolveComponent('NuxtLink');
 

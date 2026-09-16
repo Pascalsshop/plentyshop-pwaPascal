@@ -90,19 +90,29 @@ const inputClasses = computed(
 onMounted(() => (inputId.value = useId()));
 
 watch(count, (quantity) => {
-  if (quantity < minValue) {
+  if (!Number.isFinite(quantity)) {
+    set(clamp(value, minValue, maxValue));
+    return;
+  } else if (quantity < minValue) {
     set(minValue);
+    return;
   } else if (quantity > maxValue) {
     set(maxValue);
+    return;
   }
 
   emit('changeQuantity', quantity);
 });
 
 const handleOnChange = (event: Event) => {
-  const currentValue = (event.target as HTMLInputElement)?.value;
+  const input = event.target as HTMLInputElement;
+  const currentValue = input?.value;
   const nextValue = Number.parseFloat(currentValue);
-  set(clamp(nextValue, minValue, maxValue));
+  const boundedValue = clamp(Number.isFinite(nextValue) ? nextValue : value, minValue, maxValue);
+  set(boundedValue);
+  // Also restore the DOM when the corrected number equals the previous state.
+  // A no-op reactive update would otherwise leave an emptied field blank.
+  if (input) input.value = String(boundedValue);
 };
 
 defineExpose({ handleOnChange });

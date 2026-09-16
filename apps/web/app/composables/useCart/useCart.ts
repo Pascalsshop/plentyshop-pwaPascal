@@ -47,6 +47,7 @@ const isCartItemError = (data: Cart | CartItemError): data is CartItemError => {
  */
 export const useCart = () => {
   const { emit } = usePlentyEvent();
+  const quantityLimits = useState<Record<number, number | undefined>>('cartQuantityLimits', () => ({}));
   const state = useState('useCart', () => ({
     data: {} as Cart,
     useAsShippingAddress: true,
@@ -217,6 +218,7 @@ export const useCart = () => {
    * ```
    */
   const setCartItemQuantity = async (params: SetCartItemQuantityParams) => {
+    quantityLimits.value[params.cartItemId] = undefined;
     state.value.loading = true;
     try {
       const { data } = await useSdk().plentysystems.setCartItemQuantity({
@@ -228,7 +230,9 @@ export const useCart = () => {
       if (isCartItemError(data as unknown as Cart | CartItemError)) {
         const { send } = useNotification();
         const responseData = data as CartItemError;
-        state.value.data.itemQuantity = responseData.availableStock;
+        if (Number.isFinite(responseData.availableStock) && responseData.availableStock >= 0) {
+          quantityLimits.value[params.cartItemId] = responseData.availableStock;
+        }
 
         send({ message: t('storefrontError.cart.reachedMaximumQuantity'), type: 'warning' });
       } else {
@@ -288,6 +292,7 @@ export const useCart = () => {
   const cartIsEmpty = computed(() => !state.value.data?.items?.length);
   const showNetPrices = computed(() => state.value.data?.showNetPrices ?? false);
   return {
+    quantityLimits,
     setCart,
     clearCartItems,
     setCartItemQuantity,

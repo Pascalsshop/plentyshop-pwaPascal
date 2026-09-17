@@ -6,6 +6,22 @@ export const AMIKON_PHONE_HREF = 'tel:+492861685300';
 export const AMIKON_PHONE_LABEL = '+49 2861 – 68 53 00';
 export const AMIKON_LOGO_PATH = '/_nuxt-plenty/images/amikon/logo.gif';
 
+/** Match whole CMS labels, including the active locale's home/checkout translations. */
+export const isAmikonCategoryMenuLabelVisible = (label: string, translatedLabels: readonly string[] = []): boolean => {
+  const normalize = (value: string) => value.trim().replace(/\s+/g, ' ').toLowerCase();
+  const excluded = [
+    'startseite',
+    'amikon',
+    'zur kasse',
+    'home',
+    'homepage',
+    'checkout',
+    'go to checkout',
+    ...translatedLabels,
+  ];
+  return !excluded.some((value) => normalize(value) === normalize(label));
+};
+
 export const AMIKON_FALLBACK_CATEGORIES = [
   { slug: '/3d-druck', translationKey: 'amikonHeader.categories.threeDPrinting' },
   { slug: '/maschinen', translationKey: 'amikonHeader.categories.machines' },

@@ -371,6 +371,7 @@ import {
   AMIKON_PHONE_HREF,
   AMIKON_PHONE_LABEL,
   AMIKON_PURCHASE_FORM_PATH,
+  isAmikonCategoryMenuLabelVisible,
   splitIntoBalancedColumns,
 } from './navigation';
 
@@ -430,11 +431,17 @@ const cartTotal = computed(() => format(cartGetters.getTotals(cart.value).total 
 
 const categoryMenuItems = computed<AmikonNavigationItem[]>(() => {
   const liveItems: AmikonNavigationItem[] = [];
+  const excludedLabels = [
+    t('amikonHeader.navigation.home'),
+    t('common.labels.home'),
+    t('common.labels.checkout'),
+    t('common.actions.goToCheckout'),
+  ];
 
   for (const category of categoryTree.value) {
     const label = categoryTreeGetters.getName(category);
 
-    if (label) {
+    if (label && isAmikonCategoryMenuLabelVisible(label, excludedLabels)) {
       liveItems.push({
         id: category.id,
         label,

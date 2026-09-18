@@ -1,1 +1,83 @@
-{}
+{
+  "amikonHeader": {
+    "actions": { "login": "Inloggen", "register": "Registreren" },
+    "aria": {
+      "categoryNavigation": "Productcategorieën",
+      "customerNavigation": "Klantgedeelte",
+      "mainNavigation": "Hoofdnavigatie",
+      "mobileMenu": "Mobiel navigatiemenu"
+    },
+    "logoAlt": "Amikon-Shop.de – In- en verkoop van gebruikte industriële elektronica",
+    "navigation": {
+      "categories": "Categorieën",
+      "contact": "Contact",
+      "home": "Home",
+      "newsletter": "Nieuwsbrief",
+      "privacy": "Privacy",
+      "purchaseForm": "Inkoopformulier",
+      "shipping": "Verzending"
+    },
+    "searchPlaceholder": "Zoek een product",
+    "service": {
+      "internationalShipping": "Internationale verzending",
+      "noHiddenCosts": "Geen verborgen kosten",
+      "questions": "Vragen?"
+    },
+    "categories": {
+      "climateChambers": "Warmte- en klimaatkasten",
+      "electronMicroscopes": "Rasterelektronenmicroscopen",
+      "electronics": "Elektronica",
+      "frequencyConverters": "Frequentieregelaars",
+      "laboratoryEquipment": "Laboratoriumartikelen",
+      "laserTechnology": "Lasertechniek",
+      "machines": "Machines",
+      "materialTesting": "Materiaaltestmachines",
+      "measurementTesting": "Meet- en testtechniek",
+      "monitors": "Monitoren en bedieningseenheden",
+      "motorsDrives": "Motoren en aandrijvingen",
+      "otherItems": "Overige artikelen",
+      "pneumatics": "Pneumatiek",
+      "pumps": "Pompen",
+      "robots": "Robots",
+      "saltSprayChambers": "Zoutsproeikamers",
+      "shakers": "Triltestsystemen",
+      "thermalAccessories": "Thermische accessoires",
+      "threeDPrinting": "3D-printen",
+      "vacuumTechnology": "Vacuümtechniek",
+      "walkInChambers": "Inloopklimaatkamers",
+      "weatheringTechnology": "Verweringstesttechniek"
+    }
+  },
+  "contact": {
+    "label": "Contact",
+    "clearAll": "Alles wissen",
+    "contact": "Contact",
+    "contactSend": "Aanvraag versturen",
+    "contactShopMessage": "Heb je een vraag of verzoek? Vul het formulier in en wij beantwoorden je aanvraag zo snel mogelijk.",
+    "form": {
+      "asterixHint": "Gemarkeerde velden zijn verplicht",
+      "emailLabel": "E-mail",
+      "message": "Bericht",
+      "message-placeholder": "Je bericht",
+      "nameLabel": "Naam",
+      "order-id": "Bestelnummer",
+      "subjectLabel": "Onderwerp"
+    },
+    "misConfigured": "Het contactformulier is tijdelijk niet beschikbaar. Probeer het later opnieuw of neem per e-mail of telefoon contact met ons op.",
+    "privacyPolicy": "Ik bevestig dat ik het {privacyPolicy} heb gelezen.",
+    "success": "Bericht succesvol verstuurd",
+    "info": { "heading": "Contactgegevens", "email": "E-mail" }
+  },
+  "cart": {
+    "numberInCart": "{count} artikelen in de winkelwagen",
+    "numberInWishlist": "{count} artikelen in de verlanglijst"
+  },
+  "CookieBar": { "Cookie Settings": "Cookie-instellingen" },
+  "form": { "optional": "optioneel", "required": "*" },
+  "legal": { "privacyPolicy": "privacybeleid" },
+  "common": {
+    "actions": { "search": "Zoeken", "goToCheckout": "Afrekenen" },
+    "labels": { "home": "Home", "checkout": "Kassa" },
+    "navigation": { "languageSelector": "Taal kiezen", "openMenu": "Menu openen", "closeMenu": "Menu sluiten" }
+  }
+}

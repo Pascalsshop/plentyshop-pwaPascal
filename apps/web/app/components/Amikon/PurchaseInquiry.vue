@@ -1,7 +1,7 @@
 <template>
   <form class="purchase-inquiry" @submit.prevent="submit" @input="validationMessage = ''">
     <fieldset :disabled="busy">
-      <legend>{{ english ? 'Contact details and offer' : 'Kontakt und Angebot' }}</legend>
+      <legend>{{ translation?.legend ?? (english ? 'Contact details and offer' : 'Kontakt und Angebot') }}</legend>
       <div class="fields">
         <label v-for="field in definitions" :key="field.key" :class="{ wide: field.multiline }">
           {{ labelFor(field) }}{{ field.required ? ' *' : '' }}
@@ -26,30 +26,29 @@
       </div>
       <label class="privacy"
         ><input v-model="privacy" type="checkbox" name="privacy" required /><span
-          >{{ english ? 'I have read the' : 'Ich habe die' }}
+          >{{ translation?.privacyBefore ?? (english ? 'I have read the' : 'Ich habe die') }}
           <NuxtLink :to="localePath('/privacy-policy')" target="_blank" rel="noopener">{{
-            english ? 'privacy policy' : 'Datenschutzerklärung'
+            translation?.privacyLink ?? (english ? 'privacy policy' : 'Datenschutzerklärung')
           }}</NuxtLink>
-          {{ english ? '.' : 'gelesen.' }} *</span
+          {{ translation?.privacyAfter ?? (english ? '.' : 'gelesen.') }} *</span
         ></label
       >
       <p>
         {{
-          english
+          translation?.photosBefore ??
+          (english
             ? '* Required fields. You can email photos separately to'
-            : '* Pflichtfelder. Fotos kannst du separat an'
+            : '* Pflichtfelder. Fotos kannst du separat an')
         }}
-        <a href="mailto:info@amikon.de">info@amikon.de</a> {{ english ? '.' : 'senden.' }}
+        <a href="mailto:info@amikon.de">info@amikon.de</a> {{ translation?.photosAfter ?? (english ? '.' : 'senden.') }}
       </p>
       <slot />
       <p v-if="validationMessage" role="alert" class="validation-message">{{ validationMessage }}</p>
       <button type="submit" :disabled="!available || busy">
         {{
           busy
-            ? english
-              ? 'Sending …'
-              : 'Wird gesendet …'
-            : submitLabel || (english ? 'Send inquiry' : 'Anfrage senden')
+            ? (translation?.sending ?? (english ? 'Sending …' : 'Wird gesendet …'))
+            : submitLabel || translation?.send || (english ? 'Send inquiry' : 'Anfrage senden')
         }}
       </button>
     </fieldset>
@@ -58,6 +57,7 @@
 
 <script setup lang="ts">
 import type { PurchaseInquiry } from './purchase.types';
+import { purchaseTranslations } from './purchaseTranslations';
 const props = withDefaults(defineProps<{ busy?: boolean; available?: boolean; submitLabel?: string }>(), {
   busy: false,
   available: true,
@@ -67,6 +67,7 @@ const emit = defineEmits<{ submit: [inquiry: PurchaseInquiry] }>();
 const localePath = useLocalizedPath();
 const { locale } = useI18n();
 const english = computed(() => locale.value.startsWith('en'));
+const translation = computed(() => purchaseTranslations[locale.value.toLowerCase().split('-')[0] ?? 'de']);
 const englishLabels: Record<string, string> = {
   name: 'Full name',
   email: 'Email',
@@ -80,7 +81,7 @@ const englishLabels: Record<string, string> = {
   services: 'Other services, e.g. dismantling or transport',
 };
 const labelFor = (field: { key: string; label: string }) =>
-  english.value ? englishLabels[field.key] || field.label : field.label;
+  translation.value?.[field.key] ?? (english.value ? englishLabels[field.key] || field.label : field.label);
 const definitions: {
   key: string;
   label: string;
@@ -114,23 +115,26 @@ const submit = () => {
     const value = values[invalidField.key]?.trim() || '';
     const reason =
       value.length > invalidField.max
-        ? english.value
-          ? `Use no more than ${invalidField.max} characters.`
-          : `Höchstens ${invalidField.max} Zeichen sind erlaubt.`
+        ? (translation.value?.max?.replace('{max}', String(invalidField.max)) ??
+          (english.value
+            ? `Use no more than ${invalidField.max} characters.`
+            : `Höchstens ${invalidField.max} Zeichen sind erlaubt.`))
         : invalidField.key === 'name'
-          ? english.value
-            ? 'Please enter at least three characters.'
-            : 'Bitte gib mindestens drei Zeichen ein.'
-          : english.value
-            ? 'Please enter a value, not just spaces.'
-            : 'Bitte gib einen Wert ein, nicht nur Leerzeichen.';
+          ? (translation.value?.minName ??
+            (english.value ? 'Please enter at least three characters.' : 'Bitte gib mindestens drei Zeichen ein.'))
+          : (translation.value?.blank ??
+            (english.value
+              ? 'Please enter a value, not just spaces.'
+              : 'Bitte gib einen Wert ein, nicht nur Leerzeichen.'));
     validationMessage.value = `${labelFor(invalidField)}: ${reason}`;
     return;
   }
   if (!privacy.value) {
-    validationMessage.value = english.value
-      ? 'Please confirm that you have read the privacy policy.'
-      : 'Bitte bestätige, dass du die Datenschutzerklärung gelesen hast.';
+    validationMessage.value =
+      translation.value?.privacyRequired ??
+      (english.value
+        ? 'Please confirm that you have read the privacy policy.'
+        : 'Bitte bestätige, dass du die Datenschutzerklärung gelesen hast.');
     return;
   }
   validationMessage.value = '';

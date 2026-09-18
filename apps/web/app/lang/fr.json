@@ -1,1 +1,87 @@
-{}
+{
+  "amikonHeader": {
+    "actions": { "login": "Connexion", "register": "Inscription" },
+    "aria": {
+      "categoryNavigation": "Catégories de produits",
+      "customerNavigation": "Espace client",
+      "mainNavigation": "Navigation principale",
+      "mobileMenu": "Menu de navigation mobile"
+    },
+    "logoAlt": "Amikon-Shop.de – Achat et vente d’électronique industrielle d’occasion",
+    "navigation": {
+      "categories": "Catégories",
+      "contact": "Contact",
+      "home": "Accueil",
+      "newsletter": "Newsletter",
+      "privacy": "Confidentialité",
+      "purchaseForm": "Proposer du matériel",
+      "shipping": "Livraison"
+    },
+    "searchPlaceholder": "Rechercher un produit",
+    "service": {
+      "internationalShipping": "Livraison internationale",
+      "noHiddenCosts": "Aucun coût caché",
+      "questions": "Des questions ?"
+    },
+    "categories": {
+      "climateChambers": "Enceintes thermiques et climatiques",
+      "electronMicroscopes": "Microscopes électroniques à balayage",
+      "electronics": "Électronique",
+      "frequencyConverters": "Variateurs de fréquence",
+      "laboratoryEquipment": "Matériel de laboratoire",
+      "laserTechnology": "Technologie laser",
+      "machines": "Machines",
+      "materialTesting": "Machines d’essai des matériaux",
+      "measurementTesting": "Mesure et essais",
+      "monitors": "Moniteurs et unités de commande",
+      "motorsDrives": "Moteurs et entraînements",
+      "otherItems": "Autres articles",
+      "pneumatics": "Pneumatique",
+      "pumps": "Pompes",
+      "robots": "Robots",
+      "saltSprayChambers": "Chambres de brouillard salin",
+      "shakers": "Systèmes d’essai de vibrations",
+      "thermalAccessories": "Accessoires thermiques",
+      "threeDPrinting": "Impression 3D",
+      "vacuumTechnology": "Technologie du vide",
+      "walkInChambers": "Chambres climatiques accessibles",
+      "weatheringTechnology": "Essais de vieillissement climatique"
+    }
+  },
+  "contact": {
+    "label": "Contact",
+    "clearAll": "Tout effacer",
+    "contact": "Contact",
+    "contactSend": "Envoyer la demande",
+    "contactShopMessage": "Vous avez une question ou une demande ? Remplissez le formulaire et nous vous répondrons dès que possible.",
+    "form": {
+      "asterixHint": "Les champs marqués sont obligatoires",
+      "emailLabel": "E-mail",
+      "message": "Message",
+      "message-placeholder": "Votre message",
+      "nameLabel": "Nom",
+      "order-id": "Numéro de commande",
+      "subjectLabel": "Objet"
+    },
+    "misConfigured": "Le formulaire de contact est temporairement indisponible. Veuillez réessayer ultérieurement ou nous contacter par e-mail ou par téléphone.",
+    "privacyPolicy": "Je confirme avoir lu la {privacyPolicy}.",
+    "success": "Message envoyé avec succès",
+    "info": { "heading": "Coordonnées", "email": "E-mail" }
+  },
+  "cart": {
+    "numberInCart": "{count} articles dans le panier",
+    "numberInWishlist": "{count} articles dans la liste de souhaits"
+  },
+  "CookieBar": { "Cookie Settings": "Paramètres des cookies" },
+  "form": { "optional": "facultatif", "required": "*" },
+  "legal": { "privacyPolicy": "politique de confidentialité" },
+  "common": {
+    "actions": { "search": "Rechercher", "goToCheckout": "Passer commande" },
+    "labels": { "home": "Accueil", "checkout": "Commande" },
+    "navigation": {
+      "languageSelector": "Choisir la langue",
+      "openMenu": "Ouvrir le menu",
+      "closeMenu": "Fermer le menu"
+    }
+  }
+}

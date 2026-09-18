@@ -1,6 +1,21 @@
 <template>
   <AmikonInformationAppearance>
-    <template v-if="english">
+    <template v-if="translation">
+      <h2>{{ translation.detailsTitle }}</h2>
+      <template v-for="section in translation.details" :key="section.title">
+        <h3>{{ section.title }}</h3>
+        <p>{{ section.text }}</p>
+      </template>
+      <h2>{{ translation.paymentTitle }}</h2>
+      <template v-for="section in translation.payments" :key="section.title">
+        <h3>{{ section.title }}</h3>
+        <p>{{ section.text }}</p>
+      </template>
+      <p>
+        <NuxtLink :to="localePath('/contact')">{{ translation.request }}</NuxtLink>
+      </p>
+    </template>
+    <template v-else-if="english">
       <h2>Detailed shipping information</h2>
       <h3>Packaging and your own carrier</h3>
       <p>
@@ -143,9 +158,11 @@
 </template>
 
 <script setup lang="ts">
+import { shippingTranslations } from './shippingTranslations';
 // Source: owner's /content/versand-zahlung, 2026-09-16.
 // Merchant confirmed 2026-09-16: minimum 100 EUR order value AND maximum 10 kg parcel weight.
 const localePath = useLocalizedPath();
 const { locale } = useI18n();
 const english = computed(() => locale.value.startsWith('en'));
+const translation = computed(() => shippingTranslations[locale.value.toLowerCase().split('-')[0] ?? 'de']);
 </script>

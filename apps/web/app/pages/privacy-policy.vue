@@ -1,6 +1,7 @@
 <template>
   <AmikonInformationAppearance>
-    <div class="no-preflight" v-html="getHTMLTexts()" />
+    <div v-if="getHTMLTexts().trim()" class="no-preflight" v-html="getHTMLTexts()" />
+    <AmikonLegalTextUnavailable v-else />
   </AmikonInformationAppearance>
 </template>
 

@@ -43,12 +43,16 @@ export const useLegalInformation: UseLegalInformationMethodsReturn = () => {
    */
   const getLegalTexts: GetLegalInformation = async (params: LegalTextsParams) => {
     state.value.loading = true;
+    // Never retain another legal page's text when this request fails or is empty.
+    state.value.data = {} as LegalInformationResponse;
     try {
       const { data, error } = await useAsyncData(`${params.type}-${locale.value}`, () =>
         useSdk().plentysystems.getLegalTexts(params),
       );
       useHandleError(error.value ?? null);
-      state.value.data = data?.value?.data ?? state.value.data;
+      state.value.data = error.value
+        ? ({} as LegalInformationResponse)
+        : (data?.value?.data ?? ({} as LegalInformationResponse));
       return state.value.data;
     } catch (error) {
       throw new Error(error as string, { cause: error });

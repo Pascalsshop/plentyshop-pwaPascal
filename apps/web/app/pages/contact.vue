@@ -247,16 +247,19 @@ const [privacyPolicy, privacyPolicyAttributes] = defineField('privacyPolicy');
 const [turnstile, turnstileAttributes] = defineField('turnstile');
 
 const clearInputs = () => {
+  if (isContactLoading.value) return;
   name.value = '';
   email.value = '';
   message.value = '';
   orderId.value = '';
   subject.value = '';
   privacyPolicy.value = false;
+  turnstile.value = '';
+  turnstileElement.value?.reset();
 };
 
 const submitForm = async () => {
-  if (!meta.value.valid || !turnstile.value) return;
+  if (isContactLoading.value || !meta.value.valid || !turnstile.value) return;
 
   const params: CustomerContactEmailParams = {
     subject: subject.value || '',
@@ -268,13 +271,15 @@ const submitForm = async () => {
   if (name.value) params.name = name.value;
   if (orderId.value) params.orderId = Number(orderId.value);
 
-  if (await doCustomerContactMail(params)) {
-    send({ type: 'positive', message: t('contact.success') });
-    resetForm();
+  try {
+    if (await doCustomerContactMail(params)) {
+      send({ type: 'positive', message: t('contact.success') });
+      resetForm();
+    }
+  } finally {
+    turnstile.value = '';
+    turnstileElement.value?.reset();
   }
-
-  turnstile.value = '';
-  turnstileElement.value?.reset();
 };
 
 const onSubmit = handleSubmit(() => submitForm());

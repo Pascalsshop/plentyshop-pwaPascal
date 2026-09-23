@@ -19,7 +19,7 @@
       <ul class="mt-3 space-y-2 text-slate-700">
         <li>
           <span class="font-semibold">{{ translation?.emailLabel ?? (english ? 'Email:' : 'E-Mail:') }}</span>
-          <a href="mailto:info@amikon.de">info@amikon.de</a>
+          <AmikonProtectedContact kind="email" />
         </li>
         <li>{{ translation?.business ?? (english ? 'Business customers only.' : 'Nur für Gewerbekunden.') }}</li>
       </ul>
@@ -91,8 +91,8 @@ const submit = async (inquiry: PurchaseInquiry) => {
       status.value =
         translation.value?.failure ??
         (english.value
-          ? 'Your inquiry could not be sent. Your entries have been kept. Please try again or contact info@amikon.de.'
-          : 'Die Anfrage konnte nicht versendet werden. Deine Angaben bleiben erhalten. Bitte versuche es erneut oder kontaktiere info@amikon.de.');
+          ? 'Your inquiry could not be sent. Your entries have been kept. Please try again or use the contact details above.'
+          : 'Die Anfrage konnte nicht versendet werden. Deine Angaben bleiben erhalten. Bitte versuche es erneut oder nutze die Kontaktangaben oben.');
     }
   } catch {
     status.value =

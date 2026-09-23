@@ -40,7 +40,7 @@
             ? '* Required fields. You can email photos separately to'
             : '* Pflichtfelder. Fotos kannst du separat an')
         }}
-        <a href="mailto:info@amikon.de">info@amikon.de</a> {{ translation?.photosAfter ?? (english ? '.' : 'senden.') }}
+        <AmikonProtectedContact kind="email" /> {{ translation?.photosAfter ?? (english ? '.' : 'senden.') }}
       </p>
       <slot />
       <p v-if="validationMessage" role="alert" class="validation-message">{{ validationMessage }}</p>

@@ -54,7 +54,7 @@
           Einsteinstr. 8a<br />
           46325 Borken<br />
           {{ copy.country }}<br />
-          <a href="tel:+492861685300">+49 2861 6853 00</a>
+          <AmikonProtectedContact kind="phone" />
         </address>
         <p class="opening-hours">{{ copy.weekdays }}<br />07:30 – 16:00 {{ copy.clock }}</p>
         <p class="opening-hours">{{ copy.friday }}<br />07:30 – 15:00 {{ copy.clock }}</p>

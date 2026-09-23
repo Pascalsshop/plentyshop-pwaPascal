@@ -10,7 +10,7 @@ export const purchaseTranslations: Record<string, Record<string, string>> = {
     security: 'Veuillez d’abord effectuer la vérification de sécurité.',
     success: 'Merci. Votre proposition a été envoyée.',
     failure:
-      'Votre demande n’a pas pu être envoyée. Vos données ont été conservées. Réessayez ou contactez info@amikon.de.',
+      'Votre demande n’a pas pu être envoyée. Vos données ont été conservées. Réessayez ou utilisez les coordonnées ci-dessus.',
     error: 'L’envoi a échoué. Vos données ont été conservées. Veuillez réessayer.',
     legend: 'Coordonnées et proposition',
     privacyBefore: 'J’ai lu la',
@@ -46,7 +46,7 @@ export const purchaseTranslations: Record<string, Record<string, string>> = {
     security: 'Voltooi eerst de veiligheidscontrole.',
     success: 'Bedankt. Je aanbod is verstuurd.',
     failure:
-      'Je aanvraag kon niet worden verstuurd. Je gegevens zijn behouden. Probeer het opnieuw of neem contact op via info@amikon.de.',
+      'Je aanvraag kon niet worden verstuurd. Je gegevens zijn behouden. Probeer het opnieuw of gebruik de contactgegevens hierboven.',
     error: 'Het versturen is mislukt. Je gegevens zijn behouden. Probeer het opnieuw.',
     legend: 'Contactgegevens en aanbod',
     privacyBefore: 'Ik heb het',

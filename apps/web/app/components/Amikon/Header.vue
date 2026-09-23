@@ -7,10 +7,10 @@
   >
     <div class="hidden bg-amikon-600 text-white @lg:block">
       <div class="mx-auto flex max-w-screen-2xl items-center justify-center gap-12 px-6 py-2 text-sm font-semibold">
-        <a :href="AMIKON_PHONE_HREF" class="flex items-center gap-2 text-white hover:underline">
+        <span class="flex items-center gap-2 text-white">
           <SfIconCheck class="h-4 w-4" aria-hidden="true" />
-          <span>{{ t('amikonHeader.service.questions') }} {{ AMIKON_PHONE_LABEL }}</span>
-        </a>
+          <span>{{ t('amikonHeader.service.questions') }} <AmikonProtectedContact kind="phone" /></span>
+        </span>
         <span class="flex items-center gap-2">
           <SfIconCheck class="h-4 w-4" aria-hidden="true" />
           {{ t('amikonHeader.service.internationalShipping') }}
@@ -368,8 +368,6 @@ import {
   AMIKON_FALLBACK_CATEGORIES,
   AMIKON_LOGO_PATH,
   AMIKON_NEWSLETTER_URL,
-  AMIKON_PHONE_HREF,
-  AMIKON_PHONE_LABEL,
   AMIKON_PURCHASE_FORM_PATH,
   isAmikonCategoryMenuLabelVisible,
   splitIntoBalancedColumns,

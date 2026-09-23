@@ -6,6 +6,7 @@
           <span aria-hidden="true" class="text-amikon-600">✓</span> {{ item.title }}
         </h3>
         <p class="mt-1 text-sm leading-6 text-neutral-700">{{ item.text }}</p>
+        <AmikonProtectedContact v-if="item.kicker === 'Service'" kind="phone" class="text-sm" />
       </article>
     </div>
   </section>
@@ -25,7 +26,7 @@ const items = computed(() =>
         {
           kicker: 'Service',
           title: 'Persönlicher Kundenservice',
-          text: 'Mo.–Do. 07:30–16:00 Uhr, Fr. 07:30–15:00 Uhr. Tel. 02861 6853 00.',
+          text: 'Mo.–Do. 07:30–16:00 Uhr, Fr. 07:30–15:00 Uhr.',
         },
         {
           kicker: 'Sortiment',
@@ -47,7 +48,7 @@ const items = computed(() =>
         {
           kicker: 'Service',
           title: 'Personal customer service',
-          text: 'Mon–Thu 07:30–16:00, Fri 07:30–15:00. Phone +49 2861 6853 00.',
+          text: 'Mon–Thu 07:30–16:00, Fri 07:30–15:00.',
         },
         {
           kicker: 'Range',

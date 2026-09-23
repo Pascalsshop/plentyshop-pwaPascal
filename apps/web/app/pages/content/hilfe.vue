@@ -46,7 +46,7 @@
       <h2>Besoin d’aide ?</h2>
       <p>
         <NuxtLink :to="localePath('/contact')">Contactez-nous</NuxtLink> ou appelez le
-        <a href="tel:+492861685300">+49 2861 6853 00</a>.
+        <AmikonProtectedContact kind="phone" />.
       </p>
     </template>
     <template v-else-if="language === 'nl'">
@@ -88,7 +88,7 @@
       <h2>Hulp nodig?</h2>
       <p>
         <NuxtLink :to="localePath('/contact')">Neem contact op</NuxtLink> of bel
-        <a href="tel:+492861685300">+49 2861 6853 00</a>.
+        <AmikonProtectedContact kind="phone" />.
       </p>
     </template>
     <template v-else-if="language === 'en'">
@@ -127,8 +127,7 @@
       </p>
       <h2>Need assistance?</h2>
       <p>
-        <NuxtLink :to="localePath('/contact')">Contact us</NuxtLink> or call
-        <a href="tel:+492861685300">+49 2861 6853 00</a>.
+        <NuxtLink :to="localePath('/contact')">Contact us</NuxtLink> or call <AmikonProtectedContact kind="phone" />.
       </p>
     </template>
     <template v-else>
@@ -178,7 +177,7 @@
       <h2>Du benötigst Unterstützung?</h2>
       <p>
         <NuxtLink :to="localePath('/contact')">Zum Kontaktformular</NuxtLink> oder telefonisch unter
-        <a href="tel:+492861685300">+49 2861 6853 00</a>.
+        <AmikonProtectedContact kind="phone" />.
       </p>
     </template>
   </AmikonInformationAppearance>

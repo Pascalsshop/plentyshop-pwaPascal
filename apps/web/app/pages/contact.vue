@@ -136,11 +136,12 @@
         <div>
           <NuxtTurnstile
             v-if="turnstileSiteKey.length > 0 && turnstileLoad"
+            :key="turnstileSiteKey"
             v-bind="turnstileAttributes"
             ref="turnstileElement"
             v-model="turnstile"
             :site-key="turnstileSiteKey"
-            :options="{ theme: 'light' }"
+            :options="turnstileOptions"
             class="mt-4"
           />
           <ErrorMessage as="div" name="turnstile" class="text-negative-700 text-left text-sm pt-[0.2rem]" />
@@ -179,56 +180,58 @@ const { setPageMeta } = usePageMeta();
 const icon = 'page';
 setPageMeta(t('contact.label'), icon);
 
-const contactShopEmail = getContactShopEmail() ?? '';
-const turnstileSiteKey = getSetting() ?? '';
+const contactShopEmail = computed(() => (getContactShopEmail() ?? '').trim());
+const turnstileSiteKey = computed(() => (getSetting() ?? '').trim());
 const turnstileElement = ref();
 const turnstileLoad = ref(false);
 
-const validationSchema = toTypedSchema(
-  object({
-    email: string()
-      .trim()
-      .required(t('error.email.required'))
-      .test('is-valid-email', t('storefrontError.contactMail.emailInvalid'), (mail: string) =>
-        userGetters.isValidEmailAddress(mail),
-      )
-      .default(''),
-    message: string()
-      .required(t('error.contact.messageRequired'))
-      .test('min-clean-length', t('storefrontError.contactMail.messageInvalid'), (val: string | undefined) => {
-        if (!val) return false;
-        const cleaned = val.replace(/\n/g, '').trim();
-        return cleaned.length >= 3;
-      })
-      .default(''),
-    name: string()
-      .trim()
-      .notRequired()
-      .default('')
-      .test('min-if-not-empty', t('storefrontError.contactMail.nameInvalid'), (val) => {
-        if (!val || val.length === 0) return true;
-        return val.length >= 3;
-      }),
-    subject: string()
-      .trim()
-      .required(t('error.contact.subjectRequired'))
-      .default('')
-      .test('min-length', t('storefrontError.contactMail.subjectInvalid'), (val) => !!(val && val.length >= 3)),
-    orderId: string()
-      .trim()
-      .notRequired()
-      .default('')
-      .test(
-        'digits-if-not-empty',
-        t('storefrontError.contactMail.orderIdInvalid'),
-        (val) => !val || /^[1-9][0-9]*$/.test(val),
-      ),
-    privacyPolicy: boolean().oneOf([true], t('error.contact.termsRequired')).default(false),
-    turnstile:
-      turnstileSiteKey.length > 0
-        ? string().required(t('error.contact.turnstileRequired')).default('')
-        : string().optional().default(''),
-  }),
+const validationSchema = computed(() =>
+  toTypedSchema(
+    object({
+      email: string()
+        .trim()
+        .required(t('error.email.required'))
+        .test('is-valid-email', t('storefrontError.contactMail.emailInvalid'), (mail: string) =>
+          userGetters.isValidEmailAddress(mail),
+        )
+        .default(''),
+      message: string()
+        .required(t('error.contact.messageRequired'))
+        .test('min-clean-length', t('storefrontError.contactMail.messageInvalid'), (val: string | undefined) => {
+          if (!val) return false;
+          const cleaned = val.replace(/\n/g, '').trim();
+          return cleaned.length >= 3;
+        })
+        .default(''),
+      name: string()
+        .trim()
+        .notRequired()
+        .default('')
+        .test('min-if-not-empty', t('storefrontError.contactMail.nameInvalid'), (val) => {
+          if (!val || val.length === 0) return true;
+          return val.length >= 3;
+        }),
+      subject: string()
+        .trim()
+        .required(t('error.contact.subjectRequired'))
+        .default('')
+        .test('min-length', t('storefrontError.contactMail.subjectInvalid'), (val) => !!(val && val.length >= 3)),
+      orderId: string()
+        .trim()
+        .notRequired()
+        .default('')
+        .test(
+          'digits-if-not-empty',
+          t('storefrontError.contactMail.orderIdInvalid'),
+          (val) => !val || /^[1-9][0-9]*$/.test(val),
+        ),
+      privacyPolicy: boolean().oneOf([true], t('error.contact.termsRequired')).default(false),
+      turnstile:
+        turnstileSiteKey.value.length > 0
+          ? string().required(t('error.contact.turnstileRequired')).default('')
+          : string().optional().default(''),
+    }),
+  ),
 );
 
 const { errors, meta, defineField, handleSubmit, resetForm } = useForm({
@@ -246,6 +249,18 @@ const [message, messageAttributes] = defineField('message');
 const [privacyPolicy, privacyPolicyAttributes] = defineField('privacyPolicy');
 const [turnstile, turnstileAttributes] = defineField('turnstile');
 
+// Never keep a previously issued token after a failed or expired challenge.
+const invalidateTurnstile = () => {
+  turnstile.value = '';
+};
+const turnstileOptions = {
+  theme: 'light' as const,
+  action: 'contact',
+  'expired-callback': invalidateTurnstile,
+  'error-callback': invalidateTurnstile,
+  'timeout-callback': invalidateTurnstile,
+};
+
 const clearInputs = () => {
   if (isContactLoading.value) return;
   name.value = '';
@@ -260,6 +275,7 @@ const clearInputs = () => {
 
 const submitForm = async () => {
   if (isContactLoading.value || !meta.value.valid || !turnstile.value) return;
+  if (!contactShopEmail.value || !turnstileSiteKey.value) return;
 
   const params: CustomerContactEmailParams = {
     subject: subject.value || '',
@@ -287,12 +303,17 @@ const onSubmit = handleSubmit(() => submitForm());
 await getRobots();
 setRobotForStaticPage('ContactPage');
 
-if (turnstileSiteKey.length > 0) {
-  const turnstileWatcher = watch([name, email, subject, orderId, message], (data) => {
-    if (data.some((field) => field && field.length > 0)) {
+// Settings can arrive after setup or change in the builder. Do not capture an empty initial setting forever.
+watch(
+  [turnstileSiteKey, name, email, subject, orderId, message],
+  ([siteKey, ...fields]) => {
+    if (siteKey && fields.some((field) => field && field.length > 0)) {
       turnstileLoad.value = true;
-      turnstileWatcher();
     }
-  });
-}
+  },
+  { immediate: true },
+);
+watch(turnstileSiteKey, () => {
+  invalidateTurnstile();
+});
 </script>

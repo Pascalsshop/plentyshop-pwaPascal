@@ -2,8 +2,6 @@ import type { AmikonFallbackCategory } from './Amikon.types';
 
 export const AMIKON_PURCHASE_FORM_PATH = '/ankaufformular';
 export const AMIKON_NEWSLETTER_URL = 'https://www.amikon.de/newsletter/';
-export const AMIKON_PHONE_HREF = 'tel:+492861685300';
-export const AMIKON_PHONE_LABEL = '+49 2861 – 68 53 00';
 export const AMIKON_LOGO_PATH = '/_nuxt-plenty/images/amikon/logo.gif';
 
 /** Match whole CMS labels, including the active locale's home/checkout translations. */

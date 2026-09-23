@@ -4,8 +4,8 @@
     <address class="not-italic leading-7">
       Einsteinstr. 8a<br />46325 Borken<br />{{ labels.country }}
       <div class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
-        <a href="tel:+492861685300" class="underline">+49 2861 68 53 00</a>
-        <a href="mailto:info@amikon.de" class="break-all underline">info@amikon.de</a>
+        <AmikonProtectedContact kind="phone" />
+        <AmikonProtectedContact kind="email" />
       </div>
     </address>
     <p class="mt-4 leading-7">

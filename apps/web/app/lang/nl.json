@@ -48,6 +48,96 @@
       "weatheringTechnology": "Verweringstesttechniek"
     }
   },
+  "category": {
+    "sorting": {
+      "default": { "recommended_sorting": "Aanbevolen" },
+      "item": {
+        "feedbackDecimal_asc": "Beoordelingen oplopend",
+        "feedbackDecimal_desc": "Beoordelingen aflopend",
+        "manufacturer": {
+          "externalName_asc": "Fabrikant A–Z",
+          "externalName_desc": "Fabrikant Z–A"
+        },
+        "score": "Relevantie"
+      },
+      "sorting": { "price": { "avg_asc": "Prijs laag naar hoog", "avg_desc": "Prijs hoog naar laag" } },
+      "texts": { "name1_asc": "Naam A–Z", "name1_desc": "Naam Z–A" },
+      "variation": {
+        "availability": {
+          "averageDays_asc": "Beschikbaarheid oplopend",
+          "averageDays_desc": "Beschikbaarheid aflopend"
+        },
+        "createdAt_asc": "Oudste artikelen",
+        "createdAt_desc": "Nieuwste artikelen",
+        "number_asc": "Variantnummer oplopend",
+        "number_desc": "Variantnummer aflopend",
+        "position_asc": "Bestverkocht oplopend",
+        "position_desc": "Bestverkocht aflopend",
+        "updatedAt_asc": "Laatst bijgewerkt",
+        "updatedAt_desc": "Eerst bijgewerkt"
+      }
+    }
+  },
+  "product": {
+    "allFromCategory": "Alle artikelen in {name}",
+    "allProducts": "Alle artikelen",
+    "allProductsLink": "Artikelen bekijken",
+    "averageRating": "Gemiddelde beoordeling",
+    "basedOnRatings": "Op basis van {count} beoordelingen",
+    "bundleSavings": "Bespaar {percent} % op deze bundel",
+    "createReview": "Beoordeling schrijven",
+    "customerReviews": "Klantbeoordelingen",
+    "decreaseQuantity": "Aantal verlagen",
+    "details": "Artikelgegevens",
+    "doubleTapZoom": "Tik twee keer om te vergroten",
+    "estimatedDelivery": "Geschatte levertijd",
+    "imageOf": "Afbeelding van {name}",
+    "increaseQuantity": "Aantal verhogen",
+    "legalDetails": "Wettelijke artikelinformatie",
+    "lowestPrice": "Laagste prijs in de afgelopen 30 dagen: {price}",
+    "minimumQuantity": "Minimale bestelhoeveelheid: {count}",
+    "moreFromCategory": "Meer artikelen in deze categorie",
+    "noReviews": "Er zijn nog geen beoordelingen voor dit artikel",
+    "noReviewsShort": "Geen beoordelingen",
+    "notAvailable": "Dit artikel is niet beschikbaar.",
+    "outOfStock": "Niet op voorraad",
+    "priceExclVAT": "Excl. btw",
+    "priceInclVAT": "Incl. btw",
+    "reviewsCount": "{count} beoordelingen",
+    "showAllReviews": "Alle beoordelingen tonen",
+    "showAll": "Alles tonen",
+    "graduatedPrices": {
+      "discount": "KORTING",
+      "price": "PRIJS",
+      "quantity": "AANTAL",
+      "title": "Meer kopen, minder betalen"
+    },
+    "attributes": {
+      "notValidVariation": "Selecteer een geldige variant.",
+      "productNameMissing": "Artikelnaam ontbreekt",
+      "seeAvailableOptions": "Beschikbare opties bekijken"
+    }
+  },
+  "search": {
+    "clearFilters": "Alle filters wissen",
+    "emptyStateImageAlt": "Afbeelding die aangeeft dat er geen artikelen zijn gevonden",
+    "emptyStateText": "Er zijn geen artikelen meer in deze categorie.",
+    "emptyStateText2": "Niet gevonden wat u zoekt?",
+    "numberOfProducts": "{count} van {total} artikelen",
+    "searchResults": "Zoekresultaten voor ‘{phrase}’"
+  },
+  "searchBar": {
+    "searchSuggestions": "Zoeksuggesties",
+    "productSuggestions": "Productsuggesties",
+    "matchingCategories": "Overeenkomende categorieën",
+    "showAllResults": "Alle resultaten voor ‘{searchTerm}’ bekijken ({hitsCount})",
+    "noResultsFound": "Geen resultaten gevonden."
+  },
+  "account": {
+    "ordersAndReturns": {
+      "orderDetails": { "priceFrom": "vanaf", "quantity": "Aantal" }
+    }
+  },
   "contact": {
     "label": "Contact",
     "clearAll": "Alles wissen",
@@ -69,15 +159,284 @@
     "info": { "heading": "Contactgegevens", "email": "E-mail" }
   },
   "cart": {
+    "empty": "Uw winkelwagen is leeg",
+    "emptyImageAlt": "Afbeelding van een lege winkelwagen",
+    "emptyNotification": "Er zitten geen artikelen in uw winkelwagen",
+    "emptyWishlist": "Uw verlanglijst is leeg",
+    "itemAdded": "Artikel toegevoegd aan de winkelwagen",
+    "itemCount": "(Artikelen: {count})",
+    "itemRemoved": "Artikel verwijderd uit de winkelwagen",
+    "myCart": "Mijn winkelwagen",
     "numberInCart": "{count} artikelen in de winkelwagen",
     "numberInWishlist": "{count} artikelen in de verlanglijst"
   },
+  "billing": {
+    "addButton": "Factuuradres toevoegen",
+    "description": "Voeg een factuuradres toe. De factuur wordt naar het hierboven opgegeven e-mailadres gestuurd.",
+    "heading": "Factuuradres",
+    "methodChanged": "De gekozen betaalmethode is niet meer beschikbaar."
+  },
+  "checkout": {
+    "backToCheckout": "Terug naar de kassa",
+    "continueAsGuest": "Verdergaan als gast",
+    "fields": {
+      "customerReference": "Uw referentie",
+      "customerReferencePlaceholder": "Vul hier uw referentie in.",
+      "customerWish": "Opmerkingen en verzoeken",
+      "customerWishMessage": "Vul hier uw bericht aan ons in."
+    },
+    "guestCheckout": "Bestellen als gast",
+    "loginFastCheckout": "Log in om sneller af te rekenen",
+    "payment": {
+      "birthdateError": "Vul een geldige geboortedatum in.",
+      "birthdateLabel": "Geboortedatum",
+      "comingSoon": "Binnenkort beschikbaar",
+      "countrySearch": "Land zoeken",
+      "creditCard": "Creditcard",
+      "heading": "Betaalmethode",
+      "noMethodsAvailable": "Er zijn geen betaalmethoden beschikbaar. Neem contact op met de webshop.",
+      "payUponInvoice": "Betalen op factuur",
+      "phoneError": "Vul een geldig telefoonnummer in.",
+      "phoneLabel": "Telefoonnummer"
+    },
+    "googlePay": { "paymentInProgress": "Betaling wordt verwerkt…" }
+  },
+  "coupon": {
+    "apply": "Toepassen",
+    "couponApplied": "De kortingscode is toegevoegd",
+    "couponInvalid": "De kortingscode is al gebruikt of is ongeldig.",
+    "couponRemoved": "De kortingscode is verwijderd.",
+    "enterCode": "Code invoeren",
+    "name": "Kortingscode",
+    "pleaseProvideCoupon": "Vul een geldige kortingscode in.",
+    "remove": "Verwijderen",
+    "title": "Heeft u een kortingscode?"
+  },
+  "order": {
+    "errorMessage": "Er is iets misgegaan. Probeer het later opnieuw.",
+    "errorProvider": "Onbekend antwoord van de betaalprovider: {paymentType}",
+    "failedHeader": "Het spijt ons.",
+    "failedMessage": "Uw bestelling is niet afgerond.",
+    "searchResults": "Resultaten voor ‘{phrase}’",
+    "successHeader": "Bedankt voor uw bestelling!",
+    "successImageAlt": "Afbeelding van een geslaagde bestelling",
+    "successMessage": "Uw bestelling is succesvol geplaatst.",
+    "successReturnHeader": "Bedankt voor uw retourzending!"
+  },
+  "orderConfirmation": {
+    "confirmationSendTo": "Een bevestiging met alle gegevens is verzonden naar {email}",
+    "createAccountForBenefits": "Maak een account aan om van alle voordelen te profiteren!",
+    "sameAsShippingAddress": "Gelijk aan het verzendadres",
+    "saveOrderToAccount": "Deze bestelling in uw account opslaan",
+    "shipping": "Verzending",
+    "signUp": "Registreren!",
+    "subTotal": "Subtotaal",
+    "total": "Totaal",
+    "trackingOrder": "Bestelling volgen",
+    "vat": "Btw",
+    "softLogin": {
+      "check": "Controleren",
+      "fullName": "Achternaam of bedrijfsnaam",
+      "titleFullName": "Vul de achternaam of bedrijfsnaam bij de bestelling in om de bestelgegevens te bekijken.",
+      "titleLogin": "Log in op uw account om uw bestelling te bekijken",
+      "titlePostcode": "Vul de postcode in van een adres bij de bestelling om de bestelgegevens te bekijken."
+    }
+  },
+  "orderConfirmationPaymentStatus": {
+    "fullyPaid": "Betaald",
+    "overpaid": "Te veel betaald",
+    "partlyPaid": "Gedeeltelijk betaald",
+    "prepaid": "Vooruitbetaald",
+    "unknown": "Fout bij het ophalen van de betaalstatus",
+    "unpaid": "Niet betaald"
+  },
+  "orderProperties": {
+    "additionalCostsPerItem": "Extra kosten (per artikel)",
+    "hasRequiredFields": "Dit veld is verplicht.",
+    "noSelection": "Geen selectie",
+    "select": "Selecteren",
+    "upload": {
+      "acceptedFormats": "Toegestane bestandsformaten",
+      "dragAndDropFileHereOrUpload": "Sleep een bestand hierheen of {uploadFile}",
+      "maximumFileSize": "Maximale bestandsgrootte",
+      "orderPropertyTypeFile": "Type: bestand",
+      "unSupportedFileType": "Dit bestandstype wordt niet ondersteund",
+      "uploaded": "geüpload",
+      "uploadError": "Het bestand kon niet worden geüpload. Controleer de bestandsgrootte en het bestandsformaat.",
+      "uploadFile": "Bestand uploaden",
+      "uploading": "bezig met uploaden"
+    },
+    "vat": { "excl": "excl.", "incl": "incl.", "plus": "plus" }
+  },
+  "shipping": {
+    "addButton": "Verzendadres toevoegen",
+    "description": "Voeg een verzendadres toe om de verzendgegevens te bekijken.",
+    "excludedLabel": "excl. {shipping}",
+    "heading": "Verzendadres",
+    "methodChanged": "De gekozen verzendmethode is niet meer beschikbaar.",
+    "noShippingMessage": "Geen verzendgegevens beschikbaar",
+    "noShippingMethodsNoAddress": "Vul uw verzendadres in om de beschikbare verzendmethoden te bekijken.",
+    "method": {
+      "description": "Beschikbaar nadat u een verzendadres hebt ingevoerd.",
+      "free": "Gratis",
+      "heading": "Verzendmethode",
+      "maxDeliveryDays": "Levering binnen {days} dagen",
+      "noMethodsAvailable": "Er zijn geen verzendmethoden beschikbaar. Neem contact op met de webshop."
+    }
+  },
+  "quickCheckout": {
+    "cartContains": "Uw winkelwagen bevat {count} artikel | Uw winkelwagen bevat {count} artikelen",
+    "checkYourCart": "Winkelwagen controleren",
+    "close": "Snel afrekenen sluiten",
+    "heading": "Toegevoegd aan de winkelwagen",
+    "quantity": "Aantal",
+    "subTotal": "Subtotaal artikelen"
+  },
   "CookieBar": { "Cookie Settings": "Cookie-instellingen" },
-  "form": { "optional": "optioneel", "required": "*" },
+  "form": {
+    "addCompany": "+ Bedrijfsgegevens toevoegen",
+    "asterixHint": "* Gemarkeerde toestemmingen zijn verplicht",
+    "cityLabel": "Plaats",
+    "companyLabel": "Bedrijf",
+    "countryLabel": "Land",
+    "emailLabel": "E-mail",
+    "firstNameLabel": "Voornaam",
+    "lastNameLabel": "Achternaam",
+    "optional": "optioneel",
+    "passwordLabel": "Wachtwoord",
+    "passwordVisibility": "Wachtwoord tonen of verbergen",
+    "phoneLabel": "Telefoon",
+    "postalCodeLabel": "Postcode",
+    "removeCompany": "- Bedrijfsgegevens verwijderen",
+    "repeatPasswordLabel": "Wachtwoord herhalen",
+    "required": "*",
+    "selectPlaceholder": "-- Selecteren --",
+    "stateLabel": "Provincie / regio",
+    "streetNameLabel": "Straat",
+    "streetNumberLabel": "Huisnummer",
+    "useAsBillingLabel": "Als factuuradres gebruiken",
+    "useAsShippingLabel": "Als verzendadres gebruiken",
+    "vatIdLabel": "Btw-nummer"
+  },
   "legal": { "privacyPolicy": "privacybeleid" },
+  "storefrontError": {
+    "address": {
+      "createFailed": "Het opslaan van het adres is mislukt.",
+      "deleteFailed": "Het verwijderen van het adres is mislukt.",
+      "validationFailed": "Het adres is ongeldig.",
+      "vatInvalid": "Het btw-nummer is ongeldig.",
+      "vatServerBusy": "Uw btw-nummer kon niet worden gecontroleerd. Neem contact op met de webshop.",
+      "vatServerFallback": "Uw btw-nummer kon niet worden gecontroleerd. De bestelling wordt opnieuw beoordeeld."
+    },
+    "cart": {
+      "addToBasket": {
+        "itemSetComponentMismatch": "De onderdelen van deze artikelset komen niet overeen. De set kan niet aan de winkelwagen worden toegevoegd.",
+        "maxItemQuantityReached": "Het maximale aantal van dit artikel is bereikt. Het kan niet aan de winkelwagen worden toegevoegd.",
+        "maxVariationQuantityReached": "Het maximale aantal van deze variant is bereikt. De variant kan niet aan de winkelwagen worden toegevoegd.",
+        "minVariationQuantityNotReached": "Het minimumaantal van deze variant is niet bereikt. De variant kan niet aan de winkelwagen worden toegevoegd.",
+        "notEnoughStockForVariation": "Er is onvoldoende voorraad van deze variant.",
+        "unknownError": "Er is een onbekende fout opgetreden bij het toevoegen van het artikel. Probeer het opnieuw.",
+        "variationNotFound": "De gekozen variant is niet gevonden en kan niet aan de winkelwagen worden toegevoegd."
+      },
+      "failedToRemoveItem": "Het artikel kon niet worden verwijderd.",
+      "reachedMaximumQuantity": "Uw bestelling overschrijdt het maximale bestelaantal van dit artikel."
+    },
+    "coupon": { "applyFailed": "De kortingscode kon niet worden gebruikt." },
+    "order": {
+      "additionalAuthenticationRequired": "Voor deze bestelling is extra verificatie vereist.",
+      "additionalAuthenticationRequiredLogin": "U moet opnieuw inloggen voor deze bestelling.",
+      "additionalAuthenticationRequiredPostcode": "U moet de gebruikte postcode voor deze bestelling bevestigen.",
+      "additionalAuthRequiredName": "U moet de achternaam bevestigen om deze bestelling te bekijken.",
+      "assignPaymentFailed": "De betaling kon niet aan de bestelling worden gekoppeld.",
+      "createFailed": "De bestelling kon niet worden aangemaakt.",
+      "loadOrdersFailed": "De bestellingen konden niet worden geladen.",
+      "migrateUnauthorized": "De bestelling kon niet aan uw account worden toegevoegd.",
+      "notFound": "Deze bestelling bestaat niet.",
+      "softLoginFailed": "De ingevoerde gegevens zijn ongeldig.",
+      "paymentMethodCantSwitch": "De betaalmethode kan voor deze bestelling niet worden gewijzigd.",
+      "paymentMethodNotExist": "De gekozen betaalmethode bestaat niet.",
+      "paymentMethodSwitchFailed": "De betaalmethode kon niet worden gewijzigd. Probeer het opnieuw.",
+      "paymentMethodSwitchDisabled": "Het wijzigen van de betaalmethode is uitgeschakeld."
+    },
+    "security": {
+      "invalidCsrfToken": "Deze handeling is voor uw veiligheid geblokkeerd. Vernieuw de pagina en probeer het opnieuw.",
+      "tooManyRequests": "Er zijn in korte tijd te veel handelingen uitgevoerd. Probeer het later opnieuw."
+    },
+    "turnstile": {
+      "invalid": "De verificatie is mislukt. Probeer het over enkele ogenblikken opnieuw.",
+      "misConfigured": "De verificatieservice is momenteel niet beschikbaar. Neem contact op met de websitebeheerder."
+    }
+  },
   "common": {
-    "actions": { "search": "Zoeken", "goToCheckout": "Afrekenen" },
-    "labels": { "home": "Home", "checkout": "Kassa" },
-    "navigation": { "languageSelector": "Taal kiezen", "openMenu": "Menu openen", "closeMenu": "Menu sluiten" }
+    "actions": {
+      "add": "Toevoegen",
+      "addProductToWishlist": "{label} aan de verlanglijst toevoegen",
+      "addToCart": "In winkelwagen",
+      "addToWishlist": "Aan verlanglijst toevoegen",
+      "apply": "Toepassen",
+      "back": "Terug",
+      "browseProducts": "Artikelen bekijken",
+      "buy": "Kopen",
+      "clear": "Wissen",
+      "clearAll": "Alles wissen",
+      "continueShopping": "Verder winkelen",
+      "goToCheckout": "Naar de kassa",
+      "next": "Volgende",
+      "previous": "Vorige",
+      "removeFromWishlist": "Van verlanglijst verwijderen",
+      "removeItemFromBasket": "Artikel uit winkelwagen verwijderen",
+      "removeProductFromWishlist": "{label} van de verlanglijst verwijderen",
+      "resetSearch": "Zoekopdracht wissen",
+      "save": "Opslaan",
+      "saveAddress": "Adres opslaan",
+      "search": "Zoeken",
+      "showLess": "Minder tonen",
+      "showMore": "Meer tonen",
+      "showOptions": "Opties bekijken",
+      "showProducts": "Artikelen tonen",
+      "viewCart": "Winkelwagen bekijken"
+    },
+    "labels": {
+      "asterisk": "*",
+      "basePrice": "Basisprijs",
+      "cart": "Winkelwagen",
+      "category": "Categorie",
+      "checkout": "Kassa",
+      "delivery": "Verzending",
+      "filters": "Filters",
+      "grossPrice": "Brutoprijs",
+      "home": "Home",
+      "includedTax": "incl. btw",
+      "excludedTax": "excl. btw",
+      "listSettings": "Lijstinstellingen",
+      "itemsSubtotal": "Subtotaal artikelen",
+      "max": "Max.",
+      "min": "Min.",
+      "netPrice": "Nettoprijs",
+      "orderSummary": "Besteloverzicht",
+      "pagination": "Paginanavigatie",
+      "perPage": "Per pagina",
+      "products": "Artikelen",
+      "quantitySelector": "Aantal kiezen",
+      "sortBy": "Sorteren op",
+      "total": "Totaal",
+      "wishlist": "Verlanglijst"
+    },
+    "navigation": {
+      "languageSelector": "Taal kiezen",
+      "openMenu": "Menu openen",
+      "closeMenu": "Menu sluiten",
+      "breadcrumbsDropdown": "Meer kruimelpad tonen",
+      "closeAddressForm": "Adresformulier sluiten",
+      "closeAuthentication": "Aanmelden sluiten",
+      "closeDialog": "Dialoogvenster sluiten",
+      "closeListSettings": "Lijstinstellingen sluiten",
+      "currentPage": "Huidige pagina: {page}",
+      "goToPage": "Ga naar pagina {page}",
+      "nextAriaLabel": "Ga naar de volgende pagina",
+      "previousAriaLabel": "Ga naar de vorige pagina",
+      "showSubcategories": "Subcategorieën tonen"
+    },
+    "accessibility": { "viewDetails": "Details van {name} bekijken" }
   }
 }

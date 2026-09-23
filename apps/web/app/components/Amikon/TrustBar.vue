@@ -15,52 +15,98 @@
 <script setup lang="ts">
 const { locale } = useI18n();
 
-const items = computed(() =>
-  locale.value === 'de'
-    ? [
-        {
-          kicker: 'Versand',
-          title: 'Gratisversand (DE)¹',
-          text: 'UPS-Paketversand ab 100 € Bestellwert und bis 10 kg Paketgewicht. Zustellung am Samstag möglich.',
-        },
-        {
-          kicker: 'Service',
-          title: 'Persönlicher Kundenservice',
-          text: 'Mo.–Do. 07:30–16:00 Uhr, Fr. 07:30–15:00 Uhr.',
-        },
-        {
-          kicker: 'Sortiment',
-          title: 'Einzigartige Produkte',
-          text: 'Viele exklusive und außergewöhnliche Industrieprodukte aus zweiter Hand.',
-        },
-        {
-          kicker: 'Sicherheit',
-          title: 'Sicher einkaufen',
-          text: 'Verschlüsselte Übertragung und ein Bestellprozess für gewerbliche Kunden.',
-        },
-      ]
-    : [
-        {
-          kicker: 'Shipping',
-          title: 'Free shipping (DE)¹',
-          text: 'UPS parcel shipping for orders of €100 or more and parcels up to 10 kg. Saturday delivery is available.',
-        },
-        {
-          kicker: 'Service',
-          title: 'Personal customer service',
-          text: 'Mon–Thu 07:30–16:00, Fri 07:30–15:00.',
-        },
-        {
-          kicker: 'Range',
-          title: 'Unique products',
-          text: 'Many exclusive and unusual second-hand industrial products.',
-        },
-        {
-          kicker: 'Security',
-          title: 'Shop securely',
-          text: 'Encrypted transmission and an ordering process designed for business customers.',
-        },
-      ],
+const translations = {
+  de: [
+    {
+      kicker: 'Versand',
+      title: 'Gratisversand (DE)¹',
+      text: 'UPS-Paketversand ab 100 € Bestellwert und bis 10 kg Paketgewicht. Zustellung am Samstag möglich.',
+    },
+    {
+      kicker: 'Service',
+      title: 'Persönlicher Kundenservice',
+      text: 'Mo.–Do. 07:30–16:00 Uhr, Fr. 07:30–15:00 Uhr.',
+    },
+    {
+      kicker: 'Sortiment',
+      title: 'Einzigartige Produkte',
+      text: 'Viele exklusive und außergewöhnliche Industrieprodukte aus zweiter Hand.',
+    },
+    {
+      kicker: 'Sicherheit',
+      title: 'Sicher einkaufen',
+      text: 'Verschlüsselte Übertragung und ein Bestellprozess für gewerbliche Kunden.',
+    },
+  ],
+  en: [
+    {
+      kicker: 'Shipping',
+      title: 'Free shipping (DE)¹',
+      text: 'UPS parcel shipping for orders of €100 or more and parcels up to 10 kg. Saturday delivery is available.',
+    },
+    {
+      kicker: 'Service',
+      title: 'Personal customer service',
+      text: 'Mon–Thu 07:30–16:00, Fri 07:30–15:00.',
+    },
+    {
+      kicker: 'Range',
+      title: 'Unique products',
+      text: 'Many exclusive and unusual second-hand industrial products.',
+    },
+    {
+      kicker: 'Security',
+      title: 'Shop securely',
+      text: 'Encrypted transmission and an ordering process designed for business customers.',
+    },
+  ],
+  fr: [
+    {
+      kicker: 'Livraison',
+      title: 'Livraison gratuite (DE)¹',
+      text: 'Livraison par colis UPS dès 100 € de commande et jusqu’à 10 kg par colis. Livraison le samedi possible.',
+    },
+    {
+      kicker: 'Service',
+      title: 'Service client personnalisé',
+      text: 'Lun.–jeu. 07 h 30–16 h 00, ven. 07 h 30–15 h 00.',
+    },
+    {
+      kicker: 'Assortiment',
+      title: 'Produits uniques',
+      text: 'De nombreux produits industriels d’occasion exclusifs et insolites.',
+    },
+    {
+      kicker: 'Sécurité',
+      title: 'Achetez en toute sécurité',
+      text: 'Transmission chiffrée et commande conçue pour les professionnels.',
+    },
+  ],
+  nl: [
+    {
+      kicker: 'Verzending',
+      title: 'Gratis verzending (DE)¹',
+      text: 'UPS-pakketverzending vanaf € 100 bestelwaarde en tot 10 kg pakketgewicht. Levering op zaterdag mogelijk.',
+    },
+    {
+      kicker: 'Service',
+      title: 'Persoonlijke klantenservice',
+      text: 'Ma–do 07:30–16:00 uur, vr 07:30–15:00 uur.',
+    },
+    {
+      kicker: 'Assortiment',
+      title: 'Unieke producten',
+      text: 'Veel exclusieve en bijzondere tweedehands industriële producten.',
+    },
+    {
+      kicker: 'Veiligheid',
+      title: 'Veilig winkelen',
+      text: 'Versleutelde overdracht en een bestelproces voor zakelijke klanten.',
+    },
+  ],
+};
+const items = computed(
+  () => translations[locale.value.toLowerCase().split('-')[0] as keyof typeof translations] ?? translations.en,
 );
 </script>
 

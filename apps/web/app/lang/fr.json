@@ -48,6 +48,96 @@
       "weatheringTechnology": "Essais de vieillissement climatique"
     }
   },
+  "category": {
+    "sorting": {
+      "default": { "recommended_sorting": "Recommandé" },
+      "item": {
+        "feedbackDecimal_asc": "Avis clients ↑",
+        "feedbackDecimal_desc": "Avis clients ↓",
+        "manufacturer": {
+          "externalName_asc": "Fabricant A–Z",
+          "externalName_desc": "Fabricant Z–A"
+        },
+        "score": "Pertinence"
+      },
+      "sorting": { "price": { "avg_asc": "Prix croissant", "avg_desc": "Prix décroissant" } },
+      "texts": { "name1_asc": "Nom A–Z", "name1_desc": "Nom Z–A" },
+      "variation": {
+        "availability": {
+          "averageDays_asc": "Disponibilité croissante",
+          "averageDays_desc": "Disponibilité décroissante"
+        },
+        "createdAt_asc": "Articles les plus anciens",
+        "createdAt_desc": "Articles les plus récents",
+        "number_asc": "Numéro de variante croissant",
+        "number_desc": "Numéro de variante décroissant",
+        "position_asc": "Meilleures ventes croissantes",
+        "position_desc": "Meilleures ventes décroissantes",
+        "updatedAt_asc": "Dernière mise à jour",
+        "updatedAt_desc": "Première mise à jour"
+      }
+    }
+  },
+  "product": {
+    "allFromCategory": "Tous les articles de {name}",
+    "allProducts": "Tous les articles",
+    "allProductsLink": "Parcourir les articles",
+    "averageRating": "Note moyenne",
+    "basedOnRatings": "Basé sur {count} avis",
+    "bundleSavings": "Économisez {percent} % sur cet ensemble",
+    "createReview": "Rédiger un avis",
+    "customerReviews": "Avis clients",
+    "decreaseQuantity": "Diminuer la quantité",
+    "details": "Détails de l’article",
+    "doubleTapZoom": "Touchez deux fois pour agrandir",
+    "estimatedDelivery": "Délai de livraison estimé",
+    "imageOf": "Image de {name}",
+    "increaseQuantity": "Augmenter la quantité",
+    "legalDetails": "Informations légales sur l’article",
+    "lowestPrice": "Prix le plus bas des 30 derniers jours : {price}",
+    "minimumQuantity": "Quantité minimale de commande : {count}",
+    "moreFromCategory": "Autres articles de cette catégorie",
+    "noReviews": "Aucun avis n’a encore été publié pour cet article",
+    "noReviewsShort": "Aucun avis",
+    "notAvailable": "Cet article n’est pas disponible.",
+    "outOfStock": "Rupture de stock",
+    "priceExclVAT": "HT",
+    "priceInclVAT": "TTC",
+    "reviewsCount": "{count} avis",
+    "showAllReviews": "Afficher tous les avis",
+    "showAll": "Tout afficher",
+    "graduatedPrices": {
+      "discount": "REMISE",
+      "price": "PRIX",
+      "quantity": "QUANTITÉ",
+      "title": "Achetez plus, payez moins"
+    },
+    "attributes": {
+      "notValidVariation": "Veuillez sélectionner une variante valide.",
+      "productNameMissing": "Nom de l’article manquant",
+      "seeAvailableOptions": "Voir les options disponibles"
+    }
+  },
+  "search": {
+    "clearFilters": "Effacer tous les filtres",
+    "emptyStateImageAlt": "Illustration indiquant qu’aucun article n’a été trouvé",
+    "emptyStateText": "Nous n’avons plus d’articles dans cette catégorie.",
+    "emptyStateText2": "Vous n’avez pas trouvé ce que vous cherchez ?",
+    "numberOfProducts": "{count} articles sur {total}",
+    "searchResults": "Résultats de recherche pour « {phrase} »"
+  },
+  "searchBar": {
+    "searchSuggestions": "Suggestions de recherche",
+    "productSuggestions": "Suggestions de produits",
+    "matchingCategories": "Catégories correspondantes",
+    "showAllResults": "Voir tous les résultats pour « {searchTerm} » ({hitsCount})",
+    "noResultsFound": "Aucun résultat trouvé."
+  },
+  "account": {
+    "ordersAndReturns": {
+      "orderDetails": { "priceFrom": "à partir de", "quantity": "Quantité" }
+    }
+  },
   "contact": {
     "label": "Contact",
     "clearAll": "Tout effacer",
@@ -69,19 +159,284 @@
     "info": { "heading": "Coordonnées", "email": "E-mail" }
   },
   "cart": {
+    "empty": "Votre panier est vide",
+    "emptyImageAlt": "Illustration d’un panier vide",
+    "emptyNotification": "Votre panier ne contient aucun article",
+    "emptyWishlist": "Votre liste de souhaits est vide",
+    "itemAdded": "Article ajouté au panier",
+    "itemCount": "(Articles : {count})",
+    "itemRemoved": "Article retiré du panier",
+    "myCart": "Mon panier",
     "numberInCart": "{count} articles dans le panier",
     "numberInWishlist": "{count} articles dans la liste de souhaits"
   },
+  "billing": {
+    "addButton": "Ajouter une adresse de facturation",
+    "description": "Ajoutez une adresse de facturation. La facture sera envoyée à l’adresse e-mail indiquée ci-dessus.",
+    "heading": "Adresse de facturation",
+    "methodChanged": "Le mode de paiement sélectionné n’est plus disponible."
+  },
+  "checkout": {
+    "backToCheckout": "Retour à la caisse",
+    "continueAsGuest": "Continuer en tant qu’invité",
+    "fields": {
+      "customerReference": "Votre référence",
+      "customerReferencePlaceholder": "Saisissez votre référence ici.",
+      "customerWish": "Remarques et demandes",
+      "customerWishMessage": "Saisissez votre message ici."
+    },
+    "guestCheckout": "Commande sans compte",
+    "loginFastCheckout": "Connectez-vous pour commander plus rapidement",
+    "payment": {
+      "birthdateError": "Saisissez une date de naissance valide.",
+      "birthdateLabel": "Date de naissance",
+      "comingSoon": "Bientôt disponible",
+      "countrySearch": "Rechercher un pays",
+      "creditCard": "Carte bancaire",
+      "heading": "Mode de paiement",
+      "noMethodsAvailable": "Aucun mode de paiement n’est disponible. Veuillez contacter la boutique.",
+      "payUponInvoice": "Paiement sur facture",
+      "phoneError": "Saisissez un numéro de téléphone valide.",
+      "phoneLabel": "Numéro de téléphone"
+    },
+    "googlePay": { "paymentInProgress": "Paiement en cours…" }
+  },
+  "coupon": {
+    "apply": "Appliquer",
+    "couponApplied": "Le code de réduction a bien été ajouté",
+    "couponInvalid": "Ce code de réduction a déjà été utilisé ou n’est pas valide.",
+    "couponRemoved": "Le code de réduction a bien été supprimé.",
+    "enterCode": "Saisir le code",
+    "name": "Code de réduction",
+    "pleaseProvideCoupon": "Veuillez saisir un code de réduction valide.",
+    "remove": "Supprimer",
+    "title": "Vous avez un code de réduction ?"
+  },
+  "order": {
+    "errorMessage": "Une erreur s’est produite. Veuillez réessayer plus tard.",
+    "errorProvider": "Réponse inconnue du prestataire de paiement : {paymentType}",
+    "failedHeader": "Nous sommes désolés.",
+    "failedMessage": "Votre commande n’a pas été finalisée.",
+    "searchResults": "Résultats pour « {phrase} »",
+    "successHeader": "Merci pour votre commande !",
+    "successImageAlt": "Illustration de confirmation de commande",
+    "successMessage": "Votre commande a bien été effectuée.",
+    "successReturnHeader": "Merci pour votre retour !"
+  },
+  "orderConfirmation": {
+    "confirmationSendTo": "Une confirmation contenant tous les détails a été envoyée à {email}",
+    "createAccountForBenefits": "Créez un compte pour profiter de tous les avantages !",
+    "sameAsShippingAddress": "Identique à l’adresse de livraison",
+    "saveOrderToAccount": "Enregistrer cette commande dans votre compte",
+    "shipping": "Livraison",
+    "signUp": "Créer un compte !",
+    "subTotal": "Sous-total",
+    "total": "Total",
+    "trackingOrder": "Suivre votre commande",
+    "vat": "TVA",
+    "softLogin": {
+      "check": "Vérifier",
+      "fullName": "Nom de famille ou raison sociale",
+      "titleFullName": "Saisissez le nom de famille ou la raison sociale associé à la commande pour en consulter les détails.",
+      "titleLogin": "Connectez-vous à votre compte pour accéder à votre commande",
+      "titlePostcode": "Saisissez le code postal d’une adresse enregistrée pour cette commande pour en consulter les détails."
+    }
+  },
+  "orderConfirmationPaymentStatus": {
+    "fullyPaid": "Payé",
+    "overpaid": "Trop-perçu",
+    "partlyPaid": "Partiellement payé",
+    "prepaid": "Prépayé",
+    "unknown": "Erreur lors de la récupération du statut de paiement",
+    "unpaid": "Non payé"
+  },
+  "orderProperties": {
+    "additionalCostsPerItem": "Frais supplémentaires (par article)",
+    "hasRequiredFields": "Ce champ est obligatoire.",
+    "noSelection": "Aucune sélection",
+    "select": "Sélectionner",
+    "upload": {
+      "acceptedFormats": "Formats acceptés",
+      "dragAndDropFileHereOrUpload": "Glissez un fichier ici ou {uploadFile}",
+      "maximumFileSize": "Taille maximale du fichier",
+      "orderPropertyTypeFile": "Type : fichier",
+      "unSupportedFileType": "Ce type de fichier n’est pas pris en charge",
+      "uploaded": "téléversé",
+      "uploadError": "Le fichier n’a pas pu être téléversé. Vérifiez sa taille et son format.",
+      "uploadFile": "Téléverser un fichier",
+      "uploading": "téléversement en cours"
+    },
+    "vat": { "excl": "HT", "incl": "TTC", "plus": "plus" }
+  },
+  "shipping": {
+    "addButton": "Ajouter une adresse de livraison",
+    "description": "Ajoutez une adresse de livraison pour afficher les modalités de livraison.",
+    "excludedLabel": "hors {shipping}",
+    "heading": "Adresse de livraison",
+    "methodChanged": "Le mode de livraison sélectionné n’est plus disponible.",
+    "noShippingMessage": "Aucune information de livraison disponible",
+    "noShippingMethodsNoAddress": "Saisissez votre adresse de livraison pour voir les modes de livraison disponibles.",
+    "method": {
+      "description": "Disponible après la saisie d’une adresse de livraison.",
+      "free": "Gratuit",
+      "heading": "Mode de livraison",
+      "maxDeliveryDays": "Livraison sous {days} jours",
+      "noMethodsAvailable": "Aucun mode de livraison n’est disponible. Veuillez contacter la boutique."
+    }
+  },
+  "quickCheckout": {
+    "cartContains": "Votre panier contient {count} article | Votre panier contient {count} articles",
+    "checkYourCart": "Vérifier votre panier",
+    "close": "Fermer la commande rapide",
+    "heading": "Ajouté au panier",
+    "quantity": "Quantité",
+    "subTotal": "Sous-total des articles"
+  },
   "CookieBar": { "Cookie Settings": "Paramètres des cookies" },
-  "form": { "optional": "facultatif", "required": "*" },
+  "form": {
+    "addCompany": "+ Ajouter les informations de l’entreprise",
+    "asterixHint": "* Les consentements marqués sont obligatoires",
+    "cityLabel": "Ville",
+    "companyLabel": "Entreprise",
+    "countryLabel": "Pays",
+    "emailLabel": "E-mail",
+    "firstNameLabel": "Prénom",
+    "lastNameLabel": "Nom",
+    "optional": "facultatif",
+    "passwordLabel": "Mot de passe",
+    "passwordVisibility": "Afficher ou masquer le mot de passe",
+    "phoneLabel": "Téléphone",
+    "postalCodeLabel": "Code postal",
+    "removeCompany": "- Supprimer les informations de l’entreprise",
+    "repeatPasswordLabel": "Confirmer le mot de passe",
+    "required": "*",
+    "selectPlaceholder": "-- Sélectionner --",
+    "stateLabel": "État / région",
+    "streetNameLabel": "Rue",
+    "streetNumberLabel": "Numéro",
+    "useAsBillingLabel": "Utiliser comme adresse de facturation",
+    "useAsShippingLabel": "Utiliser comme adresse de livraison",
+    "vatIdLabel": "Numéro de TVA"
+  },
   "legal": { "privacyPolicy": "politique de confidentialité" },
+  "storefrontError": {
+    "address": {
+      "createFailed": "L’enregistrement de l’adresse a échoué.",
+      "deleteFailed": "La suppression de l’adresse a échoué.",
+      "validationFailed": "L’adresse n’est pas valide.",
+      "vatInvalid": "Le numéro de TVA n’est pas valide.",
+      "vatServerBusy": "Votre numéro de TVA n’a pas pu être vérifié. Veuillez contacter la boutique.",
+      "vatServerFallback": "Votre numéro de TVA n’a pas pu être vérifié. La commande sera examinée à nouveau."
+    },
+    "cart": {
+      "addToBasket": {
+        "itemSetComponentMismatch": "Les composants de cet ensemble ne correspondent pas. Il ne peut pas être ajouté au panier.",
+        "maxItemQuantityReached": "La quantité maximale de cet article est atteinte. Il ne peut pas être ajouté au panier.",
+        "maxVariationQuantityReached": "La quantité maximale de cette variante est atteinte. Elle ne peut pas être ajoutée au panier.",
+        "minVariationQuantityNotReached": "La quantité minimale de cette variante n’est pas atteinte. Elle ne peut pas être ajoutée au panier.",
+        "notEnoughStockForVariation": "Le stock disponible pour cette variante est insuffisant.",
+        "unknownError": "Une erreur inconnue s’est produite lors de l’ajout de l’article. Veuillez réessayer.",
+        "variationNotFound": "La variante sélectionnée est introuvable et ne peut pas être ajoutée au panier."
+      },
+      "failedToRemoveItem": "L’article n’a pas pu être supprimé.",
+      "reachedMaximumQuantity": "Votre commande dépasse la quantité maximale autorisée pour cet article."
+    },
+    "coupon": { "applyFailed": "Le code de réduction n’a pas pu être utilisé." },
+    "order": {
+      "additionalAuthenticationRequired": "Une vérification supplémentaire est nécessaire pour cette commande.",
+      "additionalAuthenticationRequiredLogin": "Vous devez vous reconnecter pour accéder à cette commande.",
+      "additionalAuthenticationRequiredPostcode": "Vous devez confirmer le code postal utilisé pour cette commande.",
+      "additionalAuthRequiredName": "Vous devez confirmer le nom de famille pour accéder à cette commande.",
+      "assignPaymentFailed": "Le paiement n’a pas pu être associé à la commande.",
+      "createFailed": "La commande n’a pas pu être créée.",
+      "loadOrdersFailed": "Les commandes n’ont pas pu être chargées.",
+      "migrateUnauthorized": "La commande n’a pas pu être ajoutée à votre compte.",
+      "notFound": "Cette commande n’existe pas.",
+      "softLoginFailed": "Les informations fournies ne sont pas valides.",
+      "paymentMethodCantSwitch": "Le mode de paiement ne peut pas être modifié pour cette commande.",
+      "paymentMethodNotExist": "Le mode de paiement sélectionné n’existe pas.",
+      "paymentMethodSwitchFailed": "Le mode de paiement n’a pas pu être modifié. Veuillez réessayer.",
+      "paymentMethodSwitchDisabled": "La modification du mode de paiement est désactivée."
+    },
+    "security": {
+      "invalidCsrfToken": "Cette action a été bloquée pour votre sécurité. Actualisez la page et réessayez.",
+      "tooManyRequests": "Trop d’actions ont été effectuées en peu de temps. Veuillez réessayer plus tard."
+    },
+    "turnstile": {
+      "invalid": "La vérification a échoué. Veuillez réessayer dans quelques instants.",
+      "misConfigured": "Le service de vérification est temporairement indisponible. Veuillez contacter l’administrateur du site."
+    }
+  },
   "common": {
-    "actions": { "search": "Rechercher", "goToCheckout": "Passer commande" },
-    "labels": { "home": "Accueil", "checkout": "Commande" },
+    "actions": {
+      "add": "Ajouter",
+      "addProductToWishlist": "Ajouter {label} à la liste de souhaits",
+      "addToCart": "Ajouter au panier",
+      "addToWishlist": "Ajouter à la liste de souhaits",
+      "apply": "Appliquer",
+      "back": "Retour",
+      "browseProducts": "Parcourir les articles",
+      "buy": "Acheter",
+      "clear": "Effacer",
+      "clearAll": "Tout effacer",
+      "continueShopping": "Continuer les achats",
+      "goToCheckout": "Passer à la caisse",
+      "next": "Suivant",
+      "previous": "Précédent",
+      "removeFromWishlist": "Retirer de la liste de souhaits",
+      "removeItemFromBasket": "Retirer l’article du panier",
+      "removeProductFromWishlist": "Retirer {label} de la liste de souhaits",
+      "resetSearch": "Réinitialiser la recherche",
+      "save": "Enregistrer",
+      "saveAddress": "Enregistrer l’adresse",
+      "search": "Rechercher",
+      "showLess": "Afficher moins",
+      "showMore": "Afficher plus",
+      "showOptions": "Voir les options",
+      "showProducts": "Afficher les articles",
+      "viewCart": "Voir le panier"
+    },
+    "labels": {
+      "asterisk": "*",
+      "basePrice": "Prix de base",
+      "cart": "Panier",
+      "category": "Catégorie",
+      "checkout": "Caisse",
+      "delivery": "Livraison",
+      "filters": "Filtres",
+      "grossPrice": "Prix TTC",
+      "home": "Accueil",
+      "includedTax": "TVA incluse",
+      "excludedTax": "hors TVA",
+      "listSettings": "Options de la liste",
+      "itemsSubtotal": "Sous-total des articles",
+      "max": "Max.",
+      "min": "Min.",
+      "netPrice": "Prix HT",
+      "orderSummary": "Récapitulatif de commande",
+      "pagination": "Navigation paginée",
+      "perPage": "Par page",
+      "products": "Articles",
+      "quantitySelector": "Sélecteur de quantité",
+      "sortBy": "Trier par",
+      "total": "Total",
+      "wishlist": "Liste de souhaits"
+    },
     "navigation": {
       "languageSelector": "Choisir la langue",
       "openMenu": "Ouvrir le menu",
-      "closeMenu": "Fermer le menu"
-    }
+      "closeMenu": "Fermer le menu",
+      "breadcrumbsDropdown": "Afficher le reste du chemin de navigation",
+      "closeAddressForm": "Fermer le formulaire d’adresse",
+      "closeAuthentication": "Fermer la connexion",
+      "closeDialog": "Fermer la fenêtre",
+      "closeListSettings": "Fermer les options de la liste",
+      "currentPage": "Page actuelle : {page}",
+      "goToPage": "Aller à la page {page}",
+      "nextAriaLabel": "Aller à la page suivante",
+      "previousAriaLabel": "Aller à la page précédente",
+      "showSubcategories": "Afficher les sous-catégories"
+    },
+    "accessibility": { "viewDetails": "Voir les détails de {name}" }
   }
 }

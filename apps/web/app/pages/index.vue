@@ -141,67 +141,115 @@ const en = {
   brandsTitle: 'A selection of top brands in our product range',
 };
 
-const copy = computed(() => (locale.value === 'de' ? de : en));
+const fr = {
+  categoryNavigationLabel: 'Catégories de produits sélectionnées',
+  companyImageAlt: 'Bâtiment de la société Amikon GmbH à Borken',
+  heroKicker: 'Achat et vente d’équipements industriels',
+  heroTitle: 'Bienvenue chez Amikon GmbH',
+  heroCta: 'Découvrir notre gamme',
+  welcomeHeading: 'À propos d’Amikon',
+  intro:
+    'De nombreuses entreprises revendent leurs équipements à la fin de leurs projets ou après leur amortissement complet. Cela ne signifie pas que ces appareils ne peuvent pas fonctionner de manière fiable pendant de nombreuses années encore. Amikon GmbH est spécialisée dans l’achat et la vente d’équipements industriels d’occasion. Notre modèle donne une seconde vie aux appareils, en privilégiant la qualité et la durabilité.',
+  climateKicker: 'Gamme recherchée',
+  climateTitle: 'Enceintes climatiques récentes',
+  viewAll: 'Tout voir',
+  openCategory: 'Ouvrir la catégorie',
+  newKicker: 'Récemment ajoutés',
+  newTitle: 'Nouveautés',
+  quickSearch: 'Recherche rapide',
+  purchaseKicker: 'Vendre des machines et pièces détachées',
+  purchaseTitle: 'Proposer du matériel',
+  purchaseText: 'Proposez-nous vos machines, équipements électroniques industriels ou pièces détachées d’occasion.',
+  purchaseCta: 'Envoyer une demande',
+  companyTitle: 'En savoir plus sur Amikon',
+  companyText: 'Découvrez nos activités, nos services et la seconde vie durable des équipements industriels.',
+  companyCta: 'Visiter le site de l’entreprise',
+  brandsTitle: 'Une sélection des grandes marques de notre assortiment',
+};
 
+const nl = {
+  categoryNavigationLabel: 'Geselecteerde productcategorieën',
+  companyImageAlt: 'Bedrijfspand van Amikon GmbH in Borken',
+  heroKicker: 'In- en verkoop van industriële apparatuur',
+  heroTitle: 'Welkom bij Amikon GmbH',
+  heroCta: 'Ontdek ons assortiment',
+  welcomeHeading: 'Over Amikon',
+  intro:
+    'Veel bedrijven verkopen hun apparatuur nadat projecten zijn afgerond of investeringen volledig zijn afgeschreven. Dat betekent niet dat deze apparaten niet nog jarenlang betrouwbaar kunnen functioneren. Amikon GmbH is gespecialiseerd in de in- en verkoop van gebruikte industriële apparatuur. Ons bedrijfsmodel geeft apparaten een tweede leven, met kwaliteit en duurzaamheid voorop.',
+  climateKicker: 'Populair assortiment',
+  climateTitle: 'Actuele klimaatkasten',
+  viewAll: 'Alles bekijken',
+  openCategory: 'Categorie openen',
+  newKicker: 'Nieuw in ons assortiment',
+  newTitle: 'Nieuw binnen',
+  quickSearch: 'Snel zoeken',
+  purchaseKicker: 'Machines en onderdelen verkopen',
+  purchaseTitle: 'Inkoopformulier',
+  purchaseText: 'Bied ons uw gebruikte machines, industriële elektronica of reserveonderdelen aan.',
+  purchaseCta: 'Aanvraag starten',
+  companyTitle: 'Meer over Amikon',
+  companyText:
+    'Lees meer over onze activiteiten, diensten en de duurzame tweede levenscyclus van industriële apparatuur.',
+  companyCta: 'Bezoek de bedrijfswebsite',
+  brandsTitle: 'Een selectie van topmerken uit ons assortiment',
+};
+
+const localizedCopy = { de, en, fr, nl };
+const language = computed(() => locale.value.toLowerCase().split('-')[0] as keyof typeof localizedCopy);
+const copy = computed(() => localizedCopy[language.value] ?? en);
+
+const categoryLabels = {
+  de: [
+    ['Klimakammern', 'Wärme- und Klimaschränke'],
+    ['Roboter', 'Industrieroboter'],
+    ['Materialprüfung', 'Materialprüfmaschine'],
+    ['3D-Druck', 'Industrieller 3D-Drucker'],
+    ['Shaker', 'Schwingprüfanlage'],
+  ],
+  en: [
+    ['Climate chambers', 'Temperature and climate chambers'],
+    ['Robots', 'Industrial robot'],
+    ['Material testing', 'Material testing machine'],
+    ['3D printing', 'Industrial 3D printer'],
+    ['Shakers', 'Vibration test system'],
+  ],
+  fr: [
+    ['Enceintes climatiques', 'Enceintes thermiques et climatiques'],
+    ['Robots', 'Robot industriel'],
+    ['Essais des matériaux', 'Machine d’essai des matériaux'],
+    ['Impression 3D', 'Imprimante 3D industrielle'],
+    ['Essais de vibrations', 'Système d’essai de vibrations'],
+  ],
+  nl: [
+    ['Klimaatkasten', 'Warmte- en klimaatkasten'],
+    ['Robots', 'Industriële robot'],
+    ['Materiaaltesten', 'Materiaaltestmachine'],
+    ['3D-printen', 'Industriële 3D-printer'],
+    ['Trilsystemen', 'Triltestinstallatie'],
+  ],
+} satisfies Record<keyof typeof localizedCopy, [string, string][]>;
+
+const categories = [
+  { image: homeImages.climate, slug: '/waerme-klimaschraenke' },
+  { image: homeImages.robotics, slug: '/roboter' },
+  { image: homeImages.materialTesting, slug: '/materialpruefmaschinen' },
+  { image: homeImages.threeDPrinting, slug: '/3d-druck' },
+  { image: homeImages.shaker, slug: '/shaker-schwingpruefanlagen' },
+];
 const featuredCategories = computed(() =>
-  locale.value === 'de'
-    ? [
-        {
-          label: 'Klimakammern',
-          imageAlt: 'Wärme- und Klimaschränke',
-          image: homeImages.climate,
-          slug: '/waerme-klimaschraenke',
-        },
-        { label: 'Roboter', imageAlt: 'Industrieroboter', image: homeImages.robotics, slug: '/roboter' },
-        {
-          label: 'Materialprüfung',
-          imageAlt: 'Materialprüfmaschine',
-          image: homeImages.materialTesting,
-          slug: '/materialpruefmaschinen',
-        },
-        {
-          label: '3D-Druck',
-          imageAlt: 'Industrieller 3D-Drucker',
-          image: homeImages.threeDPrinting,
-          slug: '/3d-druck',
-        },
-        {
-          label: 'Shaker',
-          imageAlt: 'Schwingprüfanlage',
-          image: homeImages.shaker,
-          slug: '/shaker-schwingpruefanlagen',
-        },
-      ]
-    : [
-        {
-          label: 'Climate chambers',
-          imageAlt: 'Temperature and climate chambers',
-          image: homeImages.climate,
-          slug: '/waerme-klimaschraenke',
-        },
-        { label: 'Robots', imageAlt: 'Industrial robot', image: homeImages.robotics, slug: '/roboter' },
-        {
-          label: 'Material testing',
-          imageAlt: 'Material testing machine',
-          image: homeImages.materialTesting,
-          slug: '/materialpruefmaschinen',
-        },
-        {
-          label: '3D printing',
-          imageAlt: 'Industrial 3D printer',
-          image: homeImages.threeDPrinting,
-          slug: '/3d-druck',
-        },
-        {
-          label: 'Shakers',
-          imageAlt: 'Vibration test system',
-          image: homeImages.shaker,
-          slug: '/shaker-schwingpruefanlagen',
-        },
-      ],
+  categories.map((category, index) => {
+    const [label, imageAlt] = (categoryLabels[language.value] ?? categoryLabels.en)[index]!;
+    return { ...category, label, imageAlt };
+  }),
 );
 
-setPageMeta(locale.value === 'de' ? 'Amikon Industriebedarf' : 'Amikon industrial supply', 'home');
+const pageTitles = {
+  de: 'Amikon Industriebedarf',
+  en: 'Amikon industrial supply',
+  fr: 'Équipements industriels Amikon',
+  nl: 'Amikon industriële apparatuur',
+};
+setPageMeta(pageTitles[language.value] ?? pageTitles.en, 'home');
 
 const { getRobots, setRobotForStaticPage } = useRobots();
 getRobots();

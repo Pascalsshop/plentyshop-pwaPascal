@@ -39,22 +39,38 @@ const props = defineProps<{ kind: 'climate' | 'new'; title: string; categoryPath
 const { locale } = useI18n();
 const localePath = useLocalizedPath();
 const sdk = useSdk();
-const labels = computed(() =>
-  locale.value === 'de'
-    ? {
-        viewAll: 'Alle ansehen',
-        loading: 'Produkte werden geladen',
-        error: 'Produkte konnten gerade nicht geladen werden.',
-        empty: 'Aktuell sind hier keine Produkte verfügbar.',
-        retry: 'Erneut versuchen',
-      }
-    : {
-        viewAll: 'View all',
-        loading: 'Loading products',
-        error: 'Products could not be loaded right now.',
-        empty: 'No products are currently available here.',
-        retry: 'Try again',
-      },
+const translations = {
+  de: {
+    viewAll: 'Alle ansehen',
+    loading: 'Produkte werden geladen',
+    error: 'Produkte konnten gerade nicht geladen werden.',
+    empty: 'Aktuell sind hier keine Produkte verfügbar.',
+    retry: 'Erneut versuchen',
+  },
+  en: {
+    viewAll: 'View all',
+    loading: 'Loading products',
+    error: 'Products could not be loaded right now.',
+    empty: 'No products are currently available here.',
+    retry: 'Try again',
+  },
+  fr: {
+    viewAll: 'Tout voir',
+    loading: 'Chargement des produits',
+    error: 'Les produits ne peuvent pas être chargés pour le moment.',
+    empty: 'Aucun produit n’est disponible ici pour le moment.',
+    retry: 'Réessayer',
+  },
+  nl: {
+    viewAll: 'Alles bekijken',
+    loading: 'Producten worden geladen',
+    error: 'De producten kunnen momenteel niet worden geladen.',
+    empty: 'Er zijn momenteel geen producten beschikbaar.',
+    retry: 'Opnieuw proberen',
+  },
+};
+const labels = computed(
+  () => translations[locale.value.toLowerCase().split('-')[0] as keyof typeof translations] ?? translations.en,
 );
 
 // Each section loads independently; language changes receive their own cache entry.

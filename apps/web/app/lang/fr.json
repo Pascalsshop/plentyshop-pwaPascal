@@ -134,9 +134,216 @@
     "noResultsFound": "Aucun résultat trouvé."
   },
   "account": {
+    "accountSettings": {
+      "billingDetails": {
+        "billingAddress": "Adresse de facturation",
+        "newAddress": "Nouvelle adresse de facturation"
+      },
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "heading": "Paramètres du compte",
+      "makeDefault": "Définir comme adresse par défaut",
+      "noAddresses": "Vous n’avez pas encore enregistré d’adresse",
+      "personalData": {
+        "change": "Modifier",
+        "changePassword": "Changer le mot de passe",
+        "contactInformation": "Coordonnées",
+        "currentPassword": "Mot de passe actuel",
+        "edit": "Modifier",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "newPassword": "Nouveau mot de passe",
+        "newPasswordAgain": "Confirmer le nouveau mot de passe",
+        "passwordChange": "Modification du mot de passe",
+        "passwordHelp": "Au moins 8 caractères, dont une lettre et un chiffre",
+        "passwordsDoNotMatch": "Les mots de passe ne correspondent pas.",
+        "yourName": "Votre nom",
+        "yourPassword": "Votre mot de passe"
+      },
+      "section": {
+        "billingDetails": "Adresses de facturation",
+        "personalData": "Données personnelles",
+        "shippingDetails": "Adresses de livraison"
+      },
+      "shippingDetails": {
+        "newAddress": "Nouvelle adresse de livraison",
+        "shippingAddress": "Adresse de livraison"
+      }
+    },
+    "back": "Retour",
+    "heading": "Mon compte",
+    "logout": "Se déconnecter",
+    "navBottomHeadingAccount": "Compte",
+    "navBottomHeadingLogin": "Connexion",
     "ordersAndReturns": {
-      "orderDetails": { "priceFrom": "à partir de", "quantity": "Quantité" }
+      "actions": "Actions",
+      "amount": "Montant",
+      "continue": "Continuer les achats",
+      "details": "Détails",
+      "heading": "Commandes et retours",
+      "listOfOrders": "Liste des commandes",
+      "more": "Afficher plus",
+      "myOrders": "Mes commandes",
+      "noOrders": "Vous n’avez pas encore commandé chez nous",
+      "noOrdersAltText": "Aucune commande",
+      "noReturns": "Vous n’avez pas encore effectué de retour.",
+      "orderAgain": {
+        "addToCart": "Ajouter au panier",
+        "buyAgain": "Commander à nouveau",
+        "cancel": "Annuler",
+        "heading": "Commander à nouveau",
+        "headingChanges": "Modifications des articles",
+        "notAvailable": "Actuellement indisponible",
+        "orderPropertyNotAvailableOrChanged": "Les caractéristiques de l’article ont changé ou ne sont plus disponibles",
+        "priceDown": "Prix en baisse",
+        "priceUp": "Prix en hausse",
+        "stockLimitation": "Articles encore disponibles : {stock}",
+        "subtext": "Vous pouvez commander à nouveau les articles de cette commande.",
+        "subtextChanges": "Des changements sont survenus depuis votre dernière commande"
+      },
+      "orderDate": "Date de commande",
+      "orderDetails": {
+        "bankDetails": {
+          "accountOwner": "Titulaire du compte",
+          "bank": "Banque",
+          "bic": "BIC/SWIFT",
+          "heading": "Coordonnées bancaires",
+          "iban": "IBAN"
+        },
+        "billingAddress": "Adresse de facturation",
+        "delivery": "Livraison",
+        "estimatedTax": "TVA estimée",
+        "heading": "Détails de la commande",
+        "itemsSubtotal": "Sous-total des articles",
+        "orderDate": "Date de commande",
+        "orderId": "Identifiant de commande",
+        "paymentAmount": "Total",
+        "paymentMethod": "Mode de paiement",
+        "price": "Prix",
+        "priceFrom": "à partir de",
+        "product": "Article",
+        "quantity": "Quantité",
+        "shippingAddress": "Adresse de livraison",
+        "showDetails": "Afficher les détails de l’article",
+        "status": "Statut",
+        "subtotal": "Sous-total",
+        "tableCaption": "Détails de la commande",
+        "total": "Total"
+      },
+      "orderId": "Identifiant de commande",
+      "orderNumber": "Numéro de commande",
+      "paymentSummary": {
+        "heading": "Récapitulatif du paiement",
+        "paymentStatus": "Statut du paiement",
+        "changePaymentMethod": "modifier"
+      },
+      "changePaymentMethod": {
+        "heading": "Changer le mode de paiement",
+        "subHeading": "Vous pouvez changer le mode de paiement de votre commande. Le mode actuel est {paymentMethod}.",
+        "success": "Le mode de paiement a bien été modifié.",
+        "change": "Modifier",
+        "cancel": "Annuler",
+        "notChangeableAfterHint": "Après avoir choisi ce mode de paiement, vous ne pourrez plus le modifier."
+      },
+      "returnDate": "Date du retour",
+      "returnId": "Identifiant du retour",
+      "returnsAltText": "Aucun retour",
+      "returnsDescription": "Vous n’avez pas encore retourné d’article",
+      "returnsHeading": "Retours",
+      "section": {
+        "myOrders": "Mes commandes",
+        "returns": "Retours"
+      },
+      "shippingDate": "Date d’expédition",
+      "shippingSummary": {
+        "heading": "Récapitulatif de livraison",
+        "shippingMethod": "Mode de livraison",
+        "shipTo": "Livrer à"
+      },
+      "status": "Statut"
+    },
+    "wishlist": {
+      "heading": "Liste de souhaits",
+      "section": { "myWishlist": "Ma liste de souhaits" },
+      "notifications": {
+        "add": "L’article a été ajouté à votre liste de souhaits.",
+        "delete": "L’article a été retiré de votre liste de souhaits."
+      }
     }
+  },
+  "authentication": {
+    "login": {
+      "createAccount": "Vous n’avez pas encore de compte ?",
+      "createAccountLater": "Pas d’inquiétude, vous pourrez créer un compte après votre commande",
+      "createAccountLinkLabel": "Inscrivez-vous maintenant !",
+      "forgotPasswordLabel": "Mot de passe oublié ?",
+      "heading": "Connectez-vous à votre compte",
+      "headingSuccess": "Mot de passe réinitialisé",
+      "loginAndContinue": "Se connecter et continuer",
+      "openLoginForm": "Ouvrir le formulaire de connexion",
+      "rememberMeLabel": "Se souvenir de moi",
+      "submitLabel": "Se connecter",
+      "success": "Vous êtes connecté avec succès"
+    },
+    "resetPassword": {
+      "anotherEmail": "Essayer une autre adresse e-mail",
+      "backToLogin": "Retour à la connexion",
+      "continue": "Continuer",
+      "email": "E-mail",
+      "emailSent": "Consultez vos e-mails : nous vous avons envoyé les instructions pour réinitialiser votre mot de passe",
+      "heading": "Mot de passe oublié ?",
+      "info": "Saisissez l’adresse e-mail utilisée lors de votre inscription. Nous vous enverrons un lien pour définir un nouveau mot de passe.",
+      "resetPassword": "Réinitialiser le mot de passe",
+      "subHeading": "Nous vous enverrons les instructions pour réinitialiser votre mot de passe par e-mail",
+      "thankYou": "Merci. Si un compte est associé à {0}, vous recevrez un lien de réinitialisation dans votre boîte de réception.",
+      "title": "Mot de passe réinitialisé"
+    },
+    "setNewPassword": {
+      "button": "Enregistrer le nouveau mot de passe",
+      "description": "Créez le nouveau mot de passe que vous utiliserez pour vous connecter à votre compte.",
+      "heading": "Réinitialiser le mot de passe",
+      "help": "Entre {min} et {max} caractères, avec des lettres, des chiffres et des symboles.",
+      "password": "Nouveau mot de passe",
+      "passwordsNotMatching": "Les mots de passe ne correspondent pas",
+      "rememberPassword": "Vous vous souvenez de votre mot de passe ?",
+      "repeatPassword": "Confirmer le nouveau mot de passe",
+      "resetSucceded": "Votre mot de passe a été réinitialisé. Vous êtes maintenant connecté avec votre nouveau mot de passe."
+    },
+    "signup": {
+      "alreadyHaveAccount": "Vous avez déjà un compte ?",
+      "benefits": {
+        "orderHistory": "Tout votre historique de commandes au même endroit",
+        "orderTracking": "Suivez vos commandes",
+        "saveAddresses": "Enregistrez plusieurs adresses",
+        "wishlist": "Retrouvez plus tard les articles de votre liste de souhaits"
+      },
+      "emailAlreadyExists": "Cette adresse e-mail est déjà enregistrée.",
+      "heading": "Créer un compte",
+      "logInLinkLabel": "Se connecter à la place",
+      "passwordValidation": {
+        "characters": "Le mot de passe doit contenir entre {min} et {max} caractères.",
+        "letters": "Le mot de passe doit contenir au moins une lettre.",
+        "numbers": "Le mot de passe doit contenir au moins un chiffre.",
+        "invalidPassword": "Au moins 8 caractères, dont une lettre et un chiffre."
+      },
+      "subheading": "Inscrivez-vous pour profiter de tous les avantages",
+      "submitLabel": "S’inscrire !",
+      "success": "Votre compte a bien été créé"
+    }
+  },
+  "error": {
+    "email": {
+      "required": "L’adresse e-mail est obligatoire.",
+      "valid": "Saisissez une adresse e-mail valide."
+    },
+    "password": {
+      "match": "Les mots de passe ne correspondent pas.",
+      "maxLength": "Le mot de passe ne doit pas dépasser {max} caractères.",
+      "minLength": "Le mot de passe doit contenir au moins {min} caractères.",
+      "required": "Le mot de passe est obligatoire.",
+      "valid": "Le mot de passe doit contenir au moins une lettre et un chiffre."
+    },
+    "turnstileRequired": "Veuillez effectuer la vérification pour confirmer que vous êtes une personne."
   },
   "contact": {
     "label": "Contact",
@@ -292,6 +499,27 @@
     "quantity": "Quantité",
     "subTotal": "Sous-total des articles"
   },
+  "returns": {
+    "areYouSure": "Voulez-vous vraiment retourner ces articles ?",
+    "cancel": "Annuler",
+    "commentOptional": "Commentaire (facultatif)",
+    "confirmReturn": "Confirmer le retour",
+    "detailsHeading": "Récapitulatif du retour",
+    "initiateReturn": "Demander un retour",
+    "orderDate": "Date de commande",
+    "quantity": "Quantité",
+    "return": "Retourner",
+    "returnForOrder": "Retour de la commande",
+    "returnItems": "Articles à retourner",
+    "returnNumber": "Numéro de retour",
+    "returnReason": "Motif du retour",
+    "selectAll": "Tout sélectionner",
+    "selectQuantities": "Veuillez sélectionner les quantités à retourner",
+    "selectReason": "Veuillez sélectionner un motif de retour",
+    "selectReturnReason": "Sélectionner un motif de retour",
+    "successConfirmationMessage": "Votre demande de retour a été enregistrée. Nous vous tiendrons informé de son traitement.",
+    "tellUsMore": "Précisez pourquoi vous souhaitez retourner ces articles…"
+  },
   "CookieBar": { "Cookie Settings": "Paramètres des cookies" },
   "form": {
     "addCompany": "+ Ajouter les informations de l’entreprise",
@@ -341,7 +569,18 @@
       "failedToRemoveItem": "L’article n’a pas pu être supprimé.",
       "reachedMaximumQuantity": "Votre commande dépasse la quantité maximale autorisée pour cet article."
     },
+    "contact": {
+      "emailAlreadyExists": "Cette adresse e-mail est déjà enregistrée.",
+      "missingContactOrUnexpectedFormat": "Les coordonnées sont manquantes ou leur format est inattendu.",
+      "passwordInvalid": "Le mot de passe ne respecte pas les exigences de sécurité.",
+      "unauthorizedPasswordReset": "Le mot de passe n’a pas pu être réinitialisé. Le lien a peut-être expiré ou a déjà été utilisé.",
+      "unexpectedAddressFormat": "Le format de l’adresse est inattendu."
+    },
     "coupon": { "applyFailed": "Le code de réduction n’a pas pu être utilisé." },
+    "login": {
+      "loginFailed": "Identifiants de connexion incorrects",
+      "userIsBlocked": "Ce compte est bloqué"
+    },
     "order": {
       "additionalAuthenticationRequired": "Une vérification supplémentaire est nécessaire pour cette commande.",
       "additionalAuthenticationRequiredLogin": "Vous devez vous reconnecter pour accéder à cette commande.",
@@ -377,12 +616,21 @@
       "back": "Retour",
       "browseProducts": "Parcourir les articles",
       "buy": "Acheter",
+      "cancel": "Annuler",
+      "cancelOrder": "Annuler la commande",
       "clear": "Effacer",
       "clearAll": "Tout effacer",
       "continueShopping": "Continuer les achats",
+      "edit": "Modifier",
       "goToCheckout": "Passer à la caisse",
+      "goToHomepage": "Aller à l’accueil",
       "next": "Suivant",
+      "pay": "Payer",
+      "placeOrder": "Passer commande et payer",
       "previous": "Précédent",
+      "readLess": "Lire moins",
+      "readMore": "Lire plus",
+      "reloadPage": "Recharger la page",
       "removeFromWishlist": "Retirer de la liste de souhaits",
       "removeItemFromBasket": "Retirer l’article du panier",
       "removeProductFromWishlist": "Retirer {label} de la liste de souhaits",
@@ -390,6 +638,7 @@
       "save": "Enregistrer",
       "saveAddress": "Enregistrer l’adresse",
       "search": "Rechercher",
+      "scrollTop": "Retour en haut de page",
       "showLess": "Afficher moins",
       "showMore": "Afficher plus",
       "showOptions": "Voir les options",
@@ -397,13 +646,17 @@
       "viewCart": "Voir le panier"
     },
     "labels": {
+      "address": "Adresses",
       "asterisk": "*",
       "basePrice": "Prix de base",
       "cart": "Panier",
       "category": "Catégorie",
       "checkout": "Caisse",
+      "content": "Contenu",
       "delivery": "Livraison",
       "filters": "Filtres",
+      "email": "E-mail",
+      "estimatedTax": "TVA",
       "grossPrice": "Prix TTC",
       "home": "Accueil",
       "includedTax": "TVA incluse",
@@ -412,13 +665,21 @@
       "itemsSubtotal": "Sous-total des articles",
       "max": "Max.",
       "min": "Min.",
+      "mostPopular": "Le plus populaire",
       "netPrice": "Prix HT",
+      "or": "ou",
+      "orderNumber": "Identifiant de commande",
       "orderSummary": "Récapitulatif de commande",
       "pagination": "Navigation paginée",
       "perPage": "Par page",
       "products": "Articles",
+      "phone": "Téléphone",
       "quantitySelector": "Sélecteur de quantité",
+      "returnNumber": "Identifiant du retour",
+      "sale": "Promotion",
       "sortBy": "Trier par",
+      "technicalData": "Caractéristiques techniques",
+      "tomorrow": "Demain",
       "total": "Total",
       "wishlist": "Liste de souhaits"
     },
@@ -430,13 +691,27 @@
       "closeAddressForm": "Fermer le formulaire d’adresse",
       "closeAuthentication": "Fermer la connexion",
       "closeDialog": "Fermer la fenêtre",
+      "closeDrawer": "Fermer le panneau",
       "closeListSettings": "Fermer les options de la liste",
+      "closeNeutralAlert": "Fermer la notification",
+      "closePickSavedAddress": "Fermer la sélection d’adresse",
       "currentPage": "Page actuelle : {page}",
       "goToPage": "Aller à la page {page}",
       "nextAriaLabel": "Aller à la page suivante",
+      "openConfigurationDrawer": "Ouvrir le panneau de configuration",
+      "openSearchModal": "Ouvrir la recherche d’articles",
       "previousAriaLabel": "Aller à la page précédente",
+      "socialLabel": "Accéder à la page {label}",
       "showSubcategories": "Afficher les sous-catégories"
     },
-    "accessibility": { "viewDetails": "Voir les détails de {name}" }
+    "accessibility": { "viewDetails": "Voir les détails de {name}" },
+    "messages": {
+      "offline": "Vous semblez être hors ligne. Vérifiez votre connexion Internet."
+    },
+    "reloadPWA": {
+      "ariaLabel": "Une nouvelle version de la boutique est disponible. Appuyez pour actualiser la page.",
+      "newVersionAvailable": "Une nouvelle version de la boutique est disponible.",
+      "refresh": "Actualiser"
+    }
   }
 }

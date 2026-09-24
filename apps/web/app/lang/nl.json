@@ -134,9 +134,216 @@
     "noResultsFound": "Geen resultaten gevonden."
   },
   "account": {
+    "accountSettings": {
+      "billingDetails": {
+        "billingAddress": "Factuuradres",
+        "newAddress": "Nieuw factuuradres"
+      },
+      "delete": "Verwijderen",
+      "edit": "Bewerken",
+      "heading": "Accountinstellingen",
+      "makeDefault": "Als standaard instellen",
+      "noAddresses": "U hebt nog geen adressen opgeslagen",
+      "personalData": {
+        "change": "Wijzigen",
+        "changePassword": "Wachtwoord wijzigen",
+        "contactInformation": "Contactgegevens",
+        "currentPassword": "Huidig wachtwoord",
+        "edit": "Bewerken",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "newPassword": "Nieuw wachtwoord",
+        "newPasswordAgain": "Nieuw wachtwoord herhalen",
+        "passwordChange": "Wachtwoord wijzigen",
+        "passwordHelp": "Minimaal 8 tekens, waaronder een letter en een cijfer",
+        "passwordsDoNotMatch": "De wachtwoorden komen niet overeen.",
+        "yourName": "Uw naam",
+        "yourPassword": "Uw wachtwoord"
+      },
+      "section": {
+        "billingDetails": "Factuuradressen",
+        "personalData": "Persoonlijke gegevens",
+        "shippingDetails": "Verzendadressen"
+      },
+      "shippingDetails": {
+        "newAddress": "Nieuw verzendadres",
+        "shippingAddress": "Verzendadres"
+      }
+    },
+    "back": "Terug",
+    "heading": "Mijn account",
+    "logout": "Uitloggen",
+    "navBottomHeadingAccount": "Account",
+    "navBottomHeadingLogin": "Inloggen",
     "ordersAndReturns": {
-      "orderDetails": { "priceFrom": "vanaf", "quantity": "Aantal" }
+      "actions": "Acties",
+      "amount": "Bedrag",
+      "continue": "Verder winkelen",
+      "details": "Details",
+      "heading": "Bestellingen en retouren",
+      "listOfOrders": "Overzicht van bestellingen",
+      "more": "Meer tonen",
+      "myOrders": "Mijn bestellingen",
+      "noOrders": "U hebt nog niets bij ons besteld",
+      "noOrdersAltText": "Geen bestellingen",
+      "noReturns": "U hebt nog geen artikelen geretourneerd.",
+      "orderAgain": {
+        "addToCart": "Aan winkelwagen toevoegen",
+        "buyAgain": "Opnieuw bestellen",
+        "cancel": "Annuleren",
+        "heading": "Opnieuw bestellen",
+        "headingChanges": "Gewijzigde artikelen",
+        "notAvailable": "Momenteel niet beschikbaar",
+        "orderPropertyNotAvailableOrChanged": "Artikeleigenschappen zijn gewijzigd of niet meer beschikbaar",
+        "priceDown": "Prijs gedaald",
+        "priceUp": "Prijs gestegen",
+        "stockLimitation": "Nog beschikbaar: {stock}",
+        "subtext": "U kunt de artikelen uit deze bestelling opnieuw bestellen.",
+        "subtextChanges": "Er zijn wijzigingen sinds uw vorige bestelling"
+      },
+      "orderDate": "Besteldatum",
+      "orderDetails": {
+        "bankDetails": {
+          "accountOwner": "Rekeninghouder",
+          "bank": "Bank",
+          "bic": "BIC/SWIFT",
+          "heading": "Bankgegevens",
+          "iban": "IBAN"
+        },
+        "billingAddress": "Factuuradres",
+        "delivery": "Levering",
+        "estimatedTax": "Geschatte btw",
+        "heading": "Bestelgegevens",
+        "itemsSubtotal": "Subtotaal artikelen",
+        "orderDate": "Besteldatum",
+        "orderId": "Bestel-ID",
+        "paymentAmount": "Totaal",
+        "paymentMethod": "Betaalmethode",
+        "price": "Prijs",
+        "priceFrom": "vanaf",
+        "product": "Artikel",
+        "quantity": "Aantal",
+        "shippingAddress": "Verzendadres",
+        "showDetails": "Artikelgegevens tonen",
+        "status": "Status",
+        "subtotal": "Subtotaal",
+        "tableCaption": "Bestelgegevens",
+        "total": "Totaal"
+      },
+      "orderId": "Bestel-ID",
+      "orderNumber": "Bestelnummer",
+      "paymentSummary": {
+        "heading": "Betalingsoverzicht",
+        "paymentStatus": "Betaalstatus",
+        "changePaymentMethod": "wijzigen"
+      },
+      "changePaymentMethod": {
+        "heading": "Betaalmethode wijzigen",
+        "subHeading": "U kunt de betaalmethode voor uw bestelling wijzigen. De huidige betaalmethode is {paymentMethod}.",
+        "success": "De betaalmethode is gewijzigd.",
+        "change": "Wijzigen",
+        "cancel": "Annuleren",
+        "notChangeableAfterHint": "Nadat u naar deze betaalmethode bent overgestapt, kunt u de betaalmethode niet meer wijzigen."
+      },
+      "returnDate": "Retourdatum",
+      "returnId": "Retour-ID",
+      "returnsAltText": "Geen retouren",
+      "returnsDescription": "U hebt nog geen artikelen geretourneerd",
+      "returnsHeading": "Retouren",
+      "section": {
+        "myOrders": "Mijn bestellingen",
+        "returns": "Retouren"
+      },
+      "shippingDate": "Verzenddatum",
+      "shippingSummary": {
+        "heading": "Verzendoverzicht",
+        "shippingMethod": "Verzendmethode",
+        "shipTo": "Verzenden naar"
+      },
+      "status": "Status"
+    },
+    "wishlist": {
+      "heading": "Verlanglijst",
+      "section": { "myWishlist": "Mijn verlanglijst" },
+      "notifications": {
+        "add": "Het artikel is aan uw verlanglijst toegevoegd.",
+        "delete": "Het artikel is van uw verlanglijst verwijderd."
+      }
     }
+  },
+  "authentication": {
+    "login": {
+      "createAccount": "Hebt u nog geen account?",
+      "createAccountLater": "Geen zorgen. U kunt na uw bestelling een account aanmaken",
+      "createAccountLinkLabel": "Registreer u nu!",
+      "forgotPasswordLabel": "Wachtwoord vergeten?",
+      "heading": "Log in op uw account",
+      "headingSuccess": "Wachtwoord opnieuw ingesteld",
+      "loginAndContinue": "Inloggen en doorgaan",
+      "openLoginForm": "Inlogformulier openen",
+      "rememberMeLabel": "Ingelogd blijven",
+      "submitLabel": "Inloggen",
+      "success": "U bent succesvol ingelogd"
+    },
+    "resetPassword": {
+      "anotherEmail": "Een ander e-mailadres proberen",
+      "backToLogin": "Terug naar inloggen",
+      "continue": "Doorgaan",
+      "email": "E-mail",
+      "emailSent": "Controleer uw e-mail: we hebben instructies gestuurd om uw wachtwoord opnieuw in te stellen",
+      "heading": "Wachtwoord vergeten?",
+      "info": "Vul het e-mailadres in waarmee u zich hebt geregistreerd. We sturen u een link waarmee u een nieuw wachtwoord kunt instellen.",
+      "resetPassword": "Wachtwoord opnieuw instellen",
+      "subHeading": "We sturen u per e-mail instructies om uw wachtwoord opnieuw in te stellen",
+      "thankYou": "Bedankt. Als er een account is gekoppeld aan {0}, ontvangt u een link om uw wachtwoord opnieuw in te stellen.",
+      "title": "Wachtwoord opnieuw ingesteld"
+    },
+    "setNewPassword": {
+      "button": "Nieuw wachtwoord opslaan",
+      "description": "Maak het nieuwe wachtwoord aan waarmee u op uw account wilt inloggen.",
+      "heading": "Wachtwoord opnieuw instellen",
+      "help": "Tussen {min} en {max} tekens, met een combinatie van letters, cijfers en symbolen.",
+      "password": "Nieuw wachtwoord",
+      "passwordsNotMatching": "De wachtwoorden komen niet overeen",
+      "rememberPassword": "Weet u uw wachtwoord weer?",
+      "repeatPassword": "Nieuw wachtwoord herhalen",
+      "resetSucceded": "Uw wachtwoord is opnieuw ingesteld. U bent nu ingelogd met uw nieuwe wachtwoord."
+    },
+    "signup": {
+      "alreadyHaveAccount": "Hebt u al een account?",
+      "benefits": {
+        "orderHistory": "Uw volledige bestelgeschiedenis op één plek",
+        "orderTracking": "Volg uw bestellingen",
+        "saveAddresses": "Sla meerdere adressen op",
+        "wishlist": "Bewaar artikelen op uw verlanglijst voor later"
+      },
+      "emailAlreadyExists": "Dit e-mailadres is al geregistreerd.",
+      "heading": "Een account aanmaken",
+      "logInLinkLabel": "In plaats daarvan inloggen",
+      "passwordValidation": {
+        "characters": "Het wachtwoord moet tussen {min} en {max} tekens bevatten.",
+        "letters": "Het wachtwoord moet minstens één letter bevatten.",
+        "numbers": "Het wachtwoord moet minstens één cijfer bevatten.",
+        "invalidPassword": "Minimaal 8 tekens, waaronder een letter en een cijfer."
+      },
+      "subheading": "Registreer u en profiteer van alle voordelen",
+      "submitLabel": "Registreren!",
+      "success": "Uw account is aangemaakt"
+    }
+  },
+  "error": {
+    "email": {
+      "required": "E-mailadres is verplicht.",
+      "valid": "Vul een geldig e-mailadres in."
+    },
+    "password": {
+      "match": "De wachtwoorden komen niet overeen.",
+      "maxLength": "Het wachtwoord mag niet langer zijn dan {max} tekens.",
+      "minLength": "Het wachtwoord moet minimaal {min} tekens bevatten.",
+      "required": "Wachtwoord is verplicht.",
+      "valid": "Het wachtwoord moet minstens één letter en één cijfer bevatten."
+    },
+    "turnstileRequired": "Voltooi de verificatie om te bevestigen dat u een persoon bent."
   },
   "contact": {
     "label": "Contact",
@@ -292,6 +499,27 @@
     "quantity": "Aantal",
     "subTotal": "Subtotaal artikelen"
   },
+  "returns": {
+    "areYouSure": "Weet u zeker dat u deze artikelen wilt retourneren?",
+    "cancel": "Annuleren",
+    "commentOptional": "Opmerking (optioneel)",
+    "confirmReturn": "Retourzending bevestigen",
+    "detailsHeading": "Retouroverzicht",
+    "initiateReturn": "Retour aanvragen",
+    "orderDate": "Besteldatum",
+    "quantity": "Aantal",
+    "return": "Retourneren",
+    "returnForOrder": "Retour voor bestelling",
+    "returnItems": "Te retourneren artikelen",
+    "returnNumber": "Retournummer",
+    "returnReason": "Reden van retour",
+    "selectAll": "Alles selecteren",
+    "selectQuantities": "Selecteer de aantallen die u wilt retourneren",
+    "selectReason": "Selecteer een reden voor de retourzending",
+    "selectReturnReason": "Reden voor retour selecteren",
+    "successConfirmationMessage": "Uw retouraanvraag is geregistreerd. We houden u op de hoogte van de afhandeling.",
+    "tellUsMore": "Vertel ons waarom u deze artikelen wilt retourneren…"
+  },
   "CookieBar": { "Cookie Settings": "Cookie-instellingen" },
   "form": {
     "addCompany": "+ Bedrijfsgegevens toevoegen",
@@ -341,7 +569,18 @@
       "failedToRemoveItem": "Het artikel kon niet worden verwijderd.",
       "reachedMaximumQuantity": "Uw bestelling overschrijdt het maximale bestelaantal van dit artikel."
     },
+    "contact": {
+      "emailAlreadyExists": "Dit e-mailadres is al geregistreerd.",
+      "missingContactOrUnexpectedFormat": "Contactgegevens ontbreken of hebben een onverwacht formaat.",
+      "passwordInvalid": "Het wachtwoord voldoet niet aan de beveiligingseisen.",
+      "unauthorizedPasswordReset": "Het wachtwoord kon niet opnieuw worden ingesteld. De link is mogelijk verlopen of al gebruikt.",
+      "unexpectedAddressFormat": "Het adres heeft een onverwacht formaat."
+    },
     "coupon": { "applyFailed": "De kortingscode kon niet worden gebruikt." },
+    "login": {
+      "loginFailed": "Ongeldige inloggegevens",
+      "userIsBlocked": "Dit account is geblokkeerd"
+    },
     "order": {
       "additionalAuthenticationRequired": "Voor deze bestelling is extra verificatie vereist.",
       "additionalAuthenticationRequiredLogin": "U moet opnieuw inloggen voor deze bestelling.",
@@ -377,12 +616,21 @@
       "back": "Terug",
       "browseProducts": "Artikelen bekijken",
       "buy": "Kopen",
+      "cancel": "Annuleren",
+      "cancelOrder": "Bestelling annuleren",
       "clear": "Wissen",
       "clearAll": "Alles wissen",
       "continueShopping": "Verder winkelen",
+      "edit": "Bewerken",
       "goToCheckout": "Naar de kassa",
+      "goToHomepage": "Naar de homepage",
       "next": "Volgende",
+      "pay": "Betalen",
+      "placeOrder": "Bestellen en betalen",
       "previous": "Vorige",
+      "readLess": "Minder lezen",
+      "readMore": "Meer lezen",
+      "reloadPage": "Pagina opnieuw laden",
       "removeFromWishlist": "Van verlanglijst verwijderen",
       "removeItemFromBasket": "Artikel uit winkelwagen verwijderen",
       "removeProductFromWishlist": "{label} van de verlanglijst verwijderen",
@@ -390,6 +638,7 @@
       "save": "Opslaan",
       "saveAddress": "Adres opslaan",
       "search": "Zoeken",
+      "scrollTop": "Terug naar boven",
       "showLess": "Minder tonen",
       "showMore": "Meer tonen",
       "showOptions": "Opties bekijken",
@@ -397,13 +646,17 @@
       "viewCart": "Winkelwagen bekijken"
     },
     "labels": {
+      "address": "Adressen",
       "asterisk": "*",
       "basePrice": "Basisprijs",
       "cart": "Winkelwagen",
       "category": "Categorie",
       "checkout": "Kassa",
+      "content": "Inhoud",
       "delivery": "Verzending",
       "filters": "Filters",
+      "email": "E-mail",
+      "estimatedTax": "Btw",
       "grossPrice": "Brutoprijs",
       "home": "Home",
       "includedTax": "incl. btw",
@@ -412,13 +665,21 @@
       "itemsSubtotal": "Subtotaal artikelen",
       "max": "Max.",
       "min": "Min.",
+      "mostPopular": "Meest populair",
       "netPrice": "Nettoprijs",
+      "or": "of",
+      "orderNumber": "Bestel-ID",
       "orderSummary": "Besteloverzicht",
       "pagination": "Paginanavigatie",
       "perPage": "Per pagina",
       "products": "Artikelen",
+      "phone": "Telefoon",
       "quantitySelector": "Aantal kiezen",
+      "returnNumber": "Retour-ID",
+      "sale": "Aanbieding",
       "sortBy": "Sorteren op",
+      "technicalData": "Technische gegevens",
+      "tomorrow": "Morgen",
       "total": "Totaal",
       "wishlist": "Verlanglijst"
     },
@@ -430,13 +691,27 @@
       "closeAddressForm": "Adresformulier sluiten",
       "closeAuthentication": "Aanmelden sluiten",
       "closeDialog": "Dialoogvenster sluiten",
+      "closeDrawer": "Paneel sluiten",
       "closeListSettings": "Lijstinstellingen sluiten",
+      "closeNeutralAlert": "Melding sluiten",
+      "closePickSavedAddress": "Adreskeuze sluiten",
       "currentPage": "Huidige pagina: {page}",
       "goToPage": "Ga naar pagina {page}",
       "nextAriaLabel": "Ga naar de volgende pagina",
+      "openConfigurationDrawer": "Configuratiepaneel openen",
+      "openSearchModal": "Artikelzoekfunctie openen",
       "previousAriaLabel": "Ga naar de vorige pagina",
+      "socialLabel": "Ga naar de pagina {label}",
       "showSubcategories": "Subcategorieën tonen"
     },
-    "accessibility": { "viewDetails": "Details van {name} bekijken" }
+    "accessibility": { "viewDetails": "Details van {name} bekijken" },
+    "messages": {
+      "offline": "U lijkt offline te zijn. Controleer uw internetverbinding."
+    },
+    "reloadPWA": {
+      "ariaLabel": "Er is een nieuwe versie van de webshop beschikbaar. Druk om de pagina te vernieuwen.",
+      "newVersionAvailable": "Er is een nieuwe versie van de webshop beschikbaar.",
+      "refresh": "Vernieuwen"
+    }
   }
 }

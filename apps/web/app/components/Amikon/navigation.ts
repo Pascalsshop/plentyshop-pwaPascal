@@ -3,12 +3,36 @@ import type { AmikonFallbackCategory } from './Amikon.types';
 export const AMIKON_PURCHASE_FORM_PATH = '/ankaufformular';
 export const AMIKON_NEWSLETTER_URL = 'https://www.amikon.de/newsletter/';
 export const AMIKON_LOGO_PATH = '/_nuxt-plenty/images/amikon/logo.gif';
+const NON_PRODUCT_CATEGORY_ROUTES = new Set([
+  '/home',
+  '/startseite',
+  '/checkout',
+  '/cart',
+  '/warenkorb',
+  '/login',
+  '/register',
+  '/contact',
+  '/ankaufformular',
+  '/shipping',
+  '/privacy-policy',
+  '/terms-and-conditions',
+  '/legal-disclosure',
+  '/cancellation-rights',
+  '/content/hilfe',
+  '/content/batterieverordnung',
+]);
 
-/** Match whole CMS labels, including the active locale's home/checkout translations. */
-export const isAmikonCategoryMenuLabelVisible = (label: string, translatedLabels: readonly string[] = []): boolean => {
-  const normalize = (value: string) => value.trim().replace(/\s+/g, ' ').toLowerCase();
+/** Hide CMS pages that PlentyONE also returns in the category tree. */
+export const isAmikonCategoryMenuLabelVisible = (
+  label: string,
+  translatedLabels: readonly string[] = [],
+  path = '',
+): boolean => {
+  const normalize = (value: string) => value.trim().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').toLowerCase();
   const excluded = [
     'startseite',
+    'startseite amikon',
+    'amikon startseite',
     'amikon',
     'zur kasse',
     'home',
@@ -17,7 +41,13 @@ export const isAmikonCategoryMenuLabelVisible = (label: string, translatedLabels
     'go to checkout',
     ...translatedLabels,
   ];
-  return !excluded.some((value) => normalize(value) === normalize(label));
+  if (excluded.some((value) => normalize(value) === normalize(label))) return false;
+
+  // Only exact non-product routes are excluded; similarly named product categories stay visible.
+  const segments = path.split(/[?#]/, 1)[0]?.split('/').filter(Boolean) ?? [];
+  if (['de', 'en', 'fr', 'nl'].includes(segments[0]?.toLowerCase() ?? '')) segments.shift();
+  const route = `/${segments.join('/').toLowerCase()}`.replace(/\/$/, '') || '/';
+  return !NON_PRODUCT_CATEGORY_ROUTES.has(route);
 };
 
 export const AMIKON_FALLBACK_CATEGORIES = [

@@ -2,11 +2,16 @@
   <div ref="referenceRef" :style="navigationRootStyle" class="relative w-full">
     <nav v-if="viewport.isGreaterOrEquals('lg')" ref="floatingRef" @mouseleave="onMouseLeave">
       <ul :class="navigationContainerClasses" :style="navigationContainerStyle" @focusout="onNavBlur">
-        <li v-if="categoryTree.length === 0" class="h-10" />
+        <li v-if="visibleCategoryTree.length === 0" class="h-10" />
 
-        <li v-for="(menuNode, index) in categoryTree" v-else :key="index" @mouseenter="onCategoryMouseEnter(menuNode)">
+        <li
+          v-for="(menuNode, index) in visibleCategoryTree"
+          v-else
+          :key="index"
+          @mouseenter="onCategoryMouseEnter(menuNode)"
+        >
           <NuxtLink
-            v-if="menuNode.childCount > 0"
+            v-if="hasVisibleChildren(menuNode)"
             ref="triggerReference"
             :to="localePath(generateCategoryLink(menuNode))"
             data-testid="category-button"
@@ -52,7 +57,7 @@
               activeMenu &&
               activeNode.length === 1 &&
               activeNode[0] === menuNode.id &&
-              menuNode.childCount > 0
+              hasVisibleChildren(menuNode)
             "
             :key="activeMenu.id"
             ref="megaMenuReference"
@@ -66,8 +71,8 @@
             @keydown.down="navigateDropdownItems($event, 'down')"
             @keydown.tab="handleTabInDropdown($event)"
           >
-            <template v-for="node in activeMenu.children" :key="node.id">
-              <template v-if="node.childCount === 0">
+            <template v-for="node in visibleChildren(activeMenu.children)" :key="node.id">
+              <template v-if="!hasVisibleChildren(node)">
                 <ul>
                   <li>
                     <SfListItem
@@ -94,7 +99,7 @@
                   {{ categoryTreeGetters.getName(node) }}
                 </SfListItem>
                 <ul class="mt-2 mb-3">
-                  <li v-for="child in node.children" :key="child.id">
+                  <li v-for="child in visibleChildren(node.children)" :key="child.id">
                     <SfListItem
                       v-if="categoryTreeGetters.getName(child)"
                       :tag="NuxtLink"
@@ -150,8 +155,8 @@
                 </div>
               </SfListItem>
             </li>
-            <template v-for="node in activeMenu.children" :key="node.id">
-              <li v-if="node.childCount === 0">
+            <template v-for="node in visibleChildren(activeMenu.children)" :key="node.id">
+              <li v-if="!hasVisibleChildren(node)">
                 <SfListItem
                   size="lg"
                   :tag="NuxtLink"
@@ -208,6 +213,7 @@ import {
 } from '@storefront-ui/vue';
 import { unrefElement } from '@vueuse/core';
 import { type CategoryTreeItem, categoryTreeGetters } from '@plentymarkets/shop-api';
+import { isAmikonCategoryMenuLabelVisible } from '~/components/Amikon/navigation';
 import type { NavigationBlockProps } from './types';
 
 const props = withDefaults(defineProps<NavigationBlockProps>(), {
@@ -348,6 +354,24 @@ const generateCategoryLink = (category: CategoryTreeItem) => {
   return buildCategoryMenuLink(category, categoryTree.value);
 };
 
+const excludedLabels = computed(() => [
+  t('amikonHeader.navigation.home'),
+  t('common.labels.home'),
+  t('common.labels.checkout'),
+  t('common.actions.goToCheckout'),
+]);
+const visibleChildren = (nodes: CategoryTreeItem[] | undefined): CategoryTreeItem[] =>
+  nodes?.filter((node) =>
+    isAmikonCategoryMenuLabelVisible(
+      categoryTreeGetters.getName(node),
+      excludedLabels.value,
+      generateCategoryLink(node),
+    ),
+  ) ?? [];
+const hasVisibleChildren = (node: CategoryTreeItem): boolean =>
+  node.childCount > 0 && (!node.children?.length || visibleChildren(node.children).length > 0);
+const visibleCategoryTree = computed(() => visibleChildren(categoryTree.value));
+
 const goBack = () => {
   activeNode.value = activeNode.value.slice(0, -1);
 };
@@ -361,17 +385,17 @@ const focusTrigger = (index: number) => {
 };
 
 const focusNextCategory = (currentIndex: number) => {
-  const nextIndex = (currentIndex + 1) % categoryTree.value.length;
+  const nextIndex = (currentIndex + 1) % visibleCategoryTree.value.length;
   focusTrigger(nextIndex);
 };
 
 const focusPreviousCategory = (currentIndex: number) => {
-  const prevIndex = currentIndex === 0 ? categoryTree.value.length - 1 : currentIndex - 1;
+  const prevIndex = currentIndex === 0 ? visibleCategoryTree.value.length - 1 : currentIndex - 1;
   focusTrigger(prevIndex);
 };
 
 const openMenuAndFocusFirst = (menuNode: CategoryTreeItem) => {
-  if (menuNode.childCount > 0) {
+  if (hasVisibleChildren(menuNode)) {
     onCategoryMouseEnter(menuNode);
     nextTick(() => {
       const firstLink = megaMenuReference.value?.[0]?.querySelector('a');
@@ -431,7 +455,7 @@ const onMouseLeave = () => {
 const onCategoryMouseEnter = (menuNode: CategoryTreeItem) => {
   if (!viewport.isGreaterOrEquals('lg')) return;
 
-  if (menuNode.childCount > 0) {
+  if (hasVisibleChildren(menuNode)) {
     activeNode.value = [menuNode.id];
     open();
     setCategory([menuNode]);
@@ -459,7 +483,7 @@ const handleFirstTouch = (menuNode: CategoryTreeItem) => {
 };
 
 const onCategoryClickCapture = (event: MouseEvent, menuNode: CategoryTreeItem) => {
-  if (isUsingTouch.value && menuNode.childCount > 0 && tappedCategoryId.value !== menuNode.id) {
+  if (isUsingTouch.value && hasVisibleChildren(menuNode) && tappedCategoryId.value !== menuNode.id) {
     event.stopPropagation();
     event.preventDefault();
     handleFirstTouch(menuNode);
@@ -496,7 +520,7 @@ watch(
 );
 
 watch(isOpen, (isDrawerOpen) => {
-  if (isDrawerOpen && !category.value && categoryTree.value.length > 0) {
+  if (isDrawerOpen && !category.value && visibleCategoryTree.value.length > 0) {
     setCategory(categoryTree.value);
   }
 });

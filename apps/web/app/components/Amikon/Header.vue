@@ -438,12 +438,13 @@ const categoryMenuItems = computed<AmikonNavigationItem[]>(() => {
 
   for (const category of categoryTree.value) {
     const label = categoryTreeGetters.getName(category);
+    const path = buildCategoryMenuLink(category, categoryTree.value);
 
-    if (label && isAmikonCategoryMenuLabelVisible(label, excludedLabels)) {
+    if (label && isAmikonCategoryMenuLabelVisible(label, excludedLabels, path)) {
       liveItems.push({
         id: category.id,
         label,
-        link: localePath(buildCategoryMenuLink(category, categoryTree.value)),
+        link: localePath(path),
       });
     }
   }

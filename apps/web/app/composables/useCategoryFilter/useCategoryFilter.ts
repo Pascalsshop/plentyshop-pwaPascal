@@ -1,5 +1,6 @@
 import type { Filters, GetFacetsFromURLResponse, UseCategoryFiltersResponse } from './types';
 import type { RouteLocationNormalizedGeneric } from 'vue-router';
+import { AMIKON_CLIMATE_CATEGORY_ID, isFrenchClimateCategoryPath } from '~/utils/amikonCategoryRoute';
 const nonFilters = new Set(['page', 'sort', 'term', 'facets', 'itemsPerPage', 'priceMin', 'priceMax']);
 
 const reduceFilters =
@@ -65,8 +66,13 @@ export const useCategoryFilter = (to?: RouteLocationNormalizedGeneric): UseCateg
 
     const defaultOption = isPageOfType('search') ? defaultSortingSearch() : defaultSortingOption();
 
+    const categoryUrlPath = getCategoryUrlFromRoute(currentRoute.fullPath);
+    const isFrenchClimateCategory = isFrenchClimateCategoryPath(categoryUrlPath, useNuxtApp().$i18n.locale.value);
+
     return {
-      categoryUrlPath: getCategoryUrlFromRoute(currentRoute.fullPath),
+      ...(isFrenchClimateCategory
+        ? { type: 'category' as const, categoryId: AMIKON_CLIMATE_CATEGORY_ID }
+        : { categoryUrlPath }),
       page: Number(currentRoute.query.page as string) || defaults.DEFAULT_PAGE,
       sort: currentRoute.query.sort?.toString() ?? defaultOption,
       facets: currentRoute.query.facets?.toString(),

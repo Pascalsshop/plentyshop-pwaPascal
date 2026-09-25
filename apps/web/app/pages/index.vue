@@ -200,7 +200,7 @@ const copy = computed(() => localizedCopy[language.value] ?? en);
 const climateCategoryPath = computed(() => {
   if (language.value === 'nl') return '/klimaatkamers';
   if (language.value === 'en') return '/climate-test-cabinets';
-  if (language.value === 'fr') return undefined;
+  if (language.value === 'fr') return '/waerme-klimaschraenke';
   return '/waerme-klimaschraenke';
 });
 

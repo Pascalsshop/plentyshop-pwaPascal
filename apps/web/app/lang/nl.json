@@ -271,6 +271,21 @@
       }
     }
   },
+  "address": {
+    "billingRequired": "Selecteer een factuuradres.",
+    "edit": "Adres bewerken",
+    "manage": "Uw adressen beheren",
+    "newBillingAddress": "Nieuw factuuradres",
+    "newShippingAddress": "Nieuw verzendadres",
+    "pickSavedAddress": "Opgeslagen adressen",
+    "pickSavedSubtitle": "Selecteer een opgeslagen adres of maak een nieuw adres aan",
+    "savedBillingAddresses": "Opgeslagen factuuradressen",
+    "savedShippingAddresses": "Opgeslagen verzendadressen",
+    "shippingAddress": "Verzendadres",
+    "shippingRequired": "Selecteer een verzendadres.",
+    "unsavedWarning": "Het ingevoerde adres is nog niet opgeslagen. Sla het adres op om verder te gaan met afrekenen.",
+    "sameAsShippingAddress": "Hetzelfde als het verzendadres"
+  },
   "authentication": {
     "login": {
       "createAccount": "Hebt u nog geen account?",
@@ -521,6 +536,12 @@
     "tellUsMore": "Vertel ons waarom u deze artikelen wilt retourneren…"
   },
   "CookieBar": { "Cookie Settings": "Cookie-instellingen" },
+  "footer": {
+    "legal": { "label": "Juridische informatie" },
+    "services": { "label": "Diensten" },
+    "contact": { "label": "Contact" },
+    "register": { "label": "Registreren" }
+  },
   "form": {
     "addCompany": "+ Bedrijfsgegevens toevoegen",
     "asterixHint": "* Gemarkeerde toestemmingen zijn verplicht",
@@ -535,6 +556,7 @@
     "passwordVisibility": "Wachtwoord tonen of verbergen",
     "phoneLabel": "Telefoon",
     "postalCodeLabel": "Postcode",
+    "privacyPolicyLabel": "Ik ga akkoord met het {privacyPolicy}.",
     "removeCompany": "- Bedrijfsgegevens verwijderen",
     "repeatPasswordLabel": "Wachtwoord herhalen",
     "required": "*",
@@ -546,8 +568,24 @@
     "useAsShippingLabel": "Als verzendadres gebruiken",
     "vatIdLabel": "Btw-nummer"
   },
-  "legal": { "privacyPolicy": "privacybeleid" },
+  "legal": {
+    "cancellationRights": "Herroepingsrecht",
+    "details": "Juridische informatie – klik voor meer informatie",
+    "privacyPolicy": "privacybeleid",
+    "privacyPolicyRequired": "Ga akkoord met het privacybeleid.",
+    "termsAndConditions": "Algemene voorwaarden",
+    "termsInfo": "Onze {terms}, het {cancellationRights} en het {privacyPolicy} zijn van toepassing. *",
+    "termsRequired": "Bevestig de algemene voorwaarden, het herroepingsrecht en het privacybeleid.",
+    "cancellationForm": "Herroepingsformulier",
+    "declarationOfAccessibility": "Toegankelijkheidsverklaring",
+    "legalDisclosure": "Colofon",
+    "withdrawButton": "Overeenkomst hier herroepen"
+  },
   "storefrontError": {
+    "cancellation": {
+      "recipientNotConfigured": "Het herroepingsformulier is niet geconfigureerd. Neem contact op met de websitebeheerder.",
+      "submitFailed": "Het herroepingsverzoek kon niet worden verzonden. Probeer het later opnieuw."
+    },
     "address": {
       "createFailed": "Het opslaan van het adres is mislukt.",
       "deleteFailed": "Het verwijderen van het adres is mislukt.",
@@ -556,6 +594,7 @@
       "vatServerBusy": "Uw btw-nummer kon niet worden gecontroleerd. Neem contact op met de webshop.",
       "vatServerFallback": "Uw btw-nummer kon niet worden gecontroleerd. De bestelling wordt opnieuw beoordeeld."
     },
+    "blocks": { "base64NotAllowed": "De afbeelding is niet goed geüpload. Probeer het opnieuw." },
     "cart": {
       "addToBasket": {
         "itemSetComponentMismatch": "De onderdelen van deze artikelset komen niet overeen. De set kan niet aan de winkelwagen worden toegevoegd.",
@@ -576,10 +615,27 @@
       "unauthorizedPasswordReset": "Het wachtwoord kon niet opnieuw worden ingesteld. De link is mogelijk verlopen of al gebruikt.",
       "unexpectedAddressFormat": "Het adres heeft een onverwacht formaat."
     },
+    "contactMail": {
+      "emailInvalid": "Het e-mailadres is ongeldig.",
+      "failed": "Het bericht kon niet worden verzonden.",
+      "messageInvalid": "Het bericht is ongeldig.",
+      "nameInvalid": "De naam is ongeldig.",
+      "orderIdInvalid": "Het bestelnummer is ongeldig.",
+      "subjectInvalid": "Het onderwerp is ongeldig."
+    },
     "coupon": { "applyFailed": "De kortingscode kon niet worden gebruikt." },
+    "editor": { "invalidEditorHash": "De editorsessie is ongeldig." },
+    "feedback": { "notAllowedWithoutPurchase": "U moet dit artikel kopen voordat u een beoordeling kunt plaatsen." },
     "login": {
       "loginFailed": "Ongeldige inloggegevens",
       "userIsBlocked": "Dit account is geblokkeerd"
+    },
+    "newsletter": { "createFailed": "Aanmelden voor de nieuwsbrief is mislukt." },
+    "offer": {
+      "alreadyTaken": "Deze aanbieding is al gebruikt en kan niet opnieuw worden gebruikt.",
+      "expired": "Deze aanbieding is verlopen.",
+      "itemOutOfStock": "Ten minste één artikel in deze aanbieding is niet meer op voorraad.",
+      "openUnauthorized": "U bent niet bevoegd om deze aanbieding te bekijken."
     },
     "order": {
       "additionalAuthenticationRequired": "Voor deze bestelling is extra verificatie vereist.",
@@ -604,7 +660,9 @@
     "turnstile": {
       "invalid": "De verificatie is mislukt. Probeer het over enkele ogenblikken opnieuw.",
       "misConfigured": "De verificatieservice is momenteel niet beschikbaar. Neem contact op met de websitebeheerder."
-    }
+    },
+    "notifyMe": { "alreadySubscribed": "U bent al aangemeld voor meldingen over dit artikel." },
+    "unknownError": "Er is een onbekende fout opgetreden."
   },
   "common": {
     "actions": {

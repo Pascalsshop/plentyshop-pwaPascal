@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import type { Product } from '@plentymarkets/shop-api';
 
-const props = defineProps<{ kind: 'climate' | 'new'; title: string; categoryPath?: string }>();
+const props = defineProps<{ kind: 'climate' | 'new'; title: string; categoryPath?: string; categoryId?: string }>();
 const { locale } = useI18n();
 const localePath = useLocalizedPath();
 const sdk = useSdk();
@@ -80,12 +80,14 @@ const {
   error,
   refresh,
 } = await useAsyncData(
-  computed(() => `amikon-home-${props.kind}-${locale.value}-${props.categoryPath || 'all'}`),
+  computed(() => `amikon-home-${props.kind}-${locale.value}-${props.categoryId || props.categoryPath || 'all'}`),
   async () => {
     const response = await sdk.plentysystems.getFacet({
-      ...(props.categoryPath
-        ? { type: 'category' as const, categoryUrlPath: props.categoryPath }
-        : { type: 'all' as const }),
+      ...(props.categoryId
+        ? { type: 'category' as const, categoryId: props.categoryId }
+        : props.categoryPath
+          ? { type: 'category' as const, categoryUrlPath: props.categoryPath }
+          : { type: 'all' as const }),
       itemsPerPage: 16,
       page: 1,
       sort: 'variation.createdAt_desc',

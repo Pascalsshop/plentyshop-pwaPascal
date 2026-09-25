@@ -11,12 +11,12 @@ describe('Amikon home products', () => {
     const getFacet = vi.mocked(useSdk().plentysystems.getFacet);
     getFacet.mockResolvedValueOnce({ data: { products: [] } } as never);
     const wrapper = await mountSuspended(AmikonHomeProducts, {
-      props: { kind: 'climate', title: 'Klimakammern', categoryPath: '/waerme-klimaschraenke' },
+      props: { kind: 'climate', title: 'Klimakammern', categoryPath: '/waerme-klimaschraenke', categoryId: '48' },
     });
     await flushPromises();
     expect(getFacet).toHaveBeenCalledWith({
       type: 'category',
-      categoryUrlPath: '/waerme-klimaschraenke',
+      categoryId: '48',
       itemsPerPage: 16,
       page: 1,
       sort: 'variation.createdAt_desc',

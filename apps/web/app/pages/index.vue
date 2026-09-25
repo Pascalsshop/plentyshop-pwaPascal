@@ -53,7 +53,7 @@
       </div>
     </section>
 
-    <AmikonHomeProducts kind="climate" :title="copy.climateTitle" category-path="/waerme-klimaschraenke" />
+    <AmikonHomeProducts kind="climate" :title="copy.climateTitle" :category-path="climateCategoryPath" category-id="48" />
     <AmikonHomeProducts kind="new" :title="copy.newTitle" />
 
     <AmikonHomeBusiness />
@@ -197,6 +197,12 @@ const nl = {
 const localizedCopy = { de, en, fr, nl };
 const language = computed(() => locale.value.toLowerCase().split('-')[0] as keyof typeof localizedCopy);
 const copy = computed(() => localizedCopy[language.value] ?? en);
+const climateCategoryPath = computed(() => {
+  if (language.value === 'nl') return '/klimaatkamers';
+  if (language.value === 'en') return '/climate-test-cabinets';
+  if (language.value === 'fr') return undefined;
+  return '/waerme-klimaschraenke';
+});
 
 const categoryLabels = {
   de: [

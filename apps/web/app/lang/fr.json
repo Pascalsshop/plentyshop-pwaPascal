@@ -271,6 +271,21 @@
       }
     }
   },
+  "address": {
+    "billingRequired": "Veuillez sélectionner une adresse de facturation.",
+    "edit": "Modifier l’adresse",
+    "manage": "Gérer vos adresses",
+    "newBillingAddress": "Nouvelle adresse de facturation",
+    "newShippingAddress": "Nouvelle adresse de livraison",
+    "pickSavedAddress": "Adresses enregistrées",
+    "pickSavedSubtitle": "Sélectionnez une adresse enregistrée ou créez-en une nouvelle",
+    "savedBillingAddresses": "Adresses de facturation enregistrées",
+    "savedShippingAddresses": "Adresses de livraison enregistrées",
+    "shippingAddress": "Adresse de livraison",
+    "shippingRequired": "Veuillez sélectionner une adresse de livraison.",
+    "unsavedWarning": "L’adresse saisie n’a pas encore été enregistrée. Enregistrez-la pour poursuivre la commande.",
+    "sameAsShippingAddress": "Identique à l’adresse de livraison"
+  },
   "authentication": {
     "login": {
       "createAccount": "Vous n’avez pas encore de compte ?",
@@ -521,6 +536,12 @@
     "tellUsMore": "Précisez pourquoi vous souhaitez retourner ces articles…"
   },
   "CookieBar": { "Cookie Settings": "Paramètres des cookies" },
+  "footer": {
+    "legal": { "label": "Informations légales" },
+    "services": { "label": "Services" },
+    "contact": { "label": "Contact" },
+    "register": { "label": "Inscription" }
+  },
   "form": {
     "addCompany": "+ Ajouter les informations de l’entreprise",
     "asterixHint": "* Les consentements marqués sont obligatoires",
@@ -535,6 +556,7 @@
     "passwordVisibility": "Afficher ou masquer le mot de passe",
     "phoneLabel": "Téléphone",
     "postalCodeLabel": "Code postal",
+    "privacyPolicyLabel": "J’accepte la {privacyPolicy}.",
     "removeCompany": "- Supprimer les informations de l’entreprise",
     "repeatPasswordLabel": "Confirmer le mot de passe",
     "required": "*",
@@ -546,8 +568,24 @@
     "useAsShippingLabel": "Utiliser comme adresse de livraison",
     "vatIdLabel": "Numéro de TVA"
   },
-  "legal": { "privacyPolicy": "politique de confidentialité" },
+  "legal": {
+    "cancellationRights": "Droit de rétractation",
+    "details": "Informations légales – cliquez pour plus de détails",
+    "privacyPolicy": "politique de confidentialité",
+    "privacyPolicyRequired": "Veuillez accepter la politique de confidentialité.",
+    "termsAndConditions": "Conditions générales de vente",
+    "termsInfo": "Les {terms}, le {cancellationRights} et la {privacyPolicy} s’appliquent. *",
+    "termsRequired": "Veuillez confirmer les conditions générales, le droit de rétractation et la politique de confidentialité.",
+    "cancellationForm": "Formulaire de rétractation",
+    "declarationOfAccessibility": "Déclaration d’accessibilité",
+    "legalDisclosure": "Mentions légales",
+    "withdrawButton": "Exercer le droit de rétractation"
+  },
   "storefrontError": {
+    "cancellation": {
+      "recipientNotConfigured": "Le formulaire de rétractation n’est pas configuré. Veuillez contacter l’administrateur du site.",
+      "submitFailed": "La demande de rétractation n’a pas pu être envoyée. Veuillez réessayer plus tard."
+    },
     "address": {
       "createFailed": "L’enregistrement de l’adresse a échoué.",
       "deleteFailed": "La suppression de l’adresse a échoué.",
@@ -556,6 +594,7 @@
       "vatServerBusy": "Votre numéro de TVA n’a pas pu être vérifié. Veuillez contacter la boutique.",
       "vatServerFallback": "Votre numéro de TVA n’a pas pu être vérifié. La commande sera examinée à nouveau."
     },
+    "blocks": { "base64NotAllowed": "L’image n’a pas été correctement téléversée. Veuillez réessayer." },
     "cart": {
       "addToBasket": {
         "itemSetComponentMismatch": "Les composants de cet ensemble ne correspondent pas. Il ne peut pas être ajouté au panier.",
@@ -576,10 +615,27 @@
       "unauthorizedPasswordReset": "Le mot de passe n’a pas pu être réinitialisé. Le lien a peut-être expiré ou a déjà été utilisé.",
       "unexpectedAddressFormat": "Le format de l’adresse est inattendu."
     },
+    "contactMail": {
+      "emailInvalid": "L’adresse e-mail n’est pas valide.",
+      "failed": "Le message n’a pas pu être envoyé.",
+      "messageInvalid": "Le message n’est pas valide.",
+      "nameInvalid": "Le nom n’est pas valide.",
+      "orderIdInvalid": "Le numéro de commande n’est pas valide.",
+      "subjectInvalid": "L’objet n’est pas valide."
+    },
     "coupon": { "applyFailed": "Le code de réduction n’a pas pu être utilisé." },
+    "editor": { "invalidEditorHash": "La session de l’éditeur n’est pas valide." },
+    "feedback": { "notAllowedWithoutPurchase": "Vous devez acheter cet article avant de pouvoir laisser un avis." },
     "login": {
       "loginFailed": "Identifiants de connexion incorrects",
       "userIsBlocked": "Ce compte est bloqué"
+    },
+    "newsletter": { "createFailed": "L’inscription à la newsletter a échoué." },
+    "offer": {
+      "alreadyTaken": "Cette offre a déjà été utilisée et ne peut pas être utilisée à nouveau.",
+      "expired": "Cette offre a expiré.",
+      "itemOutOfStock": "Au moins un article de cette offre n’est plus en stock.",
+      "openUnauthorized": "Vous n’êtes pas autorisé à consulter cette offre."
     },
     "order": {
       "additionalAuthenticationRequired": "Une vérification supplémentaire est nécessaire pour cette commande.",
@@ -604,7 +660,9 @@
     "turnstile": {
       "invalid": "La vérification a échoué. Veuillez réessayer dans quelques instants.",
       "misConfigured": "Le service de vérification est temporairement indisponible. Veuillez contacter l’administrateur du site."
-    }
+    },
+    "notifyMe": { "alreadySubscribed": "Vous êtes déjà inscrit aux notifications pour cet article." },
+    "unknownError": "Une erreur inconnue s’est produite."
   },
   "common": {
     "actions": {

@@ -91,7 +91,7 @@ const tooltipLabel = computed(() =>
 const buttonLabel = computed(() =>
   disabled || addresses.value.length > 0
     ? t('address.pickSavedAddress')
-    : t(type === AddressType.Shipping ? 'newShippingAddress' : 'newBillingAddress'),
+    : t(type === AddressType.Shipping ? 'address.newShippingAddress' : 'address.newBillingAddress'),
 );
 
 const emitNewAddressEvent = () => {

@@ -6,8 +6,8 @@
       >
         <NuxtLink
           v-for="category in featuredCategories"
-          :key="category.slug"
-          :to="localePath(category.slug)"
+          :key="category.id"
+          :to="localePath(category.path)"
           class="group relative overflow-hidden rounded-sm bg-white shadow-sm ring-1 ring-neutral-200 transition hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amikon-600"
         >
           <img
@@ -53,7 +53,12 @@
       </div>
     </section>
 
-    <AmikonHomeProducts kind="climate" :title="copy.climateTitle" :category-path="climateCategoryPath" category-id="48" />
+    <AmikonHomeProducts
+      kind="climate"
+      :title="copy.climateTitle"
+      :category-path="climateCategoryPath"
+      category-id="48"
+    />
     <AmikonHomeProducts kind="new" :title="copy.newTitle" />
 
     <AmikonHomeBusiness />
@@ -63,6 +68,7 @@
 </template>
 
 <script lang="ts" setup>
+import type { CategoryTreeItem } from '@plentymarkets/shop-api';
 import type { Locale } from '#i18n';
 
 defineI18nRoute({
@@ -77,6 +83,8 @@ definePageMeta({
 const localePath = useLocalizedPath();
 const { locale } = useI18n();
 const { setPageMeta } = usePageMeta();
+const { data: categoryTree } = useCategoryTree();
+const { buildCategoryMenuLink } = useLocalization();
 
 const homeImages = {
   company: '/_nuxt-plenty/images/amikon/home/company-building.jpg',
@@ -197,12 +205,35 @@ const nl = {
 const localizedCopy = { de, en, fr, nl };
 const language = computed(() => locale.value.toLowerCase().split('-')[0] as keyof typeof localizedCopy);
 const copy = computed(() => localizedCopy[language.value] ?? en);
-const climateCategoryPath = computed(() => {
-  if (language.value === 'nl') return '/klimaatkamers';
-  if (language.value === 'en') return '/climate-test-cabinets';
-  if (language.value === 'fr') return '/waerme-klimaschraenke';
-  return '/waerme-klimaschraenke';
-});
+const findCategory = (items: CategoryTreeItem[], id: number): CategoryTreeItem | undefined => {
+  for (const item of items) {
+    if (item.id === id) return item;
+    const child = findCategory(item.children ?? [], id);
+    if (child) return child;
+  }
+};
+
+const categoryPath = (id: number, fallback: string) => {
+  const category = findCategory(categoryTree.value, id);
+  return category ? buildCategoryMenuLink(category, categoryTree.value) : fallback;
+};
+
+const categoryFallbackPaths = {
+  de: ['/waerme-klimaschraenke', '/roboter', '/materialpruefmaschinen', '/3d-druck', '/shaker-schwingpruefanlagen'],
+  en: [
+    '/climate-test-cabinets',
+    '/robotics',
+    '/material-testing-machines',
+    '/3d-lasersinter',
+    '/shaker-vibration-testing',
+  ],
+  fr: ['/waerme-klimaschraenke', '/roboter', '/materialpruefmaschinen', '/3d-druck', '/shaker-schwingpruefanlagen'],
+  nl: ['/klimaatkamers', '/robotica', '/materiaal-testmachines', '/3d-printen', '/schudder-trillingstesten'],
+} satisfies Record<keyof typeof localizedCopy, string[]>;
+
+const climateCategoryPath = computed(() =>
+  categoryPath(48, categoryFallbackPaths[language.value]?.[0] ?? categoryFallbackPaths.de[0]!),
+);
 
 const categoryLabels = {
   de: [
@@ -236,16 +267,17 @@ const categoryLabels = {
 } satisfies Record<keyof typeof localizedCopy, [string, string][]>;
 
 const categories = [
-  { image: homeImages.climate, slug: '/waerme-klimaschraenke' },
-  { image: homeImages.robotics, slug: '/roboter' },
-  { image: homeImages.materialTesting, slug: '/materialpruefmaschinen' },
-  { image: homeImages.threeDPrinting, slug: '/3d-druck' },
-  { image: homeImages.shaker, slug: '/shaker-schwingpruefanlagen' },
+  { id: 48, image: homeImages.climate },
+  { id: 53, image: homeImages.robotics },
+  { id: 250, image: homeImages.materialTesting },
+  { id: 199, image: homeImages.threeDPrinting },
+  { id: 245, image: homeImages.shaker },
 ];
 const featuredCategories = computed(() =>
   categories.map((category, index) => {
     const [label, imageAlt] = (categoryLabels[language.value] ?? categoryLabels.en)[index]!;
-    return { ...category, label, imageAlt };
+    const fallback = (categoryFallbackPaths[language.value] ?? categoryFallbackPaths.de)[index]!;
+    return { ...category, path: categoryPath(category.id, fallback), label, imageAlt };
   }),
 );
 

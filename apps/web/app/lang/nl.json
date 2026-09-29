@@ -535,7 +535,58 @@
     "successConfirmationMessage": "Uw retouraanvraag is geregistreerd. We houden u op de hoogte van de afhandeling.",
     "tellUsMore": "Vertel ons waarom u deze artikelen wilt retourneren…"
   },
-  "CookieBar": { "Cookie Settings": "Cookie-instellingen" },
+  "CookieBar": {
+    "about": {
+      "description": "Wir verwenden Cookies und ähnliche Technologien auf unserer Website und verarbeiten personenbezogene Daten von Besucher:innen unserer Webseite (z.B. IP-Adresse), um z.B. Inhalte zu personalisieren, Medien von Drittanbietern einzubinden oder Zugriffe auf unsere Website zu analysieren. Die Datenverarbeitung erfolgt erst durch gesetzte Cookies. Wir teilen diese Daten mit Dritten, die wir in den Einstellungen benennen. Die Datenverarbeitung kann mit Einwilligung oder aufgrund eines berechtigten Interesses erfolgen. Die Zustimmung kann erteilt oder abgelehnt werden. Es besteht das Recht, nicht einzuwilligen und die Einwilligung zu einem späteren Zeitpunkt zu ändern oder zu widerrufen. Beachten Sie unser {legal} und weitere Hinweise zur Verwendung personenbezogener Daten in unserer {policy}.",
+      "label": "Uw privacy is belangrijk voor ons"
+    },
+    "Accept All": "Alles accepteren",
+    "Accept Selection": "Selectie accepteren",
+    "Back": "Terug",
+    "Cookie Settings": "Cookie-instellingen",
+    "group": {
+      "externalMedia": "Externe media",
+      "functional": "Functioneel",
+      "marketing": "Marketing (aanbevolen)",
+      "necessary": "Noodzakelijk"
+    },
+    "essentials": {
+      "cookies": {
+        "cloudflareTurnstile": { "name": "Cloudflare Turnstile", "provider": "Cloudflare", "status": "Erforderlich für den Turnstile-Service von Cloudflare." },
+        "consentCookie": { "name": "consent-cookie", "provider": "PlentyONE GmbH", "status": "Speichert die Einwilligungsauswahl." },
+        "payPal": { "name": "paypal", "provider": "PayPal (Europe) S.à r.l. et Cie, S.C.A.", "status": "Erforderlich für die Zahlungsabwicklung über PayPal." },
+        "plentyId": { "name": "plentyID", "provider": "PlentyONE GmbH", "status": "Speichert Informationen zur aktuellen Session, z.B. ob der User eingeloggt ist." }
+      },
+      "description": "Essenzielle Cookies ermöglichen grundlegende Funktionen und sind für die einwandfreie Funktion der Website erforderlich.",
+      "label": "Noodzakelijk"
+    },
+    "externalMedia": {
+      "description": "Inhalte von Videoplattformen und Social Media Plattformen werden standardmäßig blockiert. Wenn Cookies von externen Medien akzeptiert werden, bedarf der Zugriff auf diese Inhalte keiner manuellen Zustimmung mehr.",
+      "label": "Externe media"
+    },
+    "functional": {
+      "description": "Diese Cookies ermöglichen, dass die von Nutzern getroffenen Auswahlmöglichkeiten und bevorzugte Einstellungen (z.B. das Deaktivieren der Sprachweiterleitung) gespeichert werden können.",
+      "label": "Functioneel"
+    },
+    "Further Settings": "Meer instellingen",
+    "keys": {
+      "Lifespan": "Bewaartermijn",
+      "PrivacyPolicy": "Privacyverklaring",
+      "Provider": "Aanbieder",
+      "script": "Script",
+      "Status": "Status"
+    },
+    "marketing": {
+      "description": "Marketing-Cookies werden von Drittanbietern und Publishern verwendet, um personalisierte Werbung anzuzeigen. Sie tun dies, indem Sie Besucher über Websites hinweg verfolgen.",
+      "label": "Marketing"
+    },
+    "More information": "Meer informatie",
+    "Privacy Settings": "Privacy-instellingen",
+    "legalDisclosure": "Colofon",
+    "privacyPolicy": "Privacyverklaring",
+    "Reject All": "Alles weigeren",
+    "Show less": "Minder tonen"
+  },
   "footer": {
     "legal": { "label": "Juridische informatie" },
     "services": { "label": "Diensten" },

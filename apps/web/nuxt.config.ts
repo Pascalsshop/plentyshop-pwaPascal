@@ -144,7 +144,8 @@ export default defineNuxtConfig({
     'nuxt-lazy-hydrate',
     'nuxt-viewport',
     '@vee-validate/nuxt',
-    '@vite-pwa/nuxt',
+    // Its virtual service-worker module cannot run inside Vitest's Nuxt environment.
+    ...(process.env.VITEST ? [] : ['@vite-pwa/nuxt']),
     'vuetify-nuxt-module',
     'nuxt-color-picker',
   ],

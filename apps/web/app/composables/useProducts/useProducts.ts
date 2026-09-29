@@ -33,26 +33,32 @@ export const useProducts: UseProductsReturn = (category = '') => {
   const fetchProducts: FetchProducts = async (params: FacetSearchCriteria) => {
     const { $i18n } = useNuxtApp();
 
-    state.value.loading = true;
-
     if (params.categoryUrlPath?.endsWith('.js')) return state.value.data;
 
+    state.value.loading = true;
+    const locale = $i18n.locale.value;
     const identifier = category || params.categoryUrlPath || params.categoryId;
+    try {
+      // The same category ID can return different names and products per language.
+      const { data } = await useAsyncData(`useProducts-${locale}-${identifier}-${JSON.stringify(params)}`, () =>
+        useSdk().plentysystems.getFacet(params),
+      );
 
-    const { data } = await useAsyncData(`useProducts-${identifier}-${JSON.stringify(params)}`, () =>
-      useSdk().plentysystems.getFacet(params),
-    );
+      state.value.productsPerPage = params.itemsPerPage || defaults.DEFAULT_ITEMS_PER_PAGE;
 
-    state.value.productsPerPage = params.itemsPerPage || defaults.DEFAULT_ITEMS_PER_PAGE;
+      if (data.value?.data) {
+        data.value.data.pagination.perPageOptions = defaults.PER_PAGE_STEPS;
+        state.value.data = data.value.data;
+        handlePreviewProducts(state, locale);
+      } else {
+        // Never leave products from the previously selected language on screen.
+        state.value.data = {} as Facet;
+      }
 
-    if (data.value?.data) {
-      data.value.data.pagination.perPageOptions = defaults.PER_PAGE_STEPS;
-      state.value.data = data.value.data;
-      handlePreviewProducts(state, $i18n.locale.value);
+      return state.value.data;
+    } finally {
+      state.value.loading = false;
     }
-
-    state.value.loading = false;
-    return state.value.data;
   };
 
   /**

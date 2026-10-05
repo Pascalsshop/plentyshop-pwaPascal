@@ -37,7 +37,7 @@ describe('Amikon header menu styling', () => {
       compilerOptions: { bindingMetadata: script.bindings },
     });
     expect(template.errors).toEqual([]);
-    expect(script.bindings.openDesktopMenuOnHover).toBeDefined();
+    expect(script.bindings?.openDesktopMenuOnHover).toBeDefined();
     expect(template.code).toContain('onPointerenter:');
   });
 });

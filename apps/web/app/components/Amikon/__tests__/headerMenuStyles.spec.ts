@@ -7,6 +7,36 @@ const filename = new URL('../Header.vue', import.meta.url);
 const { descriptor } = parse(readFileSync(filename, 'utf8'), { filename: filename.pathname });
 
 describe('Amikon header menu styling', () => {
+  it('aligns every desktop header row and dropdown with the main content width and gutters', () => {
+    const containers: string[] = [];
+    const collect = (nodes: TemplateChildNode[]) => {
+      for (const node of nodes) {
+        if (node.type !== NodeTypes.ELEMENT) continue;
+        const classAttribute = node.props.find((prop) => prop.type === NodeTypes.ATTRIBUTE && prop.name === 'class');
+        if (
+          classAttribute?.type === NodeTypes.ATTRIBUTE &&
+          classAttribute.value?.content.split(/\s+/).includes('amikon-header-container')
+        ) {
+          containers.push(classAttribute.value.content);
+        }
+        collect(node.children);
+      }
+    };
+    collect(baseParse(descriptor.template!.content).children);
+    expect(containers).toHaveLength(4);
+    for (const classes of containers) {
+      expect(classes).not.toMatch(/max-w-|(?:^|\s)(?:@\w+:)?px-/);
+    }
+    const headerStyle = descriptor.styles.map((style) => style.content).join('\n');
+    const mainSource = readFileSync(new URL('../../../pages/index.vue', import.meta.url), 'utf8');
+    const mainWidth = mainSource.match(/max-width:\s*(1600px)/)?.[1];
+    expect(mainWidth).toBe('1600px');
+    expect(headerStyle).toContain(`max-width: ${mainWidth}`);
+    expect(headerStyle).toContain('width: 100%');
+    expect(headerStyle).toContain('margin-inline: auto');
+    expect(headerStyle).toContain('padding-inline: 15px');
+  });
+
   it('explicitly uppercases the category button instead of relying on inherited navigation styles', () => {
     let categoryButtonClasses: string | undefined;
     const collect = (nodes: TemplateChildNode[]) => {

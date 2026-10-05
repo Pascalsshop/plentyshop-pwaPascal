@@ -6,7 +6,7 @@
     @keydown.esc="closeMenus"
   >
     <div class="hidden bg-amikon-600 text-white @lg:block">
-      <div class="mx-auto flex max-w-screen-2xl items-center justify-center gap-12 px-6 py-2 text-sm font-semibold">
+      <div class="amikon-header-container flex items-center justify-center gap-12 py-2 text-sm font-semibold">
         <span class="flex items-center gap-2 text-white">
           <SfIconCheck class="h-4 w-4" aria-hidden="true" />
           <span>{{ t('amikonHeader.service.questions') }} <AmikonProtectedContact kind="phone" /></span>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="border-b border-neutral-200">
-      <div class="mx-auto max-w-screen-2xl px-2 @lg:px-6">
+      <div class="amikon-header-container">
         <nav
           class="flex min-h-10 items-center justify-end gap-1 @lg:hidden"
           :aria-label="t('amikonHeader.aria.customerNavigation')"
@@ -148,7 +148,7 @@
     </div>
 
     <div class="relative" @mouseleave="closeDesktopMenu">
-      <div class="mx-auto flex min-h-20 max-w-screen-2xl items-center justify-between gap-5 px-4 @lg:px-6">
+      <div class="amikon-header-container flex min-h-20 items-center justify-between gap-5">
         <NuxtLink :to="localePath(paths.home)" class="shrink-0" :aria-label="t('amikonHeader.logoAlt')">
           <img
             :src="AMIKON_LOGO_PATH"
@@ -233,7 +233,7 @@
           class="absolute left-0 right-0 top-full hidden border-t border-neutral-200 bg-white shadow-lg z-dropdown @lg:block"
           data-testid="amikon-desktop-menu"
         >
-          <div class="mx-auto grid max-w-screen-2xl grid-cols-3">
+          <div class="amikon-header-container grid grid-cols-3">
             <ul
               v-for="(column, columnIndex) in desktopMenuColumns"
               :key="columnIndex"
@@ -515,3 +515,12 @@ watch(
   },
 );
 </script>
+
+<style scoped>
+.amikon-header-container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: 15px;
+}
+</style>

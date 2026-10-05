@@ -30,7 +30,7 @@
         >
           <NuxtLink
             :to="localePath(isAuthorized ? paths.account : paths.authLogin)"
-            class="flex h-10 items-center justify-center rounded px-2 hover:bg-neutral-100"
+            class="flex h-10 items-center justify-center rounded px-2 hover:bg-amikon-600 hover:text-white"
             :class="{ 'mr-auto': isAuthorized }"
             :aria-label="accountLabel"
           >
@@ -39,7 +39,7 @@
           <NuxtLink
             v-if="!isAuthorized"
             :to="localePath(paths.register)"
-            class="mr-auto flex h-10 items-center justify-center rounded px-2 hover:bg-neutral-100"
+            class="mr-auto flex h-10 items-center justify-center rounded px-2 hover:bg-amikon-600 hover:text-white"
             :aria-label="t('amikonHeader.actions.register')"
           >
             <span class="relative" aria-hidden="true">
@@ -49,7 +49,7 @@
           </NuxtLink>
           <button
             type="button"
-            class="flex h-10 items-center gap-1 rounded px-2 hover:bg-neutral-100"
+            class="flex h-10 items-center gap-1 rounded px-2 hover:bg-amikon-600 hover:text-white"
             :aria-label="t('common.navigation.languageSelector')"
             @click="toggleLanguageSelect"
           >
@@ -58,7 +58,7 @@
           </button>
           <NuxtLink
             :to="localePath(paths.wishlist)"
-            class="flex h-10 items-center gap-1 rounded px-2 hover:bg-neutral-100"
+            class="flex h-10 items-center gap-1 rounded px-2 hover:bg-amikon-600 hover:text-white"
             :aria-label="t('cart.numberInWishlist', { count: wishlistItemIds.length })"
           >
             <SfIconFavorite class="h-5 w-5" aria-hidden="true" />
@@ -66,7 +66,7 @@
           </NuxtLink>
           <NuxtLink
             :to="localePath(paths.cart)"
-            class="flex h-10 items-center gap-1 rounded px-2 font-bold hover:bg-neutral-100"
+            class="flex h-10 items-center gap-1 rounded px-2 font-bold hover:bg-amikon-600 hover:text-white"
             :aria-label="t('cart.numberInCart', { count: cartItemsCount })"
           >
             <SfIconShoppingCart class="h-5 w-5" aria-hidden="true" />
@@ -101,7 +101,7 @@
           >
             <NuxtLink
               :to="localePath(isAuthorized ? paths.account : paths.authLogin)"
-              class="flex items-center gap-1.5 rounded px-2 py-2 hover:bg-amikon-700 hover:text-white"
+              class="flex items-center gap-1.5 rounded px-2 py-2 hover:bg-amikon-600 hover:text-white"
             >
               <SfIconPerson class="h-4 w-4" aria-hidden="true" />
               <span>{{ accountLabel }}</span>
@@ -109,7 +109,7 @@
             <NuxtLink
               v-if="!isAuthorized"
               :to="localePath(paths.register)"
-              class="flex items-center gap-1.5 rounded px-2 py-2 hover:bg-amikon-700 hover:text-white"
+              class="flex items-center gap-1.5 rounded px-2 py-2 hover:bg-amikon-600 hover:text-white"
             >
               <span class="relative" aria-hidden="true">
                 <SfIconPerson class="h-4 w-4" />
@@ -119,7 +119,7 @@
             </NuxtLink>
             <button
               type="button"
-              class="flex items-center gap-1.5 rounded px-2 py-2 hover:bg-amikon-700 hover:text-white"
+              class="flex items-center gap-1.5 rounded px-2 py-2 hover:bg-amikon-600 hover:text-white"
               :aria-label="t('common.navigation.languageSelector')"
               @click="toggleLanguageSelect"
             >
@@ -128,7 +128,7 @@
             </button>
             <NuxtLink
               :to="localePath(paths.wishlist)"
-              class="flex items-center gap-1 rounded px-2 py-2 hover:bg-amikon-700 hover:text-white"
+              class="flex items-center gap-1 rounded px-2 py-2 hover:bg-amikon-600 hover:text-white"
               :aria-label="t('cart.numberInWishlist', { count: wishlistItemIds.length })"
             >
               <span>{{ wishlistItemIds.length }}</span>
@@ -136,7 +136,7 @@
             </NuxtLink>
             <NuxtLink
               :to="localePath(paths.cart)"
-              class="flex items-center gap-2 rounded px-2 py-2 font-bold hover:bg-amikon-700 hover:text-white"
+              class="flex items-center gap-2 rounded px-2 py-2 font-bold hover:bg-amikon-600 hover:text-white"
               :aria-label="t('cart.numberInCart', { count: cartItemsCount })"
             >
               <SfIconShoppingCart class="h-5 w-5" aria-hidden="true" />
@@ -162,7 +162,7 @@
         <button
           ref="mobileMenuTrigger"
           type="button"
-          class="flex h-11 w-11 items-center justify-center rounded hover:bg-neutral-100 @lg:hidden"
+          class="flex h-11 w-11 items-center justify-center rounded hover:bg-amikon-600 hover:text-white @lg:hidden"
           :aria-label="t('common.navigation.openMenu')"
           :aria-expanded="mobileMenuOpen"
           aria-controls="amikon-mobile-menu"
@@ -175,7 +175,7 @@
           class="hidden self-stretch items-stretch text-sm font-bold uppercase @lg:flex @xl:text-base"
           :aria-label="t('amikonHeader.aria.mainNavigation')"
         >
-          <NuxtLink :to="localePath(paths.home)" class="flex items-center px-4 hover:bg-neutral-100">
+          <NuxtLink :to="localePath(paths.home)" class="flex items-center px-4 hover:bg-amikon-600 hover:text-white">
             {{ t('amikonHeader.navigation.home') }}
           </NuxtLink>
           <div class="flex">
@@ -185,25 +185,35 @@
               :class="{ 'bg-amikon-600 text-white': desktopMenuOpen }"
               :aria-expanded="desktopMenuOpen"
               aria-controls="amikon-desktop-menu"
+              @pointerenter="openDesktopMenuOnHover"
               @click="toggleDesktopMenu"
             >
               {{ t('amikonHeader.navigation.categories') }}
               <SfIconExpandMore class="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
-          <NuxtLink :to="localePath(paths.shipping)" class="flex items-center px-4 hover:bg-neutral-100">
+          <NuxtLink
+            :to="localePath(paths.shipping)"
+            class="flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+          >
             {{ t('amikonHeader.navigation.shipping') }}
           </NuxtLink>
-          <NuxtLink :to="localePath(paths.privacyPolicy)" class="flex items-center px-4 hover:bg-neutral-100">
+          <NuxtLink
+            :to="localePath(paths.privacyPolicy)"
+            class="flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+          >
             {{ t('amikonHeader.navigation.privacy') }}
           </NuxtLink>
-          <NuxtLink :to="localePath(paths.contact)" class="flex items-center px-4 hover:bg-neutral-100">
+          <NuxtLink :to="localePath(paths.contact)" class="flex items-center px-4 hover:bg-amikon-600 hover:text-white">
             {{ t('amikonHeader.navigation.contact') }}
           </NuxtLink>
-          <NuxtLink :to="localePath(AMIKON_PURCHASE_FORM_PATH)" class="flex items-center px-4 hover:bg-neutral-100">
+          <NuxtLink
+            :to="localePath(AMIKON_PURCHASE_FORM_PATH)"
+            class="flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+          >
             {{ t('amikonHeader.navigation.purchaseForm') }}
           </NuxtLink>
-          <a :href="AMIKON_NEWSLETTER_URL" class="flex items-center px-4 hover:bg-neutral-100">
+          <a :href="AMIKON_NEWSLETTER_URL" class="flex items-center px-4 hover:bg-amikon-600 hover:text-white">
             {{ t('amikonHeader.navigation.newsletter') }}
           </a>
         </nav>
@@ -273,7 +283,7 @@
             </NuxtLink>
             <button
               type="button"
-              class="flex h-10 w-10 items-center justify-center rounded hover:bg-neutral-100"
+              class="flex h-10 w-10 items-center justify-center rounded hover:bg-amikon-600 hover:text-white"
               :aria-label="t('common.navigation.closeMenu')"
               @click="closeMenus"
             >
@@ -301,7 +311,7 @@
               <li>
                 <NuxtLink
                   :to="localePath(paths.shipping)"
-                  class="block px-5 py-3 hover:bg-neutral-100"
+                  class="block px-5 py-3 hover:bg-amikon-600 hover:text-white"
                   @click="closeMenus"
                 >
                   {{ t('amikonHeader.navigation.shipping') }}
@@ -310,7 +320,7 @@
               <li>
                 <NuxtLink
                   :to="localePath(paths.privacyPolicy)"
-                  class="block px-5 py-3 hover:bg-neutral-100"
+                  class="block px-5 py-3 hover:bg-amikon-600 hover:text-white"
                   @click="closeMenus"
                 >
                   {{ t('amikonHeader.navigation.privacy') }}
@@ -319,7 +329,7 @@
               <li>
                 <NuxtLink
                   :to="localePath(paths.contact)"
-                  class="block px-5 py-3 hover:bg-neutral-100"
+                  class="block px-5 py-3 hover:bg-amikon-600 hover:text-white"
                   @click="closeMenus"
                 >
                   {{ t('amikonHeader.navigation.contact') }}
@@ -328,14 +338,14 @@
               <li>
                 <NuxtLink
                   :to="localePath(AMIKON_PURCHASE_FORM_PATH)"
-                  class="block px-5 py-3 hover:bg-neutral-100"
+                  class="block px-5 py-3 hover:bg-amikon-600 hover:text-white"
                   @click="closeMenus"
                 >
                   {{ t('amikonHeader.navigation.purchaseForm') }}
                 </NuxtLink>
               </li>
               <li>
-                <a :href="AMIKON_NEWSLETTER_URL" class="block px-5 py-3 hover:bg-neutral-100">
+                <a :href="AMIKON_NEWSLETTER_URL" class="block px-5 py-3 hover:bg-amikon-600 hover:text-white">
                   {{ t('amikonHeader.navigation.newsletter') }}
                 </a>
               </li>
@@ -364,6 +374,7 @@ import { cartGetters, categoryTreeGetters } from '@plentymarkets/shop-api';
 import { onClickOutside, useResizeObserver, useScrollLock } from '@vueuse/core';
 import { flagImports } from '~/components/LanguageSelector/flags';
 import type { AmikonNavigationItem } from './Amikon.types';
+import { useAmikonDesktopMenu } from './useDesktopMenu';
 import {
   AMIKON_FALLBACK_CATEGORIES,
   AMIKON_LOGO_PATH,
@@ -387,7 +398,12 @@ const { emit } = usePlentyEvent();
 const { format } = usePriceFormatter();
 
 const headerRoot = ref<HTMLElement | null>(null);
-const desktopMenuOpen = ref(false);
+const {
+  isOpen: desktopMenuOpen,
+  openOnHover: openDesktopMenuOnHover,
+  toggle: toggleDesktopMenu,
+  close: closeDesktopMenu,
+} = useAmikonDesktopMenu();
 const mobileMenuOpen = ref(false);
 const mobileMenuTrigger = ref<HTMLButtonElement | null>(null);
 const mobileMenuPanel = ref<HTMLElement | null>(null);
@@ -463,21 +479,13 @@ const categoryMenuItems = computed<AmikonNavigationItem[]>(() => {
 
 const desktopMenuColumns = computed(() => splitIntoBalancedColumns(categoryMenuItems.value, 3));
 
-const toggleDesktopMenu = () => {
-  desktopMenuOpen.value = !desktopMenuOpen.value;
-};
-
 const openMobileMenu = () => {
-  desktopMenuOpen.value = false;
+  closeDesktopMenu();
   mobileMenuOpen.value = true;
 };
 
-const closeDesktopMenu = () => {
-  desktopMenuOpen.value = false;
-};
-
 const closeMenus = () => {
-  desktopMenuOpen.value = false;
+  closeDesktopMenu();
   mobileMenuOpen.value = false;
 };
 

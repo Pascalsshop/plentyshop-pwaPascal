@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { mockNuxtImport } from '@nuxt/test-utils/runtime';
-import { UiProductCard } from '#components';
+import { UiBadges, UiProductCard } from '#components';
 import { ProductMock } from '../../../../../__tests__/__mocks__/product.mock';
 
 const { useLazyProductImageMock } = vi.hoisted(() => ({
@@ -35,6 +35,19 @@ describe('<ProductCard />', () => {
     });
 
     expect(wrapper.find('[data-testid="product-card"]').exists()).toBe(true);
+  });
+
+  it.each([
+    { view: 'category and search results', props: {} },
+    { view: 'homepage product sliders', props: { isFromSlider: true } },
+    { view: 'wishlist', props: { isFromWishlist: true } },
+  ])('always enables availability in $view', ({ props }) => {
+    const wrapper = mount(UiProductCard, {
+      props: { product: ProductMock, ...props },
+    });
+
+    expect(wrapper.findComponent(UiBadges).props('useAvailability')).toBe(true);
+    expect(wrapper.find('[data-testid="product-availability"]').text()).toBe('Sofort versandfertig, Lieferzeit 48h');
   });
 
   it('should not render image initially for non-priority items', () => {

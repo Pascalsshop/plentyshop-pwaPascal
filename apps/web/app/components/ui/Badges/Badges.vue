@@ -19,13 +19,14 @@
       </template>
 
       <SfListItem
-        v-if="useAvailability && productGetters.getAvailabilityName(product)"
+        v-if="useAvailability && availabilityName"
+        data-testid="product-availability"
         size="sm"
         class="text-xs font-medium select-none rounded-md !w-fit !cursor-text !px-2 grid mt-2"
         :class="[productGetters.getAgenciesAvailabilityCLass(product)]"
         :style="availabilityStyles"
       >
-        {{ productGetters.getAvailabilityName(product) }}
+        {{ availabilityName }}
       </SfListItem>
     </ul>
   </div>
@@ -45,8 +46,12 @@ const productTags = computed(() => {
   return tagGetters.getTags(product);
 });
 
+const availabilityName = computed(() =>
+  useAvailability && product.variation?.availability?.names ? productGetters.getAvailabilityName(product) || '' : '',
+);
+
 const availabilityStyles = computed(() => {
-  if (!useAvailability) return {};
+  if (!availabilityName.value) return {};
 
   return {
     backgroundColor: productGetters.getAvailabilityBackgroundColor(product),
@@ -54,9 +59,7 @@ const availabilityStyles = computed(() => {
   };
 });
 
-const haveBadges = computed(
-  () => (useTags && productTags.value.length > 0) || (useAvailability && productGetters.getAvailabilityName(product)),
-);
+const haveBadges = computed(() => (useTags && productTags.value.length > 0) || Boolean(availabilityName.value));
 
 const onTagClick = (tag: ProductTag) => {
   navigateTo(localePath(`/tag/${tagGetters.getTagName(tag)}_${tagGetters.getTagId(tag)}`));

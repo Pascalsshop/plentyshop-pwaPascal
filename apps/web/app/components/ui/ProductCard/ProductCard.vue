@@ -9,7 +9,7 @@
         :use-tags="useTagsOnCategoryPage"
         :class="['absolute', isFromWishlist ? 'mx-2' : 'm-2']"
         :product="product"
-        :use-availability="isFromWishlist"
+        :use-availability="true"
       />
 
       <div ref="imageContainerRef" :class="[{ 'size-48': isFromSlider }, 'relative']">

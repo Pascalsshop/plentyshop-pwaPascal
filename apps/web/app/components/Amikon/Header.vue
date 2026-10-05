@@ -430,6 +430,7 @@ const cartTotal = computed(() => format(cartGetters.getTotals(cart.value).total 
 const categoryMenuItems = computed<AmikonNavigationItem[]>(() => {
   const liveItems: AmikonNavigationItem[] = [];
   const excludedLabels = [
+    t('amikonHeader.navigation.categories'),
     t('amikonHeader.navigation.home'),
     t('common.labels.home'),
     t('common.labels.checkout'),

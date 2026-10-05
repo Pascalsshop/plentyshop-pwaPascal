@@ -355,6 +355,7 @@ const generateCategoryLink = (category: CategoryTreeItem) => {
 };
 
 const excludedLabels = computed(() => [
+  t('amikonHeader.navigation.categories'),
   t('amikonHeader.navigation.home'),
   t('common.labels.home'),
   t('common.labels.checkout'),

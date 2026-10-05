@@ -32,6 +32,32 @@ describe('Amikon navigation', () => {
     expect(isAmikonCategoryMenuLabelVisible('Home automation', [], '/nl/home-automation')).toBe(true);
     expect(isAmikonCategoryMenuLabelVisible('Roboter', [], '/nl/robotica')).toBe(true);
   });
+  it('hides Kategorien, Über Amikon and Zu Amikon by exact label or CMS route', () => {
+    for (const label of [
+      'Kategorien',
+      ' Über   Amikon ',
+      'Über_Amikon',
+      'Ueber-Amikon',
+      ' Zu   Amikon ',
+      'Zu_Amikon',
+    ]) {
+      expect(isAmikonCategoryMenuLabelVisible(label)).toBe(false);
+    }
+    for (const prefix of ['', '/de', '/en', '/nl', '/fr']) {
+      for (const path of ['/kategorien', '/ueber-amikon', '/zu-amikon']) {
+        expect(isAmikonCategoryMenuLabelVisible('CMS-Seite', [], `${prefix}${path}/?source=menu#top`)).toBe(false);
+      }
+    }
+    expect(isAmikonCategoryMenuLabelVisible('Kategorien Zubehör', [], '/kategorien-zubehoer')).toBe(true);
+    expect(isAmikonCategoryMenuLabelVisible('Über Amikon Ersatzteile', [], '/ueber-amikon-ersatzteile')).toBe(true);
+    expect(isAmikonCategoryMenuLabelVisible('Zu Amikon Ersatzteile', [], '/zu-amikon-ersatzteile')).toBe(true);
+  });
+  it('hides the translated category overview but retains actual categories in every language', () => {
+    for (const label of ['Kategorien', 'Categories', 'Catégories', 'Categorieën']) {
+      expect(isAmikonCategoryMenuLabelVisible(` ${label} `, [label], '/cms-overview')).toBe(false);
+      expect(isAmikonCategoryMenuLabelVisible(`${label} Zubehör`, [label], '/product-category')).toBe(true);
+    }
+  });
   it('should preserve menu order across balanced columns', () => {
     const items = [1, 2, 3, 4, 5, 6, 7, 8];
 
@@ -47,6 +73,9 @@ describe('Amikon navigation', () => {
 
   it('should retain all categories from the legacy Amikon menu', () => {
     expect(AMIKON_FALLBACK_CATEGORIES).toHaveLength(22);
+    for (const { slug } of AMIKON_FALLBACK_CATEGORIES) {
+      expect(isAmikonCategoryMenuLabelVisible('Produktkategorie', [], slug)).toBe(true);
+    }
   });
 
   it('should return no columns for invalid input', () => {

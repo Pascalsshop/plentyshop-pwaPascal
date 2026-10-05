@@ -181,7 +181,7 @@
           <div class="flex">
             <button
               type="button"
-              class="flex items-center gap-1 px-4 hover:bg-amikon-600 hover:text-white"
+              class="flex items-center gap-1 px-4 uppercase hover:bg-amikon-600 hover:text-white"
               :class="{ 'bg-amikon-600 text-white': desktopMenuOpen }"
               :aria-expanded="desktopMenuOpen"
               aria-controls="amikon-desktop-menu"

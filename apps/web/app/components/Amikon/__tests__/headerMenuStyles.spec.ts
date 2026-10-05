@@ -7,6 +7,30 @@ const filename = new URL('../Header.vue', import.meta.url);
 const { descriptor } = parse(readFileSync(filename, 'utf8'), { filename: filename.pathname });
 
 describe('Amikon header menu styling', () => {
+  it('explicitly uppercases the category button instead of relying on inherited navigation styles', () => {
+    let categoryButtonClasses: string | undefined;
+    const collect = (nodes: TemplateChildNode[]) => {
+      for (const node of nodes) {
+        if (node.type !== NodeTypes.ELEMENT) continue;
+        if (
+          node.tag === 'button' &&
+          node.props.some(
+            (prop) =>
+              prop.type === NodeTypes.ATTRIBUTE &&
+              prop.name === 'aria-controls' &&
+              prop.value?.content === 'amikon-desktop-menu',
+          )
+        ) {
+          const classAttribute = node.props.find((prop) => prop.type === NodeTypes.ATTRIBUTE && prop.name === 'class');
+          if (classAttribute?.type === NodeTypes.ATTRIBUTE) categoryButtonClasses = classAttribute.value?.content;
+        }
+        collect(node.children);
+      }
+    };
+    collect(baseParse(descriptor.template!.content).children);
+    expect(categoryButtonClasses?.split(/\s+/)).toContain('uppercase');
+  });
+
   it('uses the same Amikon blue and white text for all header menu hover states', () => {
     const menuClasses: string[] = [];
     const collect = (nodes: TemplateChildNode[]) => {

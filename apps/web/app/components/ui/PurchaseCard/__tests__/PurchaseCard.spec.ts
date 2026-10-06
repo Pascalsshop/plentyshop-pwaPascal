@@ -4,6 +4,7 @@ import type { ReviewCounts } from '@plentymarkets/shop-api';
 import { mockNuxtImport } from '@nuxt/test-utils/runtime';
 import { ProductMock } from '../../../../../__tests__/__mocks__/product.mock';
 import type { PriceCardContent, PriceCardTextBlockItem, PriceCardOrderItem } from '../types';
+import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
 const { isInternalLinkMock } = vi.hoisted(() => ({
   isInternalLinkMock: vi.fn((href: string) => href.startsWith('/')),
@@ -92,6 +93,72 @@ const globalStubs = {
 };
 
 describe('<PurchaseCard />', () => {
+  describe('Amikon arrangement', () => {
+    const layoutConfiguration = () =>
+      createConfiguration({
+        fields: {
+          ...createConfiguration().fields,
+          itemName: true,
+          price: true,
+          previewText: true,
+          availability: true,
+          quantityAndAddToCart: true,
+        },
+        fieldsOrder: ['price', 'availability', 'itemName', 'quantityAndAddToCart', 'previewText'],
+      });
+    const mountAmikon = (product = ProductMock, arranged = true) =>
+      mount(UiPurchaseCard, {
+        props: { product, configuration: layoutConfiguration() },
+        global: { stubs: globalStubs, provide: { [amikonProductLayoutKey as symbol]: ref(arranged) } },
+      });
+
+    it('puts the existing title and short description before price, availability and cart', () => {
+      const product = structuredClone(ProductMock);
+      product.texts.shortDescription = 'Example description';
+      const wrapper = mountAmikon(product);
+      const fields = wrapper.get('[data-testid="purchase-card-fields"]').element;
+      const selectors = [
+        'product-name',
+        'product-description',
+        'product-price-row',
+        'product-availability',
+        'product-purchase-actions',
+      ];
+      const ordered = [...fields.querySelectorAll('[data-testid]')]
+        .map((el) => el.getAttribute('data-testid'))
+        .filter((id) => selectors.includes(id!));
+      expect(ordered).toEqual(selectors);
+      expect(wrapper.get('[data-testid="product-availability"]').text()).toBe(
+        ProductMock.variation.availability.names.name,
+      );
+    });
+
+    it('keeps the configured order outside the Amikon arrangement', () => {
+      const wrapper = mountAmikon(ProductMock, false);
+      const fields = wrapper.get('[data-testid="purchase-card-fields"]').element;
+      const ordered = [...fields.querySelectorAll('[data-testid]')]
+        .map((el) => el.getAttribute('data-testid'))
+        .filter((id) => ['product-name', 'product-price-row'].includes(id!));
+      expect(ordered).toEqual(['product-price-row', 'product-name']);
+    });
+
+    it('does not show any purchase controls for a sold item, but keeps price and availability', () => {
+      const product = structuredClone(ProductMock);
+      product.variation.availability.id = 5;
+      const wrapper = mountAmikon(product);
+      expect(wrapper.find('[data-testid="add-to-cart"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="quantity-selector"]').exists()).toBe(false);
+      expect(wrapper.find('[data-testid="product-price-row"]').exists()).toBe(true);
+      expect(wrapper.get('[data-testid="product-availability"]').attributes('style')).toContain('#dc3545');
+    });
+
+    it('does not hide purchasing just because an item has another availability status', () => {
+      const product = structuredClone(ProductMock);
+      product.variation.availability.id = 2;
+      expect(mountAmikon(product).find('[data-testid="add-to-cart"]').exists()).toBe(true);
+    });
+  });
+
   it('should render component', () => {
     const wrapper = mount(UiPurchaseCard, {
       props: {

@@ -8,8 +8,8 @@
   >
     <div class="relative">
       <div class="drift-zoom-image">
-        <section class="@md:p-4">
-          <template v-for="key in configuration?.fieldsOrder" :key="isTextBlock(key) ? key.uuid : key">
+        <section class="@md:p-4" data-testid="purchase-card-fields">
+          <template v-for="key in displayedFieldsOrder" :key="isTextBlock(key) ? key.uuid : key">
             <template v-if="isTextBlock(key) && key.visible">
               <div
                 :class="{ 'ring-2 ring-blue-500 ring-offset-1 rounded': highlightedUuid === key.uuid }"
@@ -33,7 +33,7 @@
               </p>
             </template>
             <template v-if="key === 'price' && configuration?.fields.price">
-              <div class="flex space-x-2">
+              <div class="flex space-x-2" data-testid="product-price-row">
                 <Price :crossed-price="crossedPrice" :price="priceWithProperties" />
                 <div
                   v-if="(productBundleGetters?.getBundleDiscount(product) ?? 0) > 0 && showBundleComponents"
@@ -56,7 +56,8 @@
               <UiBadges :product="product" :use-availability="false" :use-tags="true" class="mb-2" />
             </template>
             <template v-if="key === 'availability' && configuration?.fields.availability">
-              <UiBadges :product="product" :use-availability="true" :use-tags="false" class="mb-2" />
+              <UiProductAvailability v-if="amikonLayout" :product="product" />
+              <UiBadges v-else :product="product" :use-availability="true" :use-tags="false" class="mb-2" />
             </template>
             <template v-if="key === 'variationProperties' && configuration?.fields.variationProperties">
               <div class="mb-2 variation-properties">
@@ -140,11 +141,15 @@
 
             <template v-if="key === 'quantityAndAddToCart' && configuration?.fields.quantityAndAddToCart">
               <UnitContentSelect
-                v-if="product && productGetters.possibleUnitCombination(product).length > 1"
+                v-if="!hideSoldPurchaseActions && product && productGetters.possibleUnitCombination(product).length > 1"
                 :product="product"
               />
-              <div class="mt-4">
-                <div class="flex flex-col @md:flex-row flex-wrap gap-4">
+              <div class="mt-4" data-testid="product-purchase-actions">
+                <div
+                  v-if="!hideSoldPurchaseActions"
+                  class="flex flex-col @md:flex-row flex-wrap gap-4"
+                  data-testid="product-quantity-cart-row"
+                >
                   <UiQuantitySelector
                     v-if="productGetters.isActiveVariationSalable(product)"
                     :min-value="productGetters.getMinimumOrderQuantity(product)"
@@ -200,7 +205,7 @@
                     </template>
                   </i18n-t>
                 </div>
-                <template v-if="showPayPalButtons">
+                <template v-if="showPayPalButtons && !hideSoldPurchaseActions">
                   <PayPalExpressButton
                     class="mt-4"
                     location="itemPage"
@@ -241,6 +246,7 @@
 
 <script lang="ts" setup>
 import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
+import { amikonProductLayoutKey, arrangeAmikonPurchaseFields } from '~/utils/amikonProductLayout';
 import { productGetters, reviewGetters, productBundleGetters } from '@plentymarkets/shop-api';
 import { SfCounter, SfRating, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
 import type { PriceCardPadding, PriceCardTextBlockItem, PurchaseCardProps } from '~/components/ui/PurchaseCard/types';
@@ -304,6 +310,16 @@ const props = withDefaults(defineProps<PurchaseCardProps>(), {
       fullWidth: false,
     },
   }),
+});
+
+const amikonLayout = inject(amikonProductLayoutKey, ref(false));
+const hideSoldPurchaseActions = computed(
+  () =>
+    amikonLayout.value && (props.product.variation?.availability?.id ?? props.product.variation?.availabilityId) === 5,
+);
+const displayedFieldsOrder = computed(() => {
+  const fields = props.configuration?.fieldsOrder ?? [];
+  return amikonLayout.value ? arrangeAmikonPurchaseFields(fields) : fields;
 });
 
 const { currentProduct } = useProducts();
@@ -402,6 +418,7 @@ const handleValidationErrors = (): boolean => {
 };
 
 const handleAddToCart = async (quickCheckout = true) => {
+  if (hideSoldPurchaseActions.value) return false;
   await validateAllFieldsAttributes();
   await validateAllFields();
 

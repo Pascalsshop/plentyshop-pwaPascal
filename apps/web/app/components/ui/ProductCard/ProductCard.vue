@@ -234,8 +234,13 @@ const hasTitleField = computed(
 const hasPriceField = computed(
   () => configuration.value.fields?.price && configuration.value.fieldsOrder?.includes('price'),
 );
+// Availability 5 is the sold / no-longer-available status used by the Amikon shop.
+const isSold = computed(
+  () => (product.value.variation?.availability?.id ?? product.value.variation?.availabilityId) === 5,
+);
 const hasAddToCartField = computed(
-  () => configuration.value.fields?.addToCart && configuration.value.fieldsOrder?.includes('addToCart'),
+  () =>
+    !isSold.value && configuration.value.fields?.addToCart && configuration.value.fieldsOrder?.includes('addToCart'),
 );
 
 const { addModernImageExtension } = useModernImage();
@@ -404,6 +409,7 @@ const buildAutoBasketItemOrderParams = (product: Product): BasketItemOrderParams
     }) || undefined;
 
 const addWithLoader = async (productId: number, quickCheckout = true) => {
+  if (isSold.value) return;
   loading.value = true;
   try {
     const isRequiredAndPreselected = productGetters.hasOrderPropertiesRequiredAndPreselected(product.value);

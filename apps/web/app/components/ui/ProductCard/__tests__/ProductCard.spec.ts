@@ -133,4 +133,46 @@ describe('<ProductCard />', () => {
     expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(addToCart);
     expect(wrapper.find('[data-testid="product-card-purchase-row"]').exists()).toBe(price || addToCart);
   });
+
+  it.each([
+    { view: 'category and search', props: {}, isSalable: false },
+    { view: 'category and search with stale salability', props: {}, isSalable: true },
+    { view: 'homepage slider', props: { isFromSlider: true }, isSalable: false },
+    { view: 'homepage slider with stale salability', props: { isFromSlider: true }, isSalable: true },
+    { view: 'wishlist', props: { isFromWishlist: true }, isSalable: false },
+    { view: 'wishlist with stale salability', props: { isFromWishlist: true }, isSalable: true },
+  ])('shows no purchase button for sold items in $view', ({ props, isSalable }) => {
+    const product = structuredClone(ProductMock);
+    product.variation.availability.id = 5;
+    product.variation.availability.names.name = 'Der Artikel ist leider nicht mehr verfügbar';
+    product.filter.isSalable = isSalable;
+    const wrapper = mount(UiProductCard, { props: { product, ...props } });
+    expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="product-card-options"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="product-card-vertical-price"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="productcard-name"]').exists()).toBe(true);
+    expect(wrapper.get('[data-testid="product-availability"]').text()).toBe(product.variation.availability.names.name);
+  });
+
+  it('does not leave an empty action row when a sold item also hides the price', () => {
+    const product = structuredClone(ProductMock);
+    product.variation.availability.id = 5;
+    const defaults = mount(UiProductCard, { props: { product } }).props('configuration')!;
+    const wrapper = mount(UiProductCard, {
+      props: { product, configuration: { ...defaults, fields: { ...defaults.fields, price: false } } },
+    });
+    expect(wrapper.find('[data-testid="product-card-purchase-row"]').exists()).toBe(false);
+  });
+
+  it('updates purchase buttons when the availability changes', async () => {
+    const wrapper = mount(UiProductCard, { props: { product: ProductMock } });
+    expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(true);
+    const sold = structuredClone(ProductMock);
+    sold.variation.availability.id = 5;
+    await wrapper.setProps({ product: sold });
+    expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="product-card-options"]').exists()).toBe(false);
+    await wrapper.setProps({ product: ProductMock });
+    expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(true);
+  });
 });

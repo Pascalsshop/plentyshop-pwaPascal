@@ -87,6 +87,7 @@ const createConfiguration = (extraFields: Partial<PriceCardContent> = {}): Price
 });
 
 const globalStubs = {
+  AmikonRefrigerantNotice: { props: ['product'], template: '<section data-testid="refrigerant-notice-stub" />' },
   PayPalExpressButton: true,
   PayPalPayLaterBanner: true,
   UnitContentSelect: true,
@@ -140,6 +141,37 @@ describe('<PurchaseCard />', () => {
         .map((el) => el.getAttribute('data-testid'))
         .filter((id) => ['product-name', 'product-price-row'].includes(id!));
       expect(ordered).toEqual(['product-price-row', 'product-name']);
+      expect(wrapper.find('[data-testid="product-item-id"]').exists()).toBe(false);
+    });
+
+    it('shows the item ID immediately below the title, not the variation ID or number', () => {
+      const product = structuredClone(ProductMock);
+      product.item.id = 24680;
+      product.variation.id = 13579;
+      product.variation.number = 'OTHER-NUMBER';
+      const wrapper = mountAmikon(product);
+      const id = wrapper.get('[data-testid="product-item-id"]');
+      expect(id.text()).toContain('24680');
+      expect(id.text()).not.toContain('13579');
+      expect(id.text()).not.toContain('OTHER-NUMBER');
+      expect(wrapper.get('[data-testid="product-name"]').element.nextElementSibling).toBe(id.element);
+    });
+
+    it('omits an unavailable item ID rather than showing a placeholder', () => {
+      const product = structuredClone(ProductMock);
+      product.item.id = 0;
+      expect(mountAmikon(product).find('[data-testid="product-item-id"]').exists()).toBe(false);
+    });
+
+    it('places the refrigerant component below the purchase fields in the same column', () => {
+      const wrapper = mountAmikon();
+      const notice = wrapper.get('[data-testid="refrigerant-notice-stub"]');
+      expect(wrapper.get('[data-testid="purchase-card"]').element.lastElementChild).toBe(notice.element);
+      expect(wrapper.get('[data-testid="purchase-card-fields"]').element.contains(notice.element)).toBe(false);
+    });
+
+    it('does not add the refrigerant component outside the Amikon arrangement', () => {
+      expect(mountAmikon(ProductMock, false).find('[data-testid="refrigerant-notice-stub"]').exists()).toBe(false);
     });
 
     it('does not show any purchase controls for a sold item, but keeps price and availability', () => {

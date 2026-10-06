@@ -1,4 +1,15 @@
 {
+  "amikonRefrigerant": {
+    "title": "Switch to environmentally friendly refrigerant",
+    "intro": "The following work can be performed on climate chambers. Please contact us if you are interested.",
+    "recovery": "Extraction and proper disposal of the previous refrigerant",
+    "components": "Replacement of necessary components, if required",
+    "refilling": "Evacuate the circuit and refill it with R 452A, for example",
+    "adjustment": "Checking / adjusting superheat at expansion valves",
+    "leakTest": "Leak test",
+    "testRun": "Test run of the system",
+    "contact": "Contact us"
+  },
   "notifyMe": {
     "notifyButtonTooltip": "We will notify you as soon as the product is available again.",
     "notifyButton": "Notify me",
@@ -1096,6 +1107,7 @@
     "unsavedChangesWarning": "You have unsaved changes."
   },
   "product": {
+    "itemIdLabel": "Item ID",
     "allFromCategory": "All {name}",
     "allProducts": "All items",
     "allProductsLink": "Browse items",

@@ -1,4 +1,15 @@
 {
+  "amikonRefrigerant": {
+    "title": "Conversion à un fluide frigorigène plus respectueux de l’environnement",
+    "intro": "Les travaux suivants peuvent être réalisés sur les enceintes climatiques. Contactez-nous si vous êtes intéressé.",
+    "recovery": "Récupération et élimination appropriée du fluide frigorigène existant",
+    "components": "Remplacement des composants nécessaires, le cas échéant",
+    "refilling": "Mise sous vide du circuit et remplissage, par exemple avec du R 452A",
+    "adjustment": "Contrôle / réglage de la surchauffe au niveau des détendeurs",
+    "leakTest": "Contrôle d’étanchéité",
+    "testRun": "Essai de fonctionnement de l’installation",
+    "contact": "Nous contacter"
+  },
   "amikonHeader": {
     "actions": { "login": "Connexion", "register": "Inscription" },
     "aria": {
@@ -79,6 +90,7 @@
     }
   },
   "product": {
+    "itemIdLabel": "ID de l’article",
     "allFromCategory": "Tous les articles de {name}",
     "allProducts": "Tous les articles",
     "allProductsLink": "Parcourir les articles",

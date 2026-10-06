@@ -34,6 +34,15 @@ provide(
   box-shadow: none;
   border: 0;
 }
+.amikon-product--arranged :deep([data-testid='product-name']:has(+ [data-testid='product-item-id'])) {
+  margin-bottom: 8px;
+}
+.amikon-product--arranged :deep([data-testid='product-item-id']) {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #62686a;
+}
 .amikon-product--arranged :deep([data-testid='purchase-card-fields']) {
   padding: 0;
 }

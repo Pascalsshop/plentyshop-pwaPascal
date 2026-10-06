@@ -22,6 +22,9 @@
               <h1 class="font-bold typography-headline-4 break-word" data-testid="product-name">
                 {{ productGetters.getName(product) }}
               </h1>
+              <p v-if="amikonLayout && itemId" class="text-xs text-neutral-500" data-testid="product-item-id">
+                {{ t('product.itemIdLabel') }}: {{ itemId }}
+              </p>
             </template>
             <template v-if="key === 'variationNumber' && configuration?.fields.variationNumber">
               <p
@@ -241,6 +244,7 @@
         </section>
       </div>
     </div>
+    <AmikonRefrigerantNotice v-if="amikonLayout" :product="product" />
   </form>
 </template>
 
@@ -313,6 +317,10 @@ const props = withDefaults(defineProps<PurchaseCardProps>(), {
 });
 
 const amikonLayout = inject(amikonProductLayoutKey, ref(false));
+const itemId = computed(() => {
+  const id = Number(productGetters.getItemId(props.product));
+  return Number.isSafeInteger(id) && id > 0 ? id : undefined;
+});
 const hideSoldPurchaseActions = computed(
   () =>
     amikonLayout.value && (props.product.variation?.availability?.id ?? props.product.variation?.availabilityId) === 5,

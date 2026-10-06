@@ -1,4 +1,15 @@
 {
+  "amikonRefrigerant": {
+    "title": "Umstellung auf umweltfreundliches Kältemittel",
+    "intro": "Folgende Arbeiten können bei Klimakammern durchgeführt werden. Sprechen Sie uns bei Interesse einfach an.",
+    "recovery": "Absaugen und fachgerechtes Entsorgen des bisherigen Kältemittels",
+    "components": "Gegebenenfalls Austausch notwendiger Komponenten",
+    "refilling": "Kreislauf evakuieren und neu mit z.B. R 452 A befüllen",
+    "adjustment": "Überprüfung / Anpassung der Überhitzung bei Expansionsventilen",
+    "leakTest": "Dichtheitsprüfung",
+    "testRun": "Probelauf der Anlage",
+    "contact": "Kontakt aufnehmen"
+  },
   "notifyMe": {
     "notifyButtonTooltip": "Wir benachrichtigen Sie, sobald das Produkt wieder verfügbar ist",
     "notifyButton": "Benachrichtige mich",
@@ -1096,6 +1107,7 @@
     "unsavedChangesWarning": "Es gibt ungespeicherte Änderungen."
   },
   "product": {
+    "itemIdLabel": "Artikel-ID",
     "allFromCategory": "Alle {name}",
     "allProducts": "Alle Artikel",
     "allProductsLink": "Artikel durchsuchen",

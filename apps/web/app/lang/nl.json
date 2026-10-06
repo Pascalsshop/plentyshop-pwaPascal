@@ -1,4 +1,15 @@
 {
+  "amikonRefrigerant": {
+    "title": "Overstappen op een milieuvriendelijker koudemiddel",
+    "intro": "De volgende werkzaamheden kunnen aan klimaatkamers worden uitgevoerd. Neem bij interesse contact met ons op.",
+    "recovery": "Terugwinnen en vakkundig afvoeren van het bestaande koudemiddel",
+    "components": "Indien nodig vervangen van noodzakelijke onderdelen",
+    "refilling": "Het circuit vacumeren en opnieuw vullen met bijvoorbeeld R 452A",
+    "adjustment": "Controleren / afstellen van de oververhitting bij expansieventielen",
+    "leakTest": "Lekdichtheidscontrole",
+    "testRun": "Proefdraaien van de installatie",
+    "contact": "Contact opnemen"
+  },
   "amikonHeader": {
     "actions": { "login": "Inloggen", "register": "Registreren" },
     "aria": {
@@ -79,6 +90,7 @@
     }
   },
   "product": {
+    "itemIdLabel": "Artikel-ID",
     "allFromCategory": "Alle artikelen in {name}",
     "allProducts": "Alle artikelen",
     "allProductsLink": "Artikelen bekijken",

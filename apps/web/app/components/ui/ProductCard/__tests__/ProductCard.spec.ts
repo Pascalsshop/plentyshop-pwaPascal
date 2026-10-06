@@ -41,13 +41,30 @@ describe('<ProductCard />', () => {
     { view: 'category and search results', props: {} },
     { view: 'homepage product sliders', props: { isFromSlider: true } },
     { view: 'wishlist', props: { isFromWishlist: true } },
-  ])('always enables availability in $view', ({ props }) => {
+  ])('shows availability once below the title, not over the image, in $view', ({ props }) => {
     const wrapper = mount(UiProductCard, {
       props: { product: ProductMock, ...props },
     });
 
-    expect(wrapper.findComponent(UiBadges).props('useAvailability')).toBe(true);
+    expect(wrapper.findComponent(UiBadges).props('useAvailability')).toBe(false);
+    expect(wrapper.findAll('[data-testid="product-availability"]')).toHaveLength(1);
     expect(wrapper.find('[data-testid="product-availability"]').text()).toBe('Sofort versandfertig, Lieferzeit 48h');
+    expect(
+      wrapper.find('[data-testid="productcard-name"]').element.nextElementSibling?.getAttribute('data-testid'),
+    ).toBe('product-availability');
+  });
+
+  it('keeps availability visible when the title is disabled in the builder', () => {
+    const wrapper = mount(UiProductCard, { props: { product: ProductMock } });
+    const configuration = wrapper.props('configuration')!;
+    const withoutTitle = mount(UiProductCard, {
+      props: {
+        product: ProductMock,
+        configuration: { ...configuration, fields: { ...configuration.fields, title: false } },
+      },
+    });
+    expect(withoutTitle.find('[data-testid="productcard-name"]').exists()).toBe(false);
+    expect(withoutTitle.findAll('[data-testid="product-availability"]')).toHaveLength(1);
   });
 
   it('should not render image initially for non-priority items', () => {

@@ -9,7 +9,7 @@
         :use-tags="useTagsOnCategoryPage"
         :class="['absolute', isFromWishlist ? 'mx-2' : 'm-2']"
         :product="product"
-        :use-availability="true"
+        :use-availability="false"
       />
 
       <div ref="imageContainerRef" :class="[{ 'size-48': isFromSlider }, 'relative']">
@@ -90,6 +90,7 @@
         'items-start': configuration?.contentAlignment === 'left',
       }"
     >
+      <UiProductAvailability v-if="!hasTitleField" :product="product" />
       <template v-for="key in configuration?.fieldsOrder" :key="key">
         <template v-if="key === 'title' && configuration?.fields?.title">
           <UiLink
@@ -101,6 +102,7 @@
           >
             {{ name }}
           </UiLink>
+          <UiProductAvailability :product="product" />
         </template>
         <template v-if="key === 'manufacturer' && configuration?.fields?.manufacturer">
           <div
@@ -217,6 +219,9 @@ const props = withDefaults(defineProps<ProductCardProps>(), {
 const product = computed(() => props.product);
 
 const configuration = computed(() => props.configuration || ({} as ItemGridContent));
+const hasTitleField = computed(
+  () => configuration.value.fields?.title && configuration.value.fieldsOrder?.includes('title'),
+);
 
 const { addModernImageExtension } = useModernImage();
 const { format } = usePriceFormatter();

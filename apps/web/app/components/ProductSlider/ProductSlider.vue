@@ -99,7 +99,6 @@ const { sliderRootRef, shouldLoadImage } = useSliderImagePreload({
 }
 .amikon-product-slider :deep([data-testid='product-card-vertical-price']) {
   font-size: 20px;
-  padding-top: 12px;
 }
 @media (max-width: 991px) {
   .amikon-product-slider :deep([data-testid='product-card']) {

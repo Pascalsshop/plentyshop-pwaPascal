@@ -89,4 +89,48 @@ describe('<ProductCard />', () => {
 
     expect(wrapper.find('[data-testid="image-slot"]').exists()).toBe(false);
   });
+
+  it('places price and add button in the same row without duplicating either', () => {
+    const wrapper = mount(UiProductCard, { props: { product: ProductMock } });
+    const row = wrapper.get('[data-testid="product-card-purchase-row"]');
+    expect(row.find('[data-testid="product-card-vertical-price"]').exists()).toBe(true);
+    expect(row.find('[data-testid="add-to-basket-short"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-testid="add-to-basket-short"]')).toHaveLength(1);
+    expect(wrapper.findAll('[data-testid="product-card-vertical-price"]')).toHaveLength(1);
+  });
+
+  it('keeps price and button together even when the builder orders the button first', () => {
+    const defaults = mount(UiProductCard, { props: { product: ProductMock } }).props('configuration')!;
+    const wrapper = mount(UiProductCard, {
+      props: { product: ProductMock, configuration: { ...defaults, fieldsOrder: ['addToCart', 'title', 'price'] } },
+    });
+    expect(wrapper.findAll('[data-testid="product-card-purchase-row"]')).toHaveLength(1);
+    const row = wrapper.get('[data-testid="product-card-purchase-row"]');
+    expect(row.find('[data-testid="product-card-vertical-price"]').exists()).toBe(true);
+    expect(row.find('[data-testid="add-to-basket-short"]').exists()).toBe(true);
+  });
+
+  it('keeps the options link next to the price when direct adding is not allowed', () => {
+    const product = structuredClone(ProductMock);
+    product.filter.isSalable = false;
+    const wrapper = mount(UiProductCard, { props: { product } });
+    const row = wrapper.get('[data-testid="product-card-purchase-row"]');
+    expect(row.find('[data-testid="product-card-vertical-price"]').exists()).toBe(true);
+    expect(row.find('[data-testid="product-card-options"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(false);
+  });
+
+  it.each([
+    { price: false, addToCart: true },
+    { price: true, addToCart: false },
+    { price: false, addToCart: false },
+  ])('respects builder visibility settings: %j', ({ price, addToCart }) => {
+    const defaults = mount(UiProductCard, { props: { product: ProductMock } }).props('configuration')!;
+    const wrapper = mount(UiProductCard, {
+      props: { product: ProductMock, configuration: { ...defaults, fields: { ...defaults.fields, price, addToCart } } },
+    });
+    expect(wrapper.find('[data-testid="product-card-vertical-price"]').exists()).toBe(price);
+    expect(wrapper.find('[data-testid="add-to-basket-short"]').exists()).toBe(addToCart);
+    expect(wrapper.find('[data-testid="product-card-purchase-row"]').exists()).toBe(price || addToCart);
+  });
 });

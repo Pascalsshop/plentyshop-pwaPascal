@@ -1,8 +1,14 @@
 <template>
   <AmikonCategoryAppearance>
-    <h1>Verfügbarkeit in den Artikelkästen</h1>
-    <p class="mb-6">Lokale Darstellung mit Testartikeln. Keine echten Bestände, keine Bestellmöglichkeit.</p>
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-testid="availability-preview">
+    <h1>Artikelkästen: Verfügbarkeit, Preis und Hinzufügen</h1>
+    <p class="mb-6">
+      Lokale Darstellung mit Testartikeln und Beispielpreisen. Alle Artikel-Aktionen sind in dieser Vorschau gesperrt.
+    </p>
+    <div
+      class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+      data-testid="availability-preview"
+      @click.capture.stop.prevent
+    >
       <UiProductCard
         v-for="product in products"
         :key="product.variation.id"
@@ -21,8 +27,8 @@ if (!import.meta.dev) throw createError({ statusCode: 404, statusMessage: 'Not f
 const configuration: ItemGridContent = {
   cardBorders: true,
   contentAlignment: 'left',
-  fields: { title: true, rating: false, previewText: false, price: false, addToCart: false, manufacturer: false },
-  fieldsOrder: ['title'],
+  fields: { title: true, rating: false, previewText: false, price: true, addToCart: true, manufacturer: false },
+  fieldsOrder: ['title', 'price', 'addToCart'],
   fieldsDisabled: [],
   showWishlistButton: false,
   showSecondImageOnHover: false,
@@ -59,8 +65,8 @@ const products = [
   product.texts.name1 = example.title;
   product.variation.availability.id = example.id;
   product.variation.availability.names.name = example.name;
-  product.filter.isSalable = false;
-  product.filter.isSalableAndActive = false;
+  product.filter.isSalable = example.id !== 5;
+  product.filter.isSalableAndActive = example.id !== 5;
   const image = product.images.all[0]!;
   image.url = '/_nuxt-plenty/images/amikon/home/category-climate.jpg';
   image.urlMiddle = image.url;

@@ -132,48 +132,57 @@
           <div v-if="showBasePrice" class="mb-2">
             <BasePriceInLine :base-price="basePrice" :unit-content="unitContent" :unit-name="unitName" />
           </div>
-          <div class="flex flex-col-reverse items-start @md:flex-row @md:items-center mt-auto">
-            <span class="block pb-2 font-bold typography-text-sm" data-testid="product-card-vertical-price">
+        </template>
+        <div
+          v-if="(key === 'price' && hasPriceField) || (key === 'addToCart' && hasAddToCartField && !hasPriceField)"
+          class="flex items-center gap-2 w-full min-w-0 mt-auto pt-3"
+          data-testid="product-card-purchase-row"
+        >
+          <div v-if="hasPriceField" class="flex flex-col-reverse items-start gap-1 min-w-0">
+            <span class="block font-bold typography-text-sm break-words" data-testid="product-card-vertical-price">
               <span v-if="showFromText" class="mr-1">{{ t('account.ordersAndReturns.orderDetails.priceFrom') }}</span>
               <span>{{ format(price) }}</span>
               <span>{{ t('common.labels.asterisk') }}</span>
             </span>
             <span
               v-if="crossedPrice && differentPrices(price, crossedPrice)"
-              class="typography-text-sm text-neutral-500 line-through @md:ml-3 @md:pb-2"
+              class="typography-text-sm text-neutral-500 line-through break-words"
             >
               {{ format(crossedPrice) }}
             </span>
           </div>
-        </template>
-        <template v-if="key === 'addToCart' && configuration?.fields?.addToCart">
-          <UiButton
-            v-if="canAddFromCategory"
-            size="sm"
-            class="min-w-[80px] w-fit"
-            data-testid="add-to-basket-short"
-            :disabled="loading"
-            :variant="configuration?.addToCartStyle || 'primary'"
-            @click="addWithLoader(Number(productGetters.getId(product)))"
-          >
-            <template v-if="!loading" #prefix>
-              <SfIconShoppingCart size="sm" />
-            </template>
-            <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="sm" />
-            <span v-else>{{ t('common.actions.add') }}</span>
-          </UiButton>
-          <UiButton
-            v-else
-            :variant="configuration?.addToCartStyle || 'primary'"
-            type="button"
-            :tag="NuxtLink"
-            :to="productPath"
-            size="sm"
-            class="w-fit"
-          >
-            <span>{{ t('common.actions.showOptions') }}</span>
-          </UiButton>
-        </template>
+          <template v-if="hasAddToCartField">
+            <UiButton
+              v-if="canAddFromCategory"
+              size="sm"
+              class="min-w-[80px] w-fit shrink-0"
+              :class="{ 'max-w-[60%]': hasPriceField }"
+              data-testid="add-to-basket-short"
+              :disabled="loading"
+              :variant="configuration?.addToCartStyle || 'primary'"
+              @click="addWithLoader(Number(productGetters.getId(product)))"
+            >
+              <template v-if="!loading" #prefix>
+                <SfIconShoppingCart size="sm" />
+              </template>
+              <SfLoaderCircular v-if="loading" class="flex justify-center items-center" size="sm" />
+              <span v-else class="min-w-0 break-words">{{ t('common.actions.add') }}</span>
+            </UiButton>
+            <UiButton
+              v-else
+              :variant="configuration?.addToCartStyle || 'primary'"
+              type="button"
+              :tag="NuxtLink"
+              :to="productPath"
+              size="sm"
+              class="w-fit shrink-0"
+              :class="{ 'max-w-[60%]': hasPriceField }"
+              data-testid="product-card-options"
+            >
+              <span class="min-w-0 break-words">{{ t('common.actions.showOptions') }}</span>
+            </UiButton>
+          </template>
+        </div>
       </template>
     </div>
   </div>
@@ -221,6 +230,12 @@ const product = computed(() => props.product);
 const configuration = computed(() => props.configuration || ({} as ItemGridContent));
 const hasTitleField = computed(
   () => configuration.value.fields?.title && configuration.value.fieldsOrder?.includes('title'),
+);
+const hasPriceField = computed(
+  () => configuration.value.fields?.price && configuration.value.fieldsOrder?.includes('price'),
+);
+const hasAddToCartField = computed(
+  () => configuration.value.fields?.addToCart && configuration.value.fieldsOrder?.includes('addToCart'),
 );
 
 const { addModernImageExtension } = useModernImage();

@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import type { PayPalPayLaterBannerType } from '../types';
-import { cartGetters } from '@plentymarkets/shop-api';
+import { cartGetters, type ApiError } from '@plentymarkets/shop-api';
 import type { PayPalNamespace } from '@paypal/paypal-js';
 import { usePayPal } from '../composables/usePayPal';
 
@@ -17,6 +17,9 @@ const paypalUuid = useId();
 const isTextStyle = ref(textStylePlacements.includes(placement));
 const loadScript = computed(() => payLaterVisibility.getVisibility(location));
 const watchAmount = computed(() => amount);
+let isMounted = false;
+let isDisposed = false;
+let renderVersion = 0;
 
 const renderPayPalMessage = async (script: PayPalNamespace | null) => {
   const isEligible = script
@@ -45,18 +48,30 @@ const renderPayPalMessage = async (script: PayPalNamespace | null) => {
 };
 
 const renderMessage = async () => {
+  const version = ++renderVersion;
   await loadConfig();
-  if (!loadScript.value) return;
-  await getScript(currency.value, commit)
-    .then(async (script) => await renderPayPalMessage(script))
-    .catch((error) => useHandleError(error));
+  if (!isMounted || version !== renderVersion || !loadScript.value) return;
+  try {
+    const script = await getScript(currency.value, commit);
+    await nextTick();
+    if (!isMounted || version !== renderVersion) return;
+    await renderPayPalMessage(script);
+  } catch (error) {
+    if (isMounted && version === renderVersion) useHandleError(error as ApiError);
+  }
 };
 
-onNuxtReady(async () => {
-  await renderMessage();
-
-  watch([currency, watchAmount, loadScript], async () => {
-    await renderMessage();
-  });
+watch([currency, watchAmount, loadScript], () => {
+  if (isMounted) void renderMessage();
+});
+onNuxtReady(() => {
+  if (isDisposed) return;
+  isMounted = true;
+  return renderMessage();
+});
+onBeforeUnmount(() => {
+  isDisposed = true;
+  isMounted = false;
+  renderVersion++;
 });
 </script>

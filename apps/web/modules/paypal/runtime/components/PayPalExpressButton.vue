@@ -4,13 +4,35 @@
 
 <script setup lang="ts">
 import { cartGetters } from '@plentymarkets/shop-api';
-import type { PayPalNamespace, FUNDING_SOURCE, OnApproveData, OnInitActions } from '@paypal/paypal-js';
+import type {
+  PayPalNamespace,
+  PayPalButtonsComponent,
+  FUNDING_SOURCE,
+  OnApproveData,
+  OnInitActions,
+} from '@paypal/paypal-js';
 import type { PayPalAddToCartCallback, PaypalButtonPropsType } from '../types';
 import { usePayPal } from '../composables/usePayPal';
 
 const paypalButton = ref<HTMLElement | null>(null);
 const paypalUuid = ref(useId());
 const paypalScript = ref<PayPalNamespace | null>(null);
+const renderedButtons = new Set<PayPalButtonsComponent>();
+let isMounted = false;
+let isDisposed = false;
+let renderVersion = 0;
+const closeButtons = async () => {
+  const buttons = [...renderedButtons];
+  renderedButtons.clear();
+  await Promise.all(
+    buttons.map((button) =>
+      button.close().catch((error) => {
+        // eslint-disable-next-line no-console -- Keep SDK cleanup failures diagnosable.
+        console.warn('[PayPal] Could not close an express button.', error);
+      }),
+    ),
+  );
+};
 
 const {
   order: paypalOrder,
@@ -133,7 +155,7 @@ const getLabel = (type: string) => {
   }
 };
 
-const renderButton = (fundingSource: FUNDING_SOURCE) => {
+const renderButton = async (fundingSource: FUNDING_SOURCE, version: number) => {
   if (paypalScript.value?.Buttons && fundingSource) {
     const button = paypalScript.value?.Buttons({
       style: {
@@ -192,11 +214,22 @@ const renderButton = (fundingSource: FUNDING_SOURCE) => {
       },
     });
 
-    if (button.isEligible() && paypalButton.value) button.render('#' + paypalButton.value.id);
+    if (button.isEligible() && paypalButton.value && isMounted && version === renderVersion) {
+      renderedButtons.add(button);
+      try {
+        await button.render(paypalButton.value);
+      } catch (error) {
+        // Closing/navigating away can reject an in-flight render; actual failures remain visible.
+        if (isMounted && version === renderVersion) {
+          // eslint-disable-next-line no-console -- Report real render failures, not expected route cancellation.
+          console.warn('[PayPal] Could not render an express button.', error);
+        }
+      }
+    }
   }
 };
 
-const createButton = () => {
+const createButton = async (version: number) => {
   if (paypalScript.value) {
     if (paypalButton.value) {
       paypalButton.value.innerHTML = '';
@@ -212,21 +245,36 @@ const createButton = () => {
         FUNDING_SOURCES.push(paypalScript.value.FUNDING.PAYLATER as string);
       }
 
-      FUNDING_SOURCES.forEach((fundingSource) => renderButton(fundingSource as FUNDING_SOURCE));
+      await Promise.all(FUNDING_SOURCES.map((fundingSource) => renderButton(fundingSource as FUNDING_SOURCE, version)));
     }
   }
 };
 
-onNuxtReady(async () => {
+const refreshButton = async () => {
+  const version = ++renderVersion;
+  await closeButtons();
   await loadConfig();
+  if (!isMounted || version !== renderVersion) return;
   if (!config.value || !isAvailable(props.location ?? 'checkoutPage').value) return;
-  paypalScript.value = await getScript(currency.value, isCommit);
-  createButton();
+  const script = await getScript(currency.value, isCommit);
+  if (!isMounted || version !== renderVersion) return;
+  paypalScript.value = script;
+  await createButton(version);
+};
 
-  watch([currency, loadScript], async () => {
-    if (!loadScript.value || !config.value || !isAvailable(props.location ?? 'checkoutPage').value) return;
-    paypalScript.value = await getScript(currency.value, isCommit);
-    createButton();
-  });
+// Register the watcher synchronously so Vue disposes it on route changes.
+watch([currency, loadScript], () => {
+  if (isMounted) void refreshButton();
+});
+onNuxtReady(() => {
+  if (isDisposed) return;
+  isMounted = true;
+  return refreshButton();
+});
+onBeforeUnmount(() => {
+  isDisposed = true;
+  isMounted = false;
+  renderVersion++;
+  void closeButtons();
 });
 </script>

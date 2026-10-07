@@ -26,6 +26,7 @@ export const usePayPal = () => {
     loading: false,
     paypalScript: null as PayPalScript | null,
     loadingScripts: {} as PayPalLoadScript,
+    requestedScriptKey: '',
     order: null as PayPalCreateOrder | null,
     config: null as PayPalSettings | null,
     loadedConfig: false,
@@ -118,8 +119,10 @@ export const usePayPal = () => {
           merchantId: paypalGetters.getMerchantId(state.value.config),
           currency: currency,
           dataPartnerAttributionId: 'Plenty_Cart_PWA_PPCP',
-          components:
-            'applepay,googlepay,messages,buttons,funding-eligibility,card-fields,payment-fields,marks,legal&enable-funding=paylater',
+          // Different SDK options must not replace/destroy another instance's buttons.
+          dataNamespace: `plenty_paypal_${currency}_${locale}_${commit ? 'commit' : 'express'}`,
+          components: 'applepay,googlepay,messages,buttons,funding-eligibility,card-fields,payment-fields,marks,legal',
+          enableFunding: 'paylater',
           locale: locale,
           commit: commit,
         });
@@ -144,11 +147,8 @@ export const usePayPal = () => {
     const { $i18n } = useNuxtApp();
     const localePayPal = getLocaleForPayPal($i18n.locale.value);
     const scriptKey = `${currency}_${localePayPal}_${commit}`;
-
-    if (state.value.loadingScripts[scriptKey] !== undefined) {
-      state.value.isReady = true;
-      return state.value.loadingScripts[scriptKey];
-    }
+    const { emit } = usePlentyEvent();
+    state.value.requestedScriptKey = scriptKey;
 
     if (
       state.value.paypalScript &&
@@ -157,31 +157,31 @@ export const usePayPal = () => {
       state.value.paypalScript.locale === localePayPal &&
       state.value.paypalScript.commit === commit
     ) {
+      state.value.isReady = true;
       return state.value.paypalScript.script;
     }
 
-    state.value.loadingScripts = {};
     state.value.isReady = false;
-    state.value.paypalScript = null;
-    state.value.loadingScripts[scriptKey] = loadScript(currency, localePayPal, commit)
-      .then(async (paypalScript) => {
-        state.value.paypalScript = { script: paypalScript, currency, locale: localePayPal, commit };
-        state.value.isReady = true;
-
-        if (paypalScript) {
-          updateAvailableAPMs(paypalScript, currency).then(() => {
-            const { emit } = usePlentyEvent();
-            emit('frontend:paypalAPMsLoaded', null);
-          });
-        }
-
-        return paypalScript;
-      })
-      .finally(() => {
-        delete state.value.loadingScripts.scriptKey;
-      });
-
-    return state.value.loadingScripts[scriptKey];
+    // Share in-flight loads instead of starting competing SDK scripts.
+    const scriptPromise = (state.value.loadingScripts[scriptKey] ??= loadScript(currency, localePayPal, commit));
+    const loadedScript = await scriptPromise;
+    const paypalScript = loadedScript ? markRaw(loadedScript) : null;
+    if (state.value.loadingScripts[scriptKey] === scriptPromise) {
+      Reflect.deleteProperty(state.value.loadingScripts, scriptKey);
+    }
+    // A slower, superseded currency/locale request must not overwrite the current SDK.
+    if (state.value.requestedScriptKey === scriptKey) {
+      const changed =
+        state.value.paypalScript?.script !== paypalScript || state.value.paypalScript?.currency !== currency;
+      state.value.paypalScript = { script: paypalScript, currency, locale: localePayPal, commit };
+      state.value.isReady = Boolean(paypalScript);
+      if (paypalScript && changed) {
+        void updateAvailableAPMs(paypalScript, currency)
+          .then(() => emit('frontend:paypalAPMsLoaded', null))
+          .catch((error) => console.warn('[PayPal] Could not update available payment methods.', error));
+      }
+    }
+    return paypalScript;
   };
 
   /**

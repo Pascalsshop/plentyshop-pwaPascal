@@ -31,6 +31,11 @@ export default defineNuxtConfig({
     dirs: ['~/composables', '~/composables/**', '~/utils/**'],
   },
   vite: {
+    // Temporary diagnostics for deployed product/category hydration mismatches.
+    // Keep the actual warning visible and report the mismatched node; remove after verification.
+    define: {
+      __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
+    },
     server: {
       fs: {
         allow: ['../../..'], // relative to the current nuxt.config.ts

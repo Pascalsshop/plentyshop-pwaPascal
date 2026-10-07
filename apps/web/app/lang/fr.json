@@ -1,4 +1,15 @@
 {
+  "defaultTemplate": {
+    "product": {
+      "itemText": { "title": "Détails de l’article" },
+      "technicalData": { "title": "Caractéristiques techniques" },
+      "customerReview": { "title": "Avis clients" },
+      "productLegalInformation": {
+        "title": "Informations légales sur l’article",
+        "linkText": "Responsable dans l’UE – cliquez pour plus de détails"
+      }
+    }
+  },
   "amikonRefrigerant": {
     "title": "Conversion à un fluide frigorigène plus respectueux de l’environnement",
     "intro": "Les travaux suivants peuvent être réalisés sur les enceintes climatiques. Contactez-nous si vous êtes intéressé.",

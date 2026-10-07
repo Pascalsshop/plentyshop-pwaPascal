@@ -10,7 +10,7 @@
       >
         <template #summary>
           <h2 class="font-bold text-lg leading-6 @md:text-2xl">
-            {{ content.text.title }}
+            {{ title }}
           </h2>
         </template>
         <div
@@ -24,7 +24,7 @@
     </div>
     <div v-else>
       <h2 class="font-bold text-lg leading-6 @md:text-2xl">
-        {{ content.text.title }}
+        {{ title }}
       </h2>
       <div v-if="text" class="no-preflight [&>p:first-child]:mt-0 [&>p:last-child]:mb-0" v-html="text" />
     </div>
@@ -34,12 +34,27 @@
 <script setup lang="ts">
 import { productGetters } from '@plentymarkets/shop-api';
 import type { ItemTextProps } from './types';
+import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
 const props = defineProps<ItemTextProps>();
 const initiallyCollapsed = computed(() => !props.content?.layout.initiallyCollapsed);
 const displayAsCollapsable = computed(() => props.content?.layout.displayAsCollapsable);
 const { currentProduct } = useProducts();
 const content = computed(() => props.content);
+const { t } = useI18n();
+const amikonLayout = inject(amikonProductLayoutKey, ref(false));
+// Localize inherited standard headings, but preserve custom copy and Builder editing.
+const title = computed(() => {
+  const configured = content.value.text.title;
+  const standardTitles = [
+    'Item details',
+    'Artikeldetails',
+    'Détails de l’article',
+    'Artikelgegevens',
+    'defaultTemplate.product.itemText.title',
+  ];
+  return amikonLayout.value && standardTitles.includes(configured.trim()) ? t('product.details') : configured;
+});
 const text = computed(() => productGetters.getDescription(currentProduct.value));
 const inlineStyle = computed(() => {
   const layout = props.content?.layout || {};

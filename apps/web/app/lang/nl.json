@@ -1,4 +1,15 @@
 {
+  "defaultTemplate": {
+    "product": {
+      "itemText": { "title": "Artikelgegevens" },
+      "technicalData": { "title": "Technische gegevens" },
+      "customerReview": { "title": "Klantbeoordelingen" },
+      "productLegalInformation": {
+        "title": "Juridische artikelinformatie",
+        "linkText": "Verantwoordelijke in de EU – klik voor meer informatie"
+      }
+    }
+  },
   "amikonRefrigerant": {
     "title": "Overstappen op een milieuvriendelijker koudemiddel",
     "intro": "De volgende werkzaamheden kunnen aan klimaatkamers worden uitgevoerd. Neem bij interesse contact met ons op.",

@@ -1,17 +1,19 @@
 <template>
-  <AmikonProductAppearance>
-    <aside class="preview-note">
-      <strong>Lokale Artikelvorschau – nur Beispieldaten.</strong>
-      Die Galerie und die Artikelbausteine sind die echten Shop-Komponenten. Es werden keine Bestellungen ausgeführt.
-      <div class="mt-2 flex gap-4 flex-wrap">
-        <NuxtLink :to="localePath('/amikon-artikelvorschau')">Verfügbarer Testartikel</NuxtLink>
-        <NuxtLink :to="localePath('/amikon-artikelvorschau') + '?sold=1'">Verkaufter Testartikel</NuxtLink>
+  <NuxtLayout name="default" :breadcrumbs="previewBreadcrumbs">
+    <AmikonProductAppearance>
+      <aside class="preview-note">
+        <strong>Lokale Artikelvorschau – nur Beispieldaten.</strong>
+        Die Galerie und die Artikelbausteine sind die echten Shop-Komponenten. Es werden keine Bestellungen ausgeführt.
+        <div class="mt-2 flex gap-4 flex-wrap">
+          <NuxtLink :to="localePath('/amikon-artikelvorschau')">Verfügbarer Testartikel</NuxtLink>
+          <NuxtLink :to="localePath('/amikon-artikelvorschau') + '?sold=1'">Verkaufter Testartikel</NuxtLink>
+        </div>
+      </aside>
+      <div @click.capture="preventPurchase" @submit.capture.stop.prevent>
+        <EditableBlocks :blocks="blocks" read-only :has-enabled-actions="false" prevent-blocks-request />
       </div>
-    </aside>
-    <div @click.capture="preventPurchase" @submit.capture.stop.prevent>
-      <EditableBlocks :blocks="blocks" read-only :has-enabled-actions="false" prevent-blocks-request />
-    </div>
-  </AmikonProductAppearance>
+    </AmikonProductAppearance>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
@@ -20,8 +22,15 @@ import { createProduct } from '~/utils/blockTemplates/product/factory';
 import type { PriceCardContent } from '~/components/ui/PurchaseCard/types';
 
 if (!import.meta.dev) throw createError({ statusCode: 404, statusMessage: 'Not found' });
+// Use the same nested layout and breadcrumb component as the real product page.
+definePageMeta({ layout: false });
 const route = useRoute();
 const localePath = useLocalePath();
+const { t } = useI18n();
+const previewBreadcrumbs = computed(() => [
+  { name: t('common.labels.home'), link: '/' },
+  { name: 'Testartikel: Klimaprüfschrank', link: '/amikon-artikelvorschau' },
+]);
 const { currentProduct, setCurrentProduct } = useProducts();
 const previousProduct = currentProduct.value;
 const example = deepClone(ProductMock);
@@ -40,7 +49,9 @@ example.texts.shortDescription =
 example.texts.description =
   '<p>Diese Beschreibung dient nur der Layoutprüfung. Im Shop erscheint hier die hinterlegte Artikelbeschreibung.</p>';
 example.texts.technicalData =
-  '<p>Ausstattung und Lieferumfang werden im Shop aus den Artikeldaten übernommen. Hier werden keine technischen Eigenschaften zugesichert.</p>';
+  route.query.full === '1'
+    ? ''
+    : '<p>Ausstattung und Lieferumfang werden im Shop aus den Artikeldaten übernommen. Hier werden keine technischen Eigenschaften zugesichert.</p>';
 example.variation.mayShowUnitPrice = false;
 const previewImage = example.images.all[0]!;
 previewImage.url = '/_nuxt-plenty/images/amikon/home/category-climate.jpg';
@@ -50,6 +61,26 @@ previewImage.urlSecondPreview = previewImage.url;
 previewImage.cleanImageName = 'Testbild Klimaprüfschrank (Vorschau)';
 // Repeat the existing example image to exercise the real thumbnail rail, without inventing product photos.
 example.images.all = [0, 1, 2].map((position) => ({ ...deepClone(previewImage), position }));
+// Public photos from the deployed Weiss article help test cached images and the seven-image gallery.
+// Only photos are reused; this page still contains clearly marked sample product data.
+if (route.query.gallery === 'weiss') {
+  example.images.all = ['DSC06081', 'DSC06084', 'DSC06082', 'DSC06085', 'DSC06086', 'DSC06087', 'DSC06088'].map(
+    (filename, position) => {
+      const baseUrl = 'https://cdn02.plentyone.com/7ukspn3affoc/item/images/25667';
+      return {
+        ...deepClone(previewImage),
+        position,
+        width: 1600,
+        height: 1200,
+        url: `${baseUrl}/full/${filename}.jpg`,
+        urlMiddle: `${baseUrl}/middle/${filename}.jpg`,
+        urlPreview: `${baseUrl}/preview/${filename}.jpg`,
+        urlSecondPreview: `${baseUrl}/secondPreview/${filename}.jpg`,
+        cleanImageName: `${filename}.jpg`,
+      };
+    },
+  );
+}
 
 watch(
   () => route.query.sold,
@@ -68,7 +99,10 @@ watch(
 );
 onBeforeUnmount(() => setCurrentProduct(previousProduct));
 
-const blocks = createProduct().filter((block) => ['MultiGrid', 'ItemText', 'TechnicalData'].includes(block.name));
+// Optional full template reproduces asynchronous blocks and empty technical data on real item pages.
+const blocks = createProduct().filter(
+  (block) => route.query.full === '1' || ['MultiGrid', 'ItemText', 'TechnicalData'].includes(block.name),
+);
 // Stable preview IDs on server and client; the factory's random IDs must not cause hydration mismatches.
 blocks.forEach((block, index) => {
   block.meta.uuid = `amikon-product-preview-${index}`;
@@ -93,6 +127,7 @@ if (Array.isArray(overview.content)) {
       price: true,
       availability: true,
       quantityAndAddToCart: true,
+      addToWishlist: true,
     });
     config.fieldsOrder = [
       'itemName',
@@ -101,6 +136,7 @@ if (Array.isArray(overview.content)) {
       'availability',
       'previewText',
       'quantityAndAddToCart',
+      'addToWishlist',
     ];
   }
 }

@@ -10,8 +10,10 @@
       <slot />
     </main>
 
-    <Cookiebar />
-    <PreviewMode />
+    <AmikonShopTools>
+      <Cookiebar />
+      <PreviewMode />
+    </AmikonShopTools>
     <AmikonFooter />
     <QuickCheckout v-if="isOpen" :product="product" />
   </div>

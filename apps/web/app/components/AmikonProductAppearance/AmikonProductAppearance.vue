@@ -190,7 +190,7 @@ provide(
 }
 @media (max-width: 767px) {
   .amikon-product {
-    padding-top: 16px;
+    padding-top: 12px;
   }
   .amikon-product :deep([data-testid='product-name']) {
     font-size: 23px;
@@ -198,6 +198,25 @@ provide(
   .amikon-product--arranged :deep([data-testid='product-quantity-cart-row']) {
     flex-wrap: wrap;
     gap: 12px;
+  }
+  .amikon-product--arranged
+    :deep(
+      [data-testid='block-wrapper']:has(
+          > .block-wrapper > [data-testid='multi-grid-structure'] [data-testid='gallery']
+        ):has([data-testid='purchase-card'])
+    ) {
+    padding-top: 0;
+    padding-bottom: 16px;
+    margin-bottom: 0;
+  }
+  .amikon-product--arranged :deep([data-testid='gallery-images']) {
+    aspect-ratio: 4 / 3;
+  }
+  .amikon-product--arranged :deep([data-testid='gallery-images']::after) {
+    padding-top: 0;
+  }
+  .amikon-product--arranged :deep([data-testid='product-price-row']) {
+    margin-top: 12px;
   }
 }
 </style>

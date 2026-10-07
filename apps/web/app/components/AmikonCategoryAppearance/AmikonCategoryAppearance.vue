@@ -1,11 +1,17 @@
 <template>
-  <div :class="enabled ? 'amikon-category' : 'contents'">
+  <div
+    :class="[
+      enabled ? 'amikon-category' : 'contents',
+      { 'amikon-category--compact': enabled && !shouldEnableEditorFeatures },
+    ]"
+  >
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 withDefaults(defineProps<{ enabled?: boolean }>(), { enabled: true });
+const { shouldEnableEditorFeatures } = useEditorState();
 </script>
 
 <style scoped>
@@ -99,7 +105,7 @@ withDefaults(defineProps<{ enabled?: boolean }>(), { enabled: true });
 }
 @media (max-width: 767px) {
   .amikon-category {
-    padding-top: 16px;
+    padding-top: 12px;
   }
   .amikon-category :deep([data-testid='category-grid']) {
     gap: 16px;
@@ -109,6 +115,36 @@ withDefaults(defineProps<{ enabled?: boolean }>(), { enabled: true });
   }
   .amikon-category :deep(h1) {
     font-size: 23px;
+  }
+  /* Compact the ordinary title/listing only; keep image banners and Builder spacing intact. */
+  .amikon-category--compact
+    :deep(
+      [data-testid='block-wrapper']:has(> .block-wrapper > [data-testid='category-data'] > [data-testid='text-card'])
+    ),
+  .amikon-category--compact
+    :deep(
+      [data-testid='block-wrapper']:has(
+        > .block-wrapper > [data-testid='multi-grid-structure'] [data-testid='category-grid']
+      )
+    ) {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+  .amikon-category--compact :deep([data-testid='category-data']:has(> [data-testid='text-card'])) {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  .amikon-category--compact :deep([data-testid='category-headline']),
+  .amikon-category--compact :deep(#category-headline) {
+    margin-bottom: 0;
+  }
+  .amikon-category--compact :deep([data-testid='multi-grid-structure']:has([data-testid='category-grid'])) {
+    margin-top: 0 !important;
+    row-gap: 12px;
+  }
+  .amikon-category--compact :deep([data-testid='item-count']) {
+    margin-bottom: 16px;
   }
 }
 </style>

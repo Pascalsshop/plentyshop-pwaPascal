@@ -23,7 +23,7 @@ import type { PriceCardContent } from '~/components/ui/PurchaseCard/types';
 
 if (!import.meta.dev) throw createError({ statusCode: 404, statusMessage: 'Not found' });
 // Use the same nested layout and breadcrumb component as the real product page.
-definePageMeta({ layout: false });
+definePageMeta({ layout: false, skipBlocksFetch: true });
 const route = useRoute();
 const localePath = useLocalePath();
 const { t } = useI18n();

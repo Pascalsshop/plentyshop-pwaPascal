@@ -13,6 +13,7 @@ const { getScript, loadConfig, readyCallbacks, paymentAction, visibility } = vi.
   visibility: { payLater: false },
 }));
 const cart = reactive({ value: { currency: 'EUR' } });
+const language = ref('de');
 vi.mock('@plentymarkets/shop-api', () => ({
   cartGetters: { getCurrency: (data: { currency: string }) => data.currency },
 }));
@@ -40,6 +41,7 @@ mockNuxtImport('useCart', () => () => ({ data: cart, clearCartItems: paymentActi
 mockNuxtImport('useFetchSession', () => () => ({ fetchSession: vi.fn() }));
 mockNuxtImport('usePlentyEvent', () => () => ({ emit: vi.fn() }));
 mockNuxtImport('useLocalizedPath', () => () => (path: string) => path);
+mockNuxtImport('useI18n', () => () => ({ locale: language }));
 
 const makeButton = () => ({
   isEligible: vi.fn(() => true),
@@ -59,6 +61,7 @@ describe('PayPal express button lifecycle (no payments)', () => {
     cart.value.currency = 'EUR';
     getScript.mockReset();
     visibility.payLater = false;
+    language.value = 'de';
   });
 
   it('closes the owned button and stops currency watchers when navigating away', async () => {
@@ -96,6 +99,21 @@ describe('PayPal express button lifecycle (no payments)', () => {
     await initialRender;
     expect(newButton.render).toHaveBeenCalledTimes(1);
     expect(oldButton.render).not.toHaveBeenCalled();
+    expect(paymentAction).not.toHaveBeenCalled();
+    wrapper.unmount();
+  });
+
+  it('closes and recreates the button when only the language changes', async () => {
+    const oldButton = makeButton();
+    const newButton = makeButton();
+    getScript.mockResolvedValueOnce(makeSdk(oldButton)).mockResolvedValueOnce(makeSdk(newButton));
+    const wrapper = render();
+    await readyCallbacks[0]!();
+    language.value = 'nl';
+    await flushPromises();
+    expect(oldButton.close).toHaveBeenCalledTimes(1);
+    expect(newButton.render).toHaveBeenCalledTimes(1);
+    expect(getScript).toHaveBeenCalledTimes(2);
     expect(paymentAction).not.toHaveBeenCalled();
     wrapper.unmount();
   });

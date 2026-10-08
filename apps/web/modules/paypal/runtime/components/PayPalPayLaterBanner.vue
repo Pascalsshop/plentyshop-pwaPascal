@@ -9,6 +9,7 @@ import type { PayPalNamespace } from '@paypal/paypal-js';
 import { usePayPal } from '../composables/usePayPal';
 
 const { data: cart } = useCart();
+const { locale } = useI18n();
 const currency = computed(() => cartGetters.getCurrency(cart.value) || (useAppConfig().fallbackCurrency as string));
 const { isReady, getScript, loadConfig, payLaterVisibility } = usePayPal();
 const { placement, amount, location, commit = false } = defineProps<PayPalPayLaterBannerType>();
@@ -61,7 +62,7 @@ const renderMessage = async () => {
   }
 };
 
-watch([currency, watchAmount, loadScript], () => {
+watch([currency, locale, watchAmount, loadScript], () => {
   if (isMounted) void renderMessage();
 });
 onNuxtReady(() => {

@@ -51,7 +51,12 @@
                   location="checkoutPage"
                   @validation-callback="payPalValidateCallback"
                 />
-                <PayPalPayLaterBanner placement="payment" location="checkoutPage" :amount="initialTotal" />
+                <PayPalPayLaterBanner
+                  placement="payment"
+                  location="checkoutPage"
+                  :amount="initialTotal"
+                  :commit="true"
+                />
               </template>
 
               <UiButton

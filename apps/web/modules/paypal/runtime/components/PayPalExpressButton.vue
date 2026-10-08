@@ -56,6 +56,7 @@ const currency = computed(
   () => props.currency || cartGetters.getCurrency(cart.value) || (useAppConfig().fallbackCurrency as string),
 );
 const localePath = useLocalizedPath();
+const { locale } = useI18n();
 
 const emits = defineEmits<{
   (event: 'validation-callback', callback: PayPalAddToCartCallback): Promise<void>;
@@ -263,7 +264,7 @@ const refreshButton = async () => {
 };
 
 // Register the watcher synchronously so Vue disposes it on route changes.
-watch([currency, loadScript], () => {
+watch([currency, locale, loadScript], () => {
   if (isMounted) void refreshButton();
 });
 onNuxtReady(() => {

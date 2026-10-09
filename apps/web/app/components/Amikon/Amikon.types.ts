@@ -8,3 +8,7 @@ export type AmikonFallbackCategory = {
   slug: string;
   translationKey: string;
 };
+
+export type LegalTextUnavailableProps = {
+  fallbackPath?: string;
+};

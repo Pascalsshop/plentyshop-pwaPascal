@@ -8,14 +8,14 @@
     >
       <div v-if="cart" class="@lg:grid @lg:grid-cols-12 @lg:gap-x-6">
         <div class="col-span-6 @xl:col-span-7 mb-10 @lg:mb-0">
-          <UiDivider id="top-contact-information-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <UiDivider id="top-contact-information-divider" />
           <ContactInformation id="contact-information" />
-          <UiDivider id="top-shipping-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <UiDivider id="top-shipping-divider" />
           <AddressContainer id="shipping-address" :key="0" :type="AddressType.Shipping" />
-          <UiDivider id="top-billing-divider" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <UiDivider id="top-billing-divider" />
           <div v-if="showBillingAddressSection">
             <AddressContainer id="billing-address" :key="1" :type="AddressType.Billing" />
-            <UiDivider id="bottom-billing-divider" class-name="w-screen @md:w-auto -mx-4 @md:mx-0" />
+            <UiDivider id="bottom-billing-divider" />
           </div>
           <div class="relative" :class="{ 'pointer-events-none opacity-50': disableShippingPayment }">
             <ShippingMethod
@@ -28,16 +28,16 @@
               class="absolute mt-5 right-0 left-0 m-auto z-loader"
               size="2xl"
             />
-            <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+            <UiDivider />
             <PreferredDeliveryPackstationFinder v-if="countryHasDelivery" />
             <PreferredDelivery v-if="countryHasDelivery" />
-            <UiDivider v-if="preferredDeliveryAvailable" class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+            <UiDivider v-if="preferredDeliveryAvailable" />
             <CheckoutPayment :disabled="disableShippingPayment" @update:active-payment="handlePaymentMethodUpdate" />
           </div>
-          <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0" />
+          <UiDivider />
           <CustomerReference />
           <CustomerWish />
-          <UiDivider class="w-screen @md:w-auto -mx-4 @md:mx-0 mb-10" />
+          <UiDivider class="mb-10" />
           <CheckoutGeneralTerms />
         </div>
         <div class="col-span-6 @xl:col-span-5">

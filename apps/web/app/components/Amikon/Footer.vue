@@ -37,7 +37,7 @@
             <NuxtLink :to="localePath('/content/batterieverordnung')">{{ copy.batteries }}</NuxtLink>
           </li>
           <li>
-            <NuxtLink :to="localePath(paths.termsAndConditions)">{{ copy.terms }}</NuxtLink>
+            <NuxtLink :to="localePath(paths.termsAndConditions, AMIKON_TERMS_LOCALE)">{{ copy.terms }}</NuxtLink>
           </li>
           <li>
             <NuxtLink :to="localePath(paths.legalDisclosure)">{{ copy.imprint }}</NuxtLink>

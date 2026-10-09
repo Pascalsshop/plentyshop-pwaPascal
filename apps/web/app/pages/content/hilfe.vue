@@ -41,7 +41,9 @@
       </p>
       <p>
         Les modalités de conclusion du contrat figurent dans nos
-        <NuxtLink :to="localePath('/terms-and-conditions')">conditions générales de vente</NuxtLink>.
+        <NuxtLink :to="localePath(paths.termsAndConditions, AMIKON_TERMS_LOCALE)"
+          >conditions générales de vente</NuxtLink
+        >.
       </p>
       <h2>Besoin d’aide ?</h2>
       <p>
@@ -83,7 +85,7 @@
       </p>
       <p>
         De voorwaarden voor het sluiten van de overeenkomst vind je in onze
-        <NuxtLink :to="localePath('/terms-and-conditions')">algemene voorwaarden</NuxtLink>.
+        <NuxtLink :to="localePath(paths.termsAndConditions, AMIKON_TERMS_LOCALE)">algemene voorwaarden</NuxtLink>.
       </p>
       <h2>Hulp nodig?</h2>
       <p>
@@ -123,7 +125,7 @@
       </p>
       <p>
         Contract formation is explained in our
-        <NuxtLink :to="localePath('/terms-and-conditions')">terms and conditions</NuxtLink>.
+        <NuxtLink :to="localePath(paths.termsAndConditions, AMIKON_TERMS_LOCALE)">terms and conditions</NuxtLink>.
       </p>
       <h2>Need assistance?</h2>
       <p>
@@ -172,7 +174,7 @@
       </p>
       <p>
         Die Bedingungen für den Vertragsschluss findest du in unseren
-        <NuxtLink :to="localePath('/terms-and-conditions')">AGB</NuxtLink>.
+        <NuxtLink :to="localePath(paths.termsAndConditions, AMIKON_TERMS_LOCALE)">AGB</NuxtLink>.
       </p>
       <h2>Du benötigst Unterstützung?</h2>
       <p>

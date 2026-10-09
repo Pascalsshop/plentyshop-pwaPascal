@@ -1,7 +1,7 @@
 <template>
   <AmikonInformationAppearance>
     <div v-if="getHTMLTexts().trim()" class="no-preflight" v-html="getHTMLTexts()" />
-    <AmikonLegalTextUnavailable v-else />
+    <AmikonLegalTextUnavailable v-else :fallback-path="paths.legalDisclosure" />
   </AmikonInformationAppearance>
 </template>
 

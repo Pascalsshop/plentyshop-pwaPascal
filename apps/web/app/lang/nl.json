@@ -1,4 +1,10 @@
 {
+  "lang": { "de": "Duits", "en": "Engels", "fr": "Frans", "nl": "Nederlands" },
+  "amikonLegalUnavailable": {
+    "title": "Informatie momenteel niet beschikbaar",
+    "description": "De gevraagde juridische informatie kon niet worden geladen. Probeer het later opnieuw of neem contact met ons op.",
+    "germanVersion": "De beschikbare Duitse versie openen"
+  },
   "defaultTemplate": {
     "product": {
       "itemText": { "title": "Artikelgegevens" },
@@ -575,10 +581,26 @@
     },
     "essentials": {
       "cookies": {
-        "cloudflareTurnstile": { "name": "Cloudflare Turnstile", "provider": "Cloudflare", "status": "Erforderlich für den Turnstile-Service von Cloudflare." },
-        "consentCookie": { "name": "consent-cookie", "provider": "PlentyONE GmbH", "status": "Speichert die Einwilligungsauswahl." },
-        "payPal": { "name": "paypal", "provider": "PayPal (Europe) S.à r.l. et Cie, S.C.A.", "status": "Erforderlich für die Zahlungsabwicklung über PayPal." },
-        "plentyId": { "name": "plentyID", "provider": "PlentyONE GmbH", "status": "Speichert Informationen zur aktuellen Session, z.B. ob der User eingeloggt ist." }
+        "cloudflareTurnstile": {
+          "name": "Cloudflare Turnstile",
+          "provider": "Cloudflare",
+          "status": "Erforderlich für den Turnstile-Service von Cloudflare."
+        },
+        "consentCookie": {
+          "name": "consent-cookie",
+          "provider": "PlentyONE GmbH",
+          "status": "Speichert die Einwilligungsauswahl."
+        },
+        "payPal": {
+          "name": "paypal",
+          "provider": "PayPal (Europe) S.à r.l. et Cie, S.C.A.",
+          "status": "Erforderlich für die Zahlungsabwicklung über PayPal."
+        },
+        "plentyId": {
+          "name": "plentyID",
+          "provider": "PlentyONE GmbH",
+          "status": "Speichert Informationen zur aktuellen Session, z.B. ob der User eingeloggt ist."
+        }
       },
       "description": "Essenzielle Cookies ermöglichen grundlegende Funktionen und sind für die einwandfreie Funktion der Website erforderlich.",
       "label": "Noodzakelijk"

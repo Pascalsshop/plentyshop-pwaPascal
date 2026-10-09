@@ -1,4 +1,9 @@
 {
+  "amikonLegalUnavailable": {
+    "title": "Information currently unavailable",
+    "description": "The requested legal information could not be loaded. Please try again later or contact us.",
+    "germanVersion": "Open the available German version"
+  },
   "amikonRefrigerant": {
     "title": "Switch to environmentally friendly refrigerant",
     "intro": "The following work can be performed on climate chambers. Please contact us if you are interested.",

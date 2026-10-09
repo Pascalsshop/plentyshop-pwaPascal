@@ -13,7 +13,7 @@
         <i18n-t keypath="legal.termsInfo" scope="global">
           <template #terms>
             <UiLink
-              :href="localePath(paths.termsAndConditions)"
+              :href="localePath(paths.termsAndConditions, AMIKON_TERMS_LOCALE)"
               target="_blank"
               class="focus:outline focus:outline-offset-2 focus:outline-2 outline-secondary-600 rounded"
             >

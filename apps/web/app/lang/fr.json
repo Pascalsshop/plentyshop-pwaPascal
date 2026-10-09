@@ -1,4 +1,10 @@
 {
+  "lang": { "de": "Allemand", "en": "Anglais", "fr": "Français", "nl": "Néerlandais" },
+  "amikonLegalUnavailable": {
+    "title": "Informations actuellement indisponibles",
+    "description": "Les informations juridiques demandées n’ont pas pu être chargées. Veuillez réessayer plus tard ou nous contacter.",
+    "germanVersion": "Ouvrir la version allemande disponible"
+  },
   "defaultTemplate": {
     "product": {
       "itemText": { "title": "Détails de l’article" },
@@ -575,10 +581,26 @@
     },
     "essentials": {
       "cookies": {
-        "cloudflareTurnstile": { "name": "Cloudflare Turnstile", "provider": "Cloudflare", "status": "Erforderlich für den Turnstile-Service von Cloudflare." },
-        "consentCookie": { "name": "consent-cookie", "provider": "PlentyONE GmbH", "status": "Speichert die Einwilligungsauswahl." },
-        "payPal": { "name": "paypal", "provider": "PayPal (Europe) S.à r.l. et Cie, S.C.A.", "status": "Erforderlich für die Zahlungsabwicklung über PayPal." },
-        "plentyId": { "name": "plentyID", "provider": "PlentyONE GmbH", "status": "Speichert Informationen zur aktuellen Session, z.B. ob der User eingeloggt ist." }
+        "cloudflareTurnstile": {
+          "name": "Cloudflare Turnstile",
+          "provider": "Cloudflare",
+          "status": "Erforderlich für den Turnstile-Service von Cloudflare."
+        },
+        "consentCookie": {
+          "name": "consent-cookie",
+          "provider": "PlentyONE GmbH",
+          "status": "Speichert die Einwilligungsauswahl."
+        },
+        "payPal": {
+          "name": "paypal",
+          "provider": "PayPal (Europe) S.à r.l. et Cie, S.C.A.",
+          "status": "Erforderlich für die Zahlungsabwicklung über PayPal."
+        },
+        "plentyId": {
+          "name": "plentyID",
+          "provider": "PlentyONE GmbH",
+          "status": "Speichert Informationen zur aktuellen Session, z.B. ob der User eingeloggt ist."
+        }
       },
       "description": "Essenzielle Cookies ermöglichen grundlegende Funktionen und sind für die einwandfreie Funktion der Website erforderlich.",
       "label": "Essentiels"

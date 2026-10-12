@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import * as path from 'path';
+import type { ApiClientExtension } from '@vue-storefront/middleware';
+import { cartQuantityExtension } from './extensions/cart-quantity/cartQuantity';
 dotenv.config({
   path: path.resolve(__dirname, '../web/.env'),
 });
@@ -17,6 +19,7 @@ const config = {
           securityToken: process.env.API_SECURITY_TOKEN ?? '',
         },
       },
+      extensions: (extensions: ApiClientExtension[]) => [...extensions, cartQuantityExtension],
       errorHandler: (error: any, req: any, res: any) => {
         // override the default error handler to preserve the original error response
         // https://docs.alokai.com/middleware/guides/custom-error-handler#customize-the-error-handler

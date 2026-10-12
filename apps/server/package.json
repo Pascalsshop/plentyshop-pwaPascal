@@ -8,6 +8,7 @@
     "start": "echo \"Starting server...\" && nodemon --spawn",
     "lint": "echo \"No linting configured for server app\"",
     "lint:fix": "echo \"No linting configured for server app\"",
+    "test": "vitest run",
     "build": "tsup --minify"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 <template>
   <AmikonInformationAppearance>
-    <div v-if="getHTMLTexts().trim()" class="no-preflight" v-html="getHTMLTexts()" />
+    <AmikonFrenchCancellationRights v-if="isFrench" />
+    <div v-else-if="getHTMLTexts().trim()" class="no-preflight" v-html="getHTMLTexts()" />
     <AmikonLegalTextUnavailable v-else :fallback-path="paths.cancellationRights" />
   </AmikonInformationAppearance>
 </template>
@@ -13,16 +14,19 @@ defineI18nRoute({
 });
 
 const { data, getLegalTexts } = useLegalInformation();
+const { locale } = useI18n();
+const isFrench = computed(() => locale.value.split('-')[0] === AMIKON_FRENCH_LEGAL_LOCALE);
 const { getRobots, setRobotForStaticPage } = useRobots();
 const { setPageMeta } = usePageMeta();
 
 definePageMeta({
   pageType: 'static',
+  key: (route) => route.fullPath,
 });
 
-await getLegalTexts({
-  type: 'CancellationRights',
-});
+if (!isFrench.value) {
+  await getLegalTexts({ type: 'CancellationRights' });
+}
 
 const getHTMLTexts = () => {
   return data.value.htmlText ?? '';

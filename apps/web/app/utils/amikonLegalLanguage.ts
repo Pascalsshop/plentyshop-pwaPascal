@@ -1,4 +1,5 @@
 export const AMIKON_TERMS_LOCALE = 'de';
+export const AMIKON_FRENCH_LEGAL_LOCALE = 'fr';
 
 /** Resolve non-German terms URLs to the German page without changing legal content or other pages. */
 export const getAmikonGermanTermsRedirect = (

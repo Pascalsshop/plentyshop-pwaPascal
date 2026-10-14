@@ -7,7 +7,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 403, statusMessage: 'Forbidden' });
   }
   const body = await readBody<{ kind?: string } | null>(event);
-  if (body?.kind === 'email') return { href: 'mailto:info@amikon.de', label: 'info@amikon.de' };
-  if (body?.kind === 'phone') return { href: 'tel:+492861685300', label: '+49 2861 68 53 00' };
+  if (body?.kind === 'email') {
+    return { href: 'mailto:info@amikon.de', label: 'info@amikon.de' };
+  }
+  if (body?.kind === 'phone') {
+    return { href: 'tel:+492861685300', label: '+49 2861 68 53 00' };
+  }
+  if (body?.kind === 'fax') {
+    return { href: 'fax:+4928616853090', label: '+49 2861 68 53 090' };
+  }
   throw createError({ statusCode: 400, statusMessage: 'Invalid contact type' });
 });

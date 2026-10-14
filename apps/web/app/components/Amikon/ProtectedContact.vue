@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { $fetch } from 'ofetch';
 
-const props = defineProps<{ kind: 'email' | 'phone' }>();
+const props = defineProps<{ kind: 'email' | 'phone' | 'fax' }>();
 const { locale } = useI18n();
 const contact = ref<{ href: string; label: string }>();
 const pending = ref(false);
@@ -28,6 +28,7 @@ const copy = {
   de: {
     email: 'E-Mail anzeigen',
     phone: 'Telefonnummer anzeigen',
+    fax: 'Faxnummer anzeigen',
     loading: 'Wird geladen …',
     error: 'Laden fehlgeschlagen. Bitte erneut anklicken.',
     contact: 'Kontakt',
@@ -35,6 +36,7 @@ const copy = {
   en: {
     email: 'Show email',
     phone: 'Show phone number',
+    fax: 'Show fax number',
     loading: 'Loading …',
     error: 'Unable to load. Please click again.',
     contact: 'Contact',
@@ -42,6 +44,7 @@ const copy = {
   fr: {
     email: 'Afficher l’adresse e-mail',
     phone: 'Afficher le numéro de téléphone',
+    fax: 'Afficher le numéro de fax',
     loading: 'Chargement …',
     error: 'Échec du chargement. Cliquez à nouveau.',
     contact: 'Contact',
@@ -49,6 +52,7 @@ const copy = {
   nl: {
     email: 'E-mailadres tonen',
     phone: 'Telefoonnummer tonen',
+    fax: 'Faxnummer tonen',
     loading: 'Laden …',
     error: 'Laden mislukt. Klik opnieuw.',
     contact: 'Contact',
@@ -58,7 +62,9 @@ const labels = computed(() => copy[locale.value.split('-')[0] as keyof typeof co
 
 // Deliberately not useAsyncData/useState: no contact data in SSR HTML or hydration payload.
 const reveal = async () => {
-  if (pending.value || contact.value) return;
+  if (pending.value || contact.value) {
+    return;
+  }
   pending.value = true;
   failed.value = false;
   try {

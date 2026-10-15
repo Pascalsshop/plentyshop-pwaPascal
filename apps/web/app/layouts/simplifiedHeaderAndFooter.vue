@@ -4,10 +4,10 @@
     <main>
       <slot />
     </main>
-    <NuxtLazyHydrate when-idle>
+    <AmikonShopTools>
       <Cookiebar />
       <PreviewMode />
-    </NuxtLazyHydrate>
+    </AmikonShopTools>
     <UiFooterBlocks />
   </div>
 </template>

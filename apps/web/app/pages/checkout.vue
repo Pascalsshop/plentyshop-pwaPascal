@@ -82,14 +82,11 @@ definePageMeta({
   middleware: ['reject-empty-checkout'],
 });
 
-const { send } = useNotification();
-const localePath = useLocalizedPath();
 const { emit } = usePlentyEvent();
 const { countryHasDelivery, hasCheckoutAddress } = useCheckoutAddress(AddressType.Shipping);
 const checkoutReady = ref(false);
 const {
   cart,
-  cartIsEmpty,
   cartLoading,
   persistShippingAddress,
   persistBillingAddress,
@@ -141,12 +138,5 @@ onNuxtReady(async () => {
 });
 
 const disableShippingPayment = computed(() => shippingLoading.value || paymentLoading.value);
-const { createOrderLoading: processingOrder } = useDynamicPaymentButtons();
-
-watch(cartIsEmpty, async () => {
-  if (!processingOrder.value) {
-    send({ type: 'neutral', message: t('cart.emptyNotification') });
-    await navigateTo(localePath(paths.cart));
-  }
-});
+useEmptyCheckoutRedirect();
 </script>

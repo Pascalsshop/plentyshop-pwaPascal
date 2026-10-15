@@ -29,4 +29,9 @@ describe('Mobile checkout layout', () => {
       compileTemplate({ source: descriptor.template!.content, filename: 'checkout.vue', id: 'checkout-test' }).errors,
     ).toEqual([]);
   });
+
+  it('should use the tested empty-cart navigation after checkout updates', () => {
+    expect(descriptor.scriptSetup!.content).toContain('useEmptyCheckoutRedirect()');
+    expect(descriptor.scriptSetup!.content).not.toContain('watch(cartIsEmpty');
+  });
 });

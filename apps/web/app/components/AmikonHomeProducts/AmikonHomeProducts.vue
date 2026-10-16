@@ -91,9 +91,13 @@ const {
       itemsPerPage: 16,
       page: 1,
       sort: 'variation.createdAt_desc',
+      ...(props.kind === 'new' ? { priceMin: String(AMIKON_NEW_PRODUCTS_MIN_NET_PRICE) } : {}),
     });
-    if (!Array.isArray(response.data?.products)) throw new Error('Invalid product response');
-    return response.data.products.slice(0, 16);
+    if (!Array.isArray(response.data?.products)) {
+      throw new Error('Invalid product response');
+    }
+    const items = response.data.products;
+    return (props.kind === 'new' ? items.filter(isAmikonNewProductEligible) : items).slice(0, 16);
   },
   { server: false, lazy: true, default: () => [] as Product[] },
 );

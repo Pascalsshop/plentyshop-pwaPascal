@@ -53,7 +53,7 @@
     />
     <h2>{{ english ? 'Contact' : 'Kontakt' }}</h2>
     <address>Amikon GmbH<br />Einsteinstr. 8a<br />46325 Borken</address>
-    <p><a href="mailto:info@amikon.de">info@amikon.de</a> · <a href="tel:+492861685300">+49 2861 6853 00</a></p>
+    <p><AmikonProtectedContact kind="email" /> · <AmikonProtectedContact kind="phone" /></p>
   </AmikonInformationAppearance>
 </template>
 

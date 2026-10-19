@@ -1,6 +1,6 @@
 export default defineNuxtRouteMiddleware((to) => {
   const { defaultLocale, availableLocales } = useNuxtApp().$i18n;
-  const target = getAmikonGermanTermsRedirect(to.path, defaultLocale, availableLocales);
+  const target = getAmikonGermanLegalRedirect(to.path, defaultLocale, availableLocales);
 
   if (!target) {
     return;

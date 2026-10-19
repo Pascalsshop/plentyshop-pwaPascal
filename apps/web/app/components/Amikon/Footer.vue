@@ -77,7 +77,7 @@
             ><img :src="paymentBase + '/paypal/images/logos/de-pp-logo.png'" alt="PayPal" loading="lazy"
           /></NuxtLink>
         </div>
-        <a class="dealer-link" href="https://www.maschinensucher.de/main/trustseal?customer-number=47177">{{
+        <a class="dealer-link" href="https://www.maschinensucher.de/Haendler/47177/amikon-gmbh-borken">{{
           copy.dealer
         }}</a>
       </section>

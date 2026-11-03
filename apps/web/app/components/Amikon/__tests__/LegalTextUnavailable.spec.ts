@@ -6,7 +6,12 @@ import en from '~/lang/en.json?raw';
 import fr from '~/lang/fr.json?raw';
 import nl from '~/lang/nl.json?raw';
 
-const { language } = vi.hoisted(() => ({ language: { value: 'de' } }));
+const { language, legalInformation } = vi.hoisted(() => ({
+  language: { value: 'de' },
+  legalInformation: vi.fn(),
+}));
+const loading = ref(false);
+mockNuxtImport('useLegalInformation', () => legalInformation);
 const copies = { de: JSON.parse(de), en: JSON.parse(en), fr: JSON.parse(fr), nl: JSON.parse(nl) } as Record<
   'de' | 'en' | 'fr' | 'nl',
   { amikonLegalUnavailable: Record<string, string>; lang: Record<string, string> }
@@ -18,6 +23,11 @@ mockNuxtImport('useI18n', () => () => ({
 mockNuxtImport('useLocalizedPath', () => () => (path: string, locale: string) => `/${locale}${path}`);
 
 describe('Unavailable Amikon legal information', () => {
+  beforeEach(() => {
+    loading.value = false;
+    language.value = 'de';
+    legalInformation.mockReturnValue({ loading });
+  });
   const render = (fallbackPath?: string) =>
     mount(LegalTextUnavailable, {
       props: { fallbackPath },
@@ -42,6 +52,36 @@ describe('Unavailable Amikon legal information', () => {
       wrapper.unmount();
     },
   );
+
+  it.each(['de', 'en', 'fr', 'nl'] as const)(
+    'should show a localized loading status instead of a failure while fetching in %s',
+    (locale) => {
+      language.value = locale;
+      loading.value = true;
+      const wrapper = render('/privacy-policy');
+      expect(wrapper.get('[data-testid="legal-loading"]').text()).toBe(copies[locale].amikonLegalUnavailable.loading);
+      expect(wrapper.get('[role="status"]').attributes('aria-busy')).toBe('true');
+      expect(wrapper.find('h1').exists()).toBe(false);
+      expect(wrapper.find('a').exists()).toBe(false);
+      expect(wrapper.find('button').exists()).toBe(false);
+      wrapper.unmount();
+    },
+  );
+
+  it('should retain the failure notice and German fallback once a request finishes without text', async () => {
+    language.value = 'fr';
+    loading.value = true;
+    const wrapper = render('/privacy-policy');
+
+    loading.value = false;
+    await nextTick();
+
+    expect(wrapper.find('[data-testid="legal-loading"]').exists()).toBe(false);
+    expect(wrapper.get('[role="status"]').attributes('aria-busy')).toBe('false');
+    expect(wrapper.get('h1').text()).toBe(copies.fr.amikonLegalUnavailable.title);
+    expect(wrapper.get('[data-testid="legal-german-version"]').attributes('href')).toBe('/de/privacy-policy');
+    wrapper.unmount();
+  });
 
   it.each(['/privacy-policy', '/terms-and-conditions', '/legal-disclosure', '/cancellation-rights'])(
     'should link explicitly to the German version of %s instead of the missing French page',

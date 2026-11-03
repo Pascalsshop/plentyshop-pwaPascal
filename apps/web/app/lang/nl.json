@@ -1,6 +1,7 @@
 {
   "lang": { "de": "Duits", "en": "Engels", "fr": "Frans", "nl": "Nederlands" },
   "amikonLegalUnavailable": {
+    "loading": "Juridische informatie wordt geladen …",
     "title": "Informatie momenteel niet beschikbaar",
     "description": "De gevraagde juridische informatie kon niet worden geladen. Probeer het later opnieuw of neem contact met ons op.",
     "germanVersion": "De beschikbare Duitse versie openen"

@@ -1,5 +1,6 @@
 {
   "amikonLegalUnavailable": {
+    "loading": "Loading legal information …",
     "title": "Information currently unavailable",
     "description": "The requested legal information could not be loaded. Please try again later or contact us.",
     "germanVersion": "Open the available German version"

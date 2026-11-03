@@ -1,5 +1,6 @@
 {
   "amikonLegalUnavailable": {
+    "loading": "Rechtstext wird geladen …",
     "title": "Information derzeit nicht verfügbar",
     "description": "Der angeforderte Rechtstext konnte nicht geladen werden. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns.",
     "germanVersion": "Vorhandene deutsche Fassung öffnen"

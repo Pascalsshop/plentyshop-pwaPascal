@@ -1,6 +1,7 @@
 {
   "lang": { "de": "Allemand", "en": "Anglais", "fr": "Français", "nl": "Néerlandais" },
   "amikonLegalUnavailable": {
+    "loading": "Chargement des informations juridiques …",
     "title": "Informations actuellement indisponibles",
     "description": "Les informations juridiques demandées n’ont pas pu être chargées. Veuillez réessayer plus tard ou nous contacter.",
     "germanVersion": "Ouvrir la version allemande disponible"

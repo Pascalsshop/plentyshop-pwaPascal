@@ -39,44 +39,67 @@ export const useCheckoutPagePaymentAndShipping = () => {
   const paymentMethods = computed(() => paymentMethodData.value);
   const shippingMethods = computed(() => shippingProviderGetters.getShippingProviders(shippingMethodData.value));
   const selectedPaymentId = computed(() => cart?.value?.methodOfPaymentId || 0);
+  const methodUpdatePending = useState('checkout-method-update-pending', () => false);
+  const disableShippingPayment = computed(
+    () => methodUpdatePending.value || shippingLoading.value || paymentLoading.value,
+  );
 
   const handleShippingMethodUpdate = async (shippingMethodId: string) => {
     const existingShippingMethod = selectedShippingMethod.value
       ? shippingProviderGetters.getParcelServicePresetId(selectedShippingMethod.value)
       : null;
 
-    if (existingShippingMethod === shippingMethodId) return;
-
-    await saveShippingMethod(Number(shippingMethodId));
-    usePreferredDelivery().disableAllOptions();
-    await fetchPaymentMethods();
-    await fetchSession();
-
-    const isPaymentMethodExcluded = paymentProviderGetters.isPaymentMethodExcluded(
-      selectedShippingMethod.value,
-      selectedPaymentId.value,
-    );
-
-    const isPaymentMethodUnavailable = paymentProviderGetters.isPaymentMethodUnavailable(
-      paymentMethods.value.list,
-      selectedPaymentId.value,
-    );
-
-    if (isPaymentMethodExcluded || isPaymentMethodUnavailable) {
-      send({ message: t('billing.methodChanged'), type: 'warning' });
-
-      const fallbackMethod = getFallbackPaymentMethod(paymentMethods.value.list, selectedShippingMethod.value);
-      if (fallbackMethod) await savePaymentMethod(fallbackMethod.id);
+    if (methodUpdatePending.value || existingShippingMethod === shippingMethodId) {
+      return;
     }
 
-    setShippingPrivacyAgreement(false);
+    methodUpdatePending.value = true;
+    try {
+      await saveShippingMethod(Number(shippingMethodId));
+      usePreferredDelivery().disableAllOptions();
+      await fetchSession();
+      await getShippingMethods();
+      await fetchPaymentMethods();
+
+      const isPaymentMethodExcluded = paymentProviderGetters.isPaymentMethodExcluded(
+        selectedShippingMethod.value,
+        selectedPaymentId.value,
+      );
+
+      const isPaymentMethodUnavailable = paymentProviderGetters.isPaymentMethodUnavailable(
+        paymentMethods.value.list,
+        selectedPaymentId.value,
+      );
+
+      if (isPaymentMethodExcluded || isPaymentMethodUnavailable) {
+        send({ message: t('billing.methodChanged'), type: 'warning' });
+
+        const fallbackMethod = getFallbackPaymentMethod(paymentMethods.value.list, selectedShippingMethod.value);
+        if (fallbackMethod) {
+          await savePaymentMethod(fallbackMethod.id);
+          await fetchSession();
+          await getShippingMethods();
+        }
+      }
+
+      setShippingPrivacyAgreement(false);
+    } finally {
+      methodUpdatePending.value = false;
+    }
   };
 
   const handlePaymentMethodUpdate = async (paymentMethodId: number) => {
-    if (cart.value.methodOfPaymentId === paymentMethodId) return;
-    await savePaymentMethod(paymentMethodId);
-    await getShippingMethods();
-    await fetchSession();
+    if (methodUpdatePending.value || selectedPaymentId.value === paymentMethodId) {
+      return;
+    }
+    methodUpdatePending.value = true;
+    try {
+      await savePaymentMethod(paymentMethodId);
+      await fetchSession();
+      await getShippingMethods();
+    } finally {
+      methodUpdatePending.value = false;
+    }
   };
 
   const validateShippingTerms = () => {
@@ -95,6 +118,7 @@ export const useCheckoutPagePaymentAndShipping = () => {
   return {
     paymentLoading,
     shippingLoading,
+    disableShippingPayment,
     paymentMethods,
     shippingMethods,
     selectedPaymentId,

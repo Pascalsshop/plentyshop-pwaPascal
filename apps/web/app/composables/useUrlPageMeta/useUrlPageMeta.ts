@@ -3,28 +3,24 @@ import type {
   StaticPageMeta,
   CategoriesPageMeta,
   GetCategoryRobotsContent,
-  UseUrlPageMetaState,
+  PageLink,
 } from './types';
 import { categoryGetters, type Facet, type FacetSearchCriteria } from '@plentymarkets/shop-api';
 import type { Locale } from '#i18n';
 
-/**
- * @description Composable managing canonical data, og:url and href alernates
- * @returns UseUrlPageMetaReturn
- * @example
- * ``` ts
- * const { data, loading, setStaticPageMeta } = useUrlPageMeta();
- * ```
- */
-
-const setPreviousAndNextLink = (productsCatalog: Facet, facetsFromUrl: FacetSearchCriteria, canonicalLink: string) => {
+const getPaginationLinks = (
+  productsCatalog: Facet,
+  facetsFromUrl: FacetSearchCriteria,
+  canonicalLink: string,
+): PageLink[] => {
   if (!facetsFromUrl?.itemsPerPage || !facetsFromUrl?.page) {
-    return;
+    return [];
   }
 
   const domain = useRuntimeConfig().public.domain as string;
   const url = new URL(canonicalLink, domain);
   const baseUrl = `${url.origin}${url.pathname}`;
+  const links: PageLink[] = [];
 
   if (facetsFromUrl.page >= 2) {
     const prevParams = new URLSearchParams(url.search);
@@ -34,14 +30,7 @@ const setPreviousAndNextLink = (productsCatalog: Facet, facetsFromUrl: FacetSear
       prevParams.set('page', String(facetsFromUrl.page - 1));
     }
     const prevSearch = prevParams.toString();
-    useHead({
-      link: [
-        {
-          rel: 'prev',
-          href: prevSearch ? `${baseUrl}?${prevSearch}` : baseUrl,
-        },
-      ],
-    });
+    links.push({ rel: 'prev', href: prevSearch ? `${baseUrl}?${prevSearch}` : baseUrl });
   }
   if (
     productsCatalog.pagination?.totals &&
@@ -49,22 +38,34 @@ const setPreviousAndNextLink = (productsCatalog: Facet, facetsFromUrl: FacetSear
   ) {
     const nextParams = new URLSearchParams(url.search);
     nextParams.set('page', String(facetsFromUrl.page + 1));
-    useHead({
-      link: [
-        {
-          rel: 'next',
-          href: `${baseUrl}?${nextParams.toString()}`,
-        },
-      ],
-    });
+    links.push({ rel: 'next', href: `${baseUrl}?${nextParams.toString()}` });
   }
+  return links;
 };
 
+/**
+ * @description Composable managing canonical data, og:url and href alernates
+ * @returns UseUrlPageMetaReturn
+ * @example
+ * ``` ts
+ * const { data, loading, setStaticPageMeta } = useUrlPageMeta();
+ * ```
+ */
 export const useUrlPageMeta: UseUrlPageMetaReturn = () => {
-  const state = useState<UseUrlPageMetaState>(`useUrlPageMeta`, () => ({
+  const state = useState(`useUrlPageMeta`, () => ({
     loading: false,
   }));
   const { applyToUrl: applyTrailingSlashToUrl } = useUrlTrailingSlash();
+  const { $i18n } = useNuxtApp();
+  const links = shallowRef<PageLink[]>([]);
+  const ogUrl = ref<string>();
+  useHead({ link: links });
+  useSeoMeta({ ogUrl });
+
+  const clearPageMeta = () => {
+    links.value = [];
+    ogUrl.value = undefined;
+  };
 
   /**
    * @description Function for setting static page metas.
@@ -80,35 +81,34 @@ export const useUrlPageMeta: UseUrlPageMetaReturn = () => {
     const route = useRouter().currentRoute.value;
     const runtimeConfig = useRuntimeConfig();
     const localePath = useLocalePath();
-    const { defaultLocale } = useI18n();
+    const { defaultLocale } = $i18n;
     const { getAvailableLocales } = useLocalization();
 
     const canonicalUrl = applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${localePath(route.fullPath)}`);
 
-    const alternateLocales = getAvailableLocales().map((locale: Locale) => {
-      return {
+    const locales = getAvailableLocales();
+    const getLegalRedirect = (path: string) =>
+      getAmikonGermanLegalRedirect(path.replace(/[?#].*$/, ''), defaultLocale, locales);
+    const defaultPath = localePath(route.fullPath, defaultLocale);
+    const alternateLocales = locales
+      .map((locale: Locale) => ({ locale, path: localePath(route.fullPath, locale) }))
+      .filter(({ path }) => !getLegalRedirect(path))
+      .map(({ locale, path }) => ({
         rel: 'alternate' as const,
         hreflang: locale,
-        href: applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${localePath(route.fullPath, locale)}`),
-      };
-    });
+        href: applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${path}`),
+      }));
 
-    useHead({
-      link: [
-        { rel: 'canonical', href: canonicalUrl },
-        {
-          rel: 'alternate',
-          hreflang: 'x-default',
-          href: applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${localePath(route.fullPath, defaultLocale)}`),
-        },
-        ...alternateLocales,
-      ],
-    });
-
-    useSeoMeta({
-      ogUrl: canonicalUrl,
-    });
-
+    links.value = [
+      { rel: 'canonical', href: canonicalUrl },
+      {
+        rel: 'alternate',
+        hreflang: 'x-default',
+        href: applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${getLegalRedirect(defaultPath) ?? defaultPath}`),
+      },
+      ...alternateLocales,
+    ];
+    ogUrl.value = canonicalUrl;
     state.value.loading = false;
   };
 
@@ -126,7 +126,6 @@ export const useUrlPageMeta: UseUrlPageMetaReturn = () => {
     canonicalOverride?: string,
   ) => {
     state.value.loading = true;
-    const { $i18n } = useNuxtApp();
     const route = useRouter().currentRoute.value;
     const localePath = useLocalePath();
     const runtimeConfig = useRuntimeConfig();
@@ -141,38 +140,32 @@ export const useUrlPageMeta: UseUrlPageMetaReturn = () => {
             `${runtimeConfig.public.domain}${localePath(route.path, $i18n.locale.value)}${querySuffix}`,
           );
 
-    useHead({
-      link: [
-        {
-          rel: 'canonical',
-          href: canonicalLink,
-        },
-      ],
-    });
-
-    useSeoMeta({
-      ogUrl: canonicalLink,
-    });
-
+    let alternateLocales: PageLink[] = [];
     if (productsCatalog.languageUrls) {
-      Object.keys(productsCatalog.languageUrls).forEach((key) => {
+      alternateLocales = Object.keys(productsCatalog.languageUrls).map((key) => {
+        const i18nKey = hreflangLocaleMapperToI18n(key);
         const localizedPath =
           key === `x-default`
-            ? localePath(productsCatalog.languageUrls[key] || '/', $i18n.defaultLocale)
-            : localePath(productsCatalog.languageUrls[key] || '/', key as Locale);
+            ? localePath(
+                productsCatalog.languageUrls[key] || '/',
+                hreflangLocaleMapperToI18n($i18n.defaultLocale) as Locale,
+              )
+            : localePath(productsCatalog.languageUrls[key] || '/', i18nKey as Locale);
 
-        useHead({
-          link: [
-            {
-              rel: 'alternate',
-              hreflang: key,
-              href: applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${localizedPath}${querySuffix}`),
-            },
-          ],
-        });
+        return {
+          rel: 'alternate' as const,
+          hreflang: key,
+          href: applyTrailingSlashToUrl(`${runtimeConfig.public.domain}${localizedPath}${querySuffix}`),
+        };
       });
     }
-    setPreviousAndNextLink(productsCatalog, facetsFromUrl, canonicalLink);
+
+    links.value = [
+      { rel: 'canonical', href: canonicalLink },
+      ...alternateLocales,
+      ...getPaginationLinks(productsCatalog, facetsFromUrl, canonicalLink),
+    ];
+    ogUrl.value = canonicalLink;
     state.value.loading = false;
   };
 
@@ -208,6 +201,7 @@ export const useUrlPageMeta: UseUrlPageMetaReturn = () => {
   };
 
   return {
+    clearPageMeta,
     setStaticPageMeta,
     setCategoriesPageMeta,
     getCategoryRobotsContent,

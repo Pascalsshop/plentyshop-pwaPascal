@@ -97,7 +97,7 @@ const {
 const { preferredDeliveryAvailable } = usePreferredDelivery();
 const { fetchPaymentMethods } = usePaymentMethods();
 const { getScript } = usePayPal();
-const { paymentLoading, shippingLoading, handleShippingMethodUpdate, handlePaymentMethodUpdate } =
+const { disableShippingPayment, handleShippingMethodUpdate, handlePaymentMethodUpdate } =
   useCheckoutPagePaymentAndShipping();
 
 emit('frontend:beginCheckout', cart.value);
@@ -137,6 +137,5 @@ onNuxtReady(async () => {
   checkoutReady.value = true;
 });
 
-const disableShippingPayment = computed(() => shippingLoading.value || paymentLoading.value);
 useEmptyCheckoutRedirect();
 </script>

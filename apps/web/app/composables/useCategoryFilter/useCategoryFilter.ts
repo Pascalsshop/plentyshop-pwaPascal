@@ -154,11 +154,7 @@ export const useCategoryFilter = (to?: RouteLocationNormalizedGeneric): UseCateg
     const mergedFilters = mergeFilters(currentFilters, filters);
     const filtersIds = getFiltersToUpdate(mergedFilters);
 
-    if (filtersIds) {
-      updateQuery({ facets: filtersIds });
-    } else {
-      updateQuery({ facets: null });
-    }
+    updateQuery({ facets: filtersIds || null, page: null });
   };
 
   /**
@@ -173,13 +169,13 @@ export const useCategoryFilter = (to?: RouteLocationNormalizedGeneric): UseCateg
    */
   const updatePrices = (priceMin: string, priceMax: string): void => {
     if (priceMin.length > 0 && priceMax.length === 0) {
-      updateQuery({ priceMin: priceMin });
+      updateQuery({ priceMin: priceMin, page: null });
     } else if (priceMax.length > 0 && priceMin.length === 0) {
-      updateQuery({ priceMax: priceMax });
+      updateQuery({ priceMax: priceMax, page: null });
     } else if (priceMax.length > 0 && priceMin.length > 0) {
-      updateQuery({ priceMin: priceMin, priceMax: priceMax });
+      updateQuery({ priceMin: priceMin, priceMax: priceMax, page: null });
     } else {
-      updateQuery({ priceMin: null, priceMax: null });
+      updateQuery({ priceMin: null, priceMax: null, page: null });
     }
   };
 
@@ -248,6 +244,7 @@ export const useCategoryFilter = (to?: RouteLocationNormalizedGeneric): UseCateg
     const query = { ...currentRoute.query };
     if (sort) query.sort = sort;
     else delete query.sort;
+    delete query.page;
     navigateTo({ query });
   };
 

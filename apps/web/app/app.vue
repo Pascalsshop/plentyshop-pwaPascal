@@ -98,7 +98,7 @@ const { disableActions } = useEditor();
 const { siteConfigurationDrawerOpen, blocksConfigurationDrawerOpen, currentFont } = useSiteConfiguration();
 const { drawerOpen, entityKey, resetForCurrentEntity } = useBlockSnapshots();
 const { resetHistory } = useBlockHistory();
-const { setStaticPageMeta } = useUrlPageMeta();
+const { clearPageMeta, setStaticPageMeta } = useUrlPageMeta();
 const { isInEditorClient, isMobilePreview, previewWidth } = useEditorState();
 
 const isLargeScreen = useMediaQuery('(min-width: 1024px)');
@@ -279,14 +279,23 @@ if (import.meta.client) {
   );
 
   watch(entityKey, () => {
-    if (drawerOpen.value) {
-      resetForCurrentEntity();
-    }
+    resetForCurrentEntity();
   });
 
   watch(entityKey, () => {
     resetHistory();
   });
+
+  watch(
+    () => route.fullPath,
+    () => {
+      if (route.meta.pageType === 'static') {
+        setStaticPageMeta();
+      } else {
+        clearPageMeta();
+      }
+    },
+  );
 }
 
 if (route?.meta.pageType === 'static') setStaticPageMeta();

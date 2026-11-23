@@ -92,7 +92,7 @@ describe('useCheckoutPagePaymentAndShipping', () => {
     const savePaymentMethodMock = vi.fn();
 
     useCart.mockImplementation(() => ({
-      cart: ref({ methodOfPaymentId: 1 }),
+      data: ref({ methodOfPaymentId: 1 }),
     }));
 
     usePaymentMethods.mockImplementation(() => ({
@@ -103,6 +103,7 @@ describe('useCheckoutPagePaymentAndShipping', () => {
 
     useCartShippingMethods.mockImplementation(() => ({
       saveShippingMethod: saveShippingMethodMock,
+      getShippingMethods: vi.fn(),
       selectedMethod: ref({
         shippingPrivacyInformation: [{ showDataPrivacyAgreementHint: true }],
         excludedPaymentMethodIds: [],
@@ -191,7 +192,7 @@ describe('useCheckoutPagePaymentAndShipping', () => {
     }));
 
     useCart.mockImplementation(() => ({
-      cart: ref({
+      data: ref({
         methodOfPaymentId: ExcludedPaymentMethodId,
       }),
       getCart: vi.fn(),
@@ -199,6 +200,7 @@ describe('useCheckoutPagePaymentAndShipping', () => {
 
     useCartShippingMethods.mockImplementation(() => ({
       saveShippingMethod: saveShippingMethodMock,
+      getShippingMethods: vi.fn(),
       selectedMethod: ref({
         id: 1,
         excludedPaymentMethodIds: [ExcludedPaymentMethodId],

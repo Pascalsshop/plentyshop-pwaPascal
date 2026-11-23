@@ -12,6 +12,7 @@ export interface UseBlockSnapshotsState {
   snapshots: BlockSnapshot[];
   loading: boolean;
   loadingMore: boolean;
+  listRequestId: number;
   preset: SnapshotDatePreset;
   dateFrom: string;
   dateTo: string;

@@ -16,15 +16,11 @@
             tag="label"
             children-tag="div"
             class="border rounded-md items-start select-none"
-            @click.prevent="updateShippingMethod(shippingProviderGetters.getParcelServicePresetId(method))"
           >
             <template #prefix>
               <SfRadio
                 v-model="radioModel"
-                :checked="
-                  shippingProviderGetters.getShippingProfileId(cart).toString() ===
-                  shippingProviderGetters.getParcelServicePresetId(method)
-                "
+                :disabled="disabled"
                 :value="shippingProviderGetters.getParcelServicePresetId(method)"
                 class="flex items-center"
               />
@@ -83,7 +79,14 @@ const { data: cart } = useCart();
 const { format } = usePriceFormatter();
 const { selectedMethod } = useCartShippingMethods();
 const { shippingMethods } = useCheckoutPagePaymentAndShipping();
-const radioModel = ref(shippingProviderGetters.getShippingProfileId(cart.value));
+const radioModel = computed({
+  get: () => shippingProviderGetters.getShippingProfileId(cart.value),
+  set: (shippingId: string) => {
+    if (!disabled) {
+      emit('update:shippingMethod', shippingId);
+    }
+  },
+});
 
 const showShippingPrivacy = computed(
   () =>
@@ -94,12 +97,6 @@ const showShippingPrivacy = computed(
 
 const getDeliveryDays = (method: string) => {
   return cartGetters.getMaxDeliveryDays(cart.value, Number(method));
-};
-
-const updateShippingMethod = (shippingId: string) => {
-  if (disabled) return;
-  radioModel.value = shippingId;
-  emit('update:shippingMethod', radioModel.value);
 };
 
 const getShippingAmount = (amount: string) => {

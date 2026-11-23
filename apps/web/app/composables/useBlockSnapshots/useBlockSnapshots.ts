@@ -18,6 +18,7 @@ export const useBlockSnapshots = () => {
     snapshots: [],
     loading: false,
     loadingMore: false,
+    listRequestId: 0,
     preset: 'all',
     dateFrom: '',
     dateTo: '',
@@ -29,6 +30,7 @@ export const useBlockSnapshots = () => {
   }));
 
   const route = useRoute();
+  const { $i18n } = useNuxtApp();
   const { data: dataProducts } = useProducts();
   const { restoreBlocks } = useBlocks();
   const { send } = useNotification();
@@ -46,7 +48,7 @@ export const useBlockSnapshots = () => {
 
   const entityKey = computed(() => {
     const { identifier, type } = resolveEntity();
-    return `${type}:${identifier}`;
+    return `${type}:${identifier}:${$i18n.locale.value}`;
   });
 
   const identifier = computed(() => resolveEntity().identifier);
@@ -70,7 +72,13 @@ export const useBlockSnapshots = () => {
     state.value.confirmingId = null;
     state.value.restoredSnapshotId = null;
     state.value.snapshots = [];
-    fetchSnapshots();
+    state.value.listRequestId++;
+    state.value.loading = false;
+    state.value.loadingMore = false;
+
+    if (state.value.drawerOpen) {
+      fetchSnapshots();
+    }
   };
 
   const toggleDrawer = () => {
@@ -82,7 +90,9 @@ export const useBlockSnapshots = () => {
   };
 
   const fetchSnapshots = async () => {
+    const requestId = ++state.value.listRequestId;
     state.value.loading = true;
+    state.value.loadingMore = false;
 
     const { identifier, type } = resolveEntity();
     const { dateFrom, dateTo } = state.value;
@@ -98,6 +108,9 @@ export const useBlockSnapshots = () => {
         itemsPerPage: ITEMS_PER_PAGE,
       });
 
+      if (requestId !== state.value.listRequestId) {
+        return;
+      }
       state.value.snapshots = data.data;
       state.value.currentPage = data.pagination.currentPage;
       state.value.lastPage = data.pagination.lastPage;
@@ -105,17 +118,20 @@ export const useBlockSnapshots = () => {
       send({ message: getEditorUITranslation('snapshot-list-error'), type: 'negative' });
       console.error('Failed to fetch block snapshots:', error);
     } finally {
-      state.value.loading = false;
+      if (requestId === state.value.listRequestId) {
+        state.value.loading = false;
+      }
     }
   };
 
   const hasMore = computed(() => state.value.currentPage < state.value.lastPage);
 
   const loadMore = async () => {
-    if (state.value.loadingMore || !hasMore.value) {
+    if (state.value.loading || state.value.loadingMore || !hasMore.value) {
       return;
     }
 
+    const requestId = state.value.listRequestId;
     state.value.loadingMore = true;
 
     const { identifier, type } = resolveEntity();
@@ -131,6 +147,9 @@ export const useBlockSnapshots = () => {
         itemsPerPage: ITEMS_PER_PAGE,
       });
 
+      if (requestId !== state.value.listRequestId) {
+        return;
+      }
       state.value.snapshots = [...state.value.snapshots, ...data.data];
       state.value.currentPage = data.pagination.currentPage;
       state.value.lastPage = data.pagination.lastPage;
@@ -138,7 +157,9 @@ export const useBlockSnapshots = () => {
       send({ message: getEditorUITranslation('snapshot-list-error'), type: 'negative' });
       console.error('Failed to load more block snapshots:', error);
     } finally {
-      state.value.loadingMore = false;
+      if (requestId === state.value.listRequestId) {
+        state.value.loadingMore = false;
+      }
     }
   };
 
@@ -226,14 +247,18 @@ export const useBlockSnapshots = () => {
 
   const confirmRestore = async () => {
     const snapshotId = state.value.confirmingId;
-    if (snapshotId == null) {
+    if (snapshotId == null || state.value.restoring) {
       return;
     }
 
+    const key = entityKey.value;
     state.value.restoring = true;
 
     try {
       const { data: snapshot } = await useSdk().plentysystems.getBlockSnapshot({ identifier: snapshotId });
+      if (key !== entityKey.value || state.value.confirmingId !== snapshotId) {
+        return;
+      }
       const { identifier, type } = resolveEntity();
 
       const payload = JSON.parse(snapshot.payload) as { blocks?: Block[] } | Block[];

@@ -1,7 +1,8 @@
 import type { Facet, FacetSearchCriteria } from '@plentymarkets/shop-api';
-export interface UseUrlPageMetaState {
-  loading: boolean;
-}
+
+export type PageLink = { href: string } & (
+  { rel: 'canonical' } | { rel: 'prev' } | { rel: 'next' } | { rel: 'alternate'; hreflang: string }
+);
 
 export type StaticPageMeta = () => void;
 export type CategoriesPageMeta = (
@@ -13,6 +14,7 @@ export type GetCategoryRobotsContent = (productsCatalog: Ref<Facet>) => Computed
 
 export interface UseUrlPageMeta {
   loading: Readonly<Ref<boolean>>;
+  clearPageMeta: () => void;
   setStaticPageMeta: StaticPageMeta;
   setCategoriesPageMeta: CategoriesPageMeta;
   getCategoryRobotsContent: GetCategoryRobotsContent;

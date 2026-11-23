@@ -3,7 +3,7 @@ import type { Locale } from '#i18n';
 /** Resolve a shop path, optionally in another language, retaining the shop's URL normalization. */
 export const useLocalizedPath = () => {
   const rawLocalePath = useLocalePath();
-  const { locale: currentLocale } = useI18n();
+  const currentLocale = useNuxtApp().$i18n.locale;
   const { resolvePathTrailingSlash } = useUrlTrailingSlash();
 
   return (path: string, locale?: Locale) => {

@@ -8,7 +8,15 @@ const { language, resolvePath } = vi.hoisted(() => {
     resolvePath: vi.fn((path: string, locale?: string) => `/${locale ?? language.value}${path}`),
   };
 });
-mockNuxtImport('useI18n', () => () => ({ locale: language }));
+mockNuxtImport('useNuxtApp', () => () => {
+  const app = tryUseNuxtApp();
+  if (!app) {
+    return { $i18n: { locale: language } } as never;
+  }
+  return new Proxy(app, {
+    get: (target, prop) => (prop === '$i18n' ? { locale: language } : Reflect.get(target, prop)),
+  });
+});
 mockNuxtImport('useLocalePath', () => () => resolvePath);
 mockNuxtImport('useUrlTrailingSlash', () => () => ({
   resolvePathTrailingSlash: (path: string) => `${path.replace(/\/$/, '')}/`,

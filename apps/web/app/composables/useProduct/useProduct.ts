@@ -18,6 +18,7 @@ export const useProduct: UseProductReturn = (slug) => {
     loading: false,
     breadcrumbs: [],
   }));
+  const latestRequest = useState(`useProductRequest-${slug}`, () => 0);
 
   const isGlobalProductDetailsTemplate = computed(() => {
     const route = useRoute();
@@ -49,6 +50,8 @@ export const useProduct: UseProductReturn = (slug) => {
   const fetchProduct: FetchProduct = async (params: ProductParams) => {
     const { $i18n } = useNuxtApp();
     const { isInEditor } = useEditorState();
+    const request = ++latestRequest.value;
+    const requestParams = { ...params };
     state.value.loading = true;
 
     if (isGlobalProductDetailsTemplate.value && isInEditor.value) {
@@ -65,9 +68,10 @@ export const useProduct: UseProductReturn = (slug) => {
     }
 
     const { data, error } = await useAsyncData(
-      `fetchProduct-${params.id}-${params.variationId}-${$i18n.locale.value}`,
-      () => useSdk().plentysystems.getProduct(params),
+      `fetchProduct-${requestParams.id}-${requestParams.variationId}-${$i18n.locale.value}`,
+      () => useSdk().plentysystems.getProduct(requestParams),
     );
+    if (request !== latestRequest.value) return state.value.data;
     useHandleError(error.value ?? null);
 
     properties.setProperties(data.value?.data?.properties ?? []);

@@ -1,11 +1,19 @@
 <template>
-  <div class="amikon-product" :class="{ 'amikon-product--arranged': !shouldEnableEditorFeatures }"><slot /></div>
+  <div
+    class="amikon-product"
+    :class="{ 'amikon-product--arranged': !shouldEnableEditorFeatures, 'amikon-product--modern': modernLayout }"
+  >
+    <slot />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
+import { amikonModernProductLayoutKey, amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
+const props = defineProps<{ modern?: boolean }>();
 const { shouldEnableEditorFeatures } = useEditorState();
+const modernLayout = computed(() => !!props.modern && !shouldEnableEditorFeatures.value);
+provide(amikonModernProductLayoutKey, modernLayout);
 // Presentation only: never rewrite the stored Builder blocks or their field visibility.
 provide(
   amikonProductLayoutKey,
@@ -153,9 +161,9 @@ provide(
   ),
 .amikon-product--arranged :deep(.amikon-product-overview) {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: var(--pdp-overview-columns, minmax(0, 1fr));
   align-items: start;
-  gap: 24px;
+  gap: var(--pdp-overview-gap, 24px);
   padding: 0;
 }
 .amikon-product--arranged
@@ -172,15 +180,9 @@ provide(
   top: auto;
 }
 @media (min-width: 1024px) {
-  .amikon-product--arranged
-    :deep(
-      [data-testid='multi-grid-structure']:has(> [data-testid='multi-grid-column']:first-child:nth-last-child(2)):has(
-          > [data-testid='multi-grid-column'] [data-testid='gallery']
-        ):has(> [data-testid='multi-grid-column'] [data-testid='purchase-card'])
-    ),
-  .amikon-product--arranged :deep(.amikon-product-overview) {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    gap: 40px;
+  .amikon-product--arranged {
+    --pdp-overview-columns: minmax(0, 7fr) minmax(0, 5fr);
+    --pdp-overview-gap: 40px;
   }
 }
 .amikon-product :deep(button:focus-visible),
@@ -217,6 +219,161 @@ provide(
   }
   .amikon-product--arranged :deep([data-testid='product-price-row']) {
     margin-top: 12px;
+  }
+}
+
+.amikon-product--modern {
+  width: min(100%, 1440px);
+  padding: 16px clamp(16px, 3vw, 44px) 56px;
+  background: #fff;
+  color: #252632;
+}
+
+.amikon-product--modern :deep([data-testid='purchase-card'] [data-testid='product-name']) {
+  margin: 0;
+  border-left: 0;
+  padding: 0;
+  font-size: clamp(26px, 3vw, 43px);
+  font-weight: 750;
+  line-height: 1.13;
+  letter-spacing: -0.025em;
+}
+
+.amikon-product--modern :deep([data-testid='product-item-id']) {
+  margin: 6px 0 12px;
+  color: #555866;
+  font-size: 14px;
+}
+
+.amikon-product--modern :deep([data-testid='gallery-images']) {
+  height: clamp(260px, 43vw, 515px);
+  border: 1px solid #e1e1e9;
+  border-radius: 12px;
+  background: #f5f5f7;
+}
+
+.amikon-product--modern :deep(.swiper-slide-thumb-active img) {
+  border: 1px solid #392f6e;
+}
+
+.amikon-product--modern :deep(.amikon-article-status) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 24px 0 16px;
+}
+
+.amikon-product--modern :deep(.amikon-article-status:empty) {
+  display: none;
+}
+
+.amikon-product--modern :deep(.amikon-article-condition) {
+  padding: 4px 9px;
+  border-radius: 5px;
+  background: #eeeef2;
+  font-size: 14px;
+}
+
+.amikon-product--modern :deep(.amikon-article-status [data-testid='product-availability']) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.amikon-product--modern :deep(.amikon-article-status :is(.availability-1, .availability-5)) {
+  padding: 0;
+  background: transparent !important;
+  color: #225932 !important;
+}
+
+.amikon-product--modern :deep(.amikon-article-status :is(.availability-1, .availability-5)::before) {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  content: '';
+}
+
+.amikon-product--modern :deep(.amikon-article-status--sold [data-testid='product-availability']) {
+  color: #962e37 !important;
+}
+
+.amikon-product--modern :deep([data-testid='product-price-row']) {
+  margin-top: 0;
+}
+
+.amikon-product--modern :deep([data-testid='price']) {
+  overflow-wrap: anywhere;
+  font-size: clamp(30px, 3.4vw, 46px);
+  line-height: 1.15;
+}
+
+.amikon-product--modern :deep([data-testid='add-to-cart']) {
+  min-height: 50px;
+}
+
+.amikon-product--modern :deep([data-testid='product-purchase-actions']) {
+  display: flex;
+  flex-direction: column;
+}
+
+.amikon-product--modern :deep([data-testid='product-price-note']) {
+  order: -1;
+  margin: 0 0 12px;
+  flex-wrap: wrap;
+}
+
+.amikon-product--modern :deep(.amikon-article-contact) {
+  display: inline-block;
+  margin-top: 19px;
+  color: #392f6e;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+
+.amikon-product--modern
+  :deep(:is([data-testid='item-text-block'], [data-testid='item-data-block'], [data-testid='technical-data-block'])) {
+  padding: 0;
+  border: 0;
+}
+
+.amikon-product--modern
+  :deep(:is([data-testid='item-text-block'], [data-testid='technical-data-block']) :is(h2, .no-preflight)) {
+  padding: 0;
+}
+
+.amikon-product--modern
+  :deep(
+    :is([data-testid='item-text-block'], [data-testid='item-data-block'], [data-testid='technical-data-block']) h2
+  ) {
+  margin-bottom: 6px;
+  color: #252632;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+@media (min-width: 900px) {
+  .amikon-product--modern {
+    --pdp-overview-columns: minmax(0, 59fr) minmax(0, 41fr);
+    --pdp-overview-gap: clamp(24px, 4vw, 48px);
+  }
+}
+
+@media (max-width: 420px) {
+  .amikon-product--modern :deep([data-testid='product-quantity-cart-row']) {
+    flex-direction: column;
+  }
+
+  .amikon-product--modern :deep([data-testid='product-quantity-cart-row'] > :first-child:not(:last-child)) {
+    flex: 0 0 auto;
+    align-self: flex-start;
   }
 }
 </style>

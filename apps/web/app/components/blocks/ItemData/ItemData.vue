@@ -62,13 +62,14 @@ import { SfIconWarning } from '@storefront-ui/vue';
 const props = defineProps<{
   content: ItemDataContent;
 }>();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const { currentProduct } = useProducts();
 
 const { isEditMode } = useEditorState();
 
 const { fieldValues } = useItemDataTable(currentProduct as Ref<Product | null>, {
   t,
+  locale,
 });
 const fieldLabels = computed<ItemDataFieldLabels>(() => ({
   itemId: t('field-itemId'),

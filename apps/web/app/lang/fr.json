@@ -109,6 +109,9 @@
   },
   "product": {
     "itemIdLabel": "ID de l’article",
+    "descriptionNav": "Description",
+    "dataNav": "Données de l’article",
+    "articleContact": "Une question sur cet article",
     "allFromCategory": "Tous les articles de {name}",
     "allProducts": "Tous les articles",
     "allProductsLink": "Parcourir les articles",

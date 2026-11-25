@@ -39,7 +39,7 @@ const props = defineProps<{
 }>();
 
 const route = useRoute();
-const { productParams } = createProductParams(route.params);
+const { productParams } = createProductParams(route.params, route.path);
 const localePath = useLocalizedPath();
 
 const selectedUnit = ref(productParams?.variationId?.toString() || '');

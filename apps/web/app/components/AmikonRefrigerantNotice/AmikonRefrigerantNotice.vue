@@ -1,6 +1,14 @@
 <template>
-  <section v-if="visible" id="amikon-refrigerant-notice" class="refrigerant-notice" data-testid="refrigerant-notice">
-    <h2>{{ t('amikonRefrigerant.title') }}</h2>
+  <component
+    :is="collapsible ? 'details' : 'section'"
+    v-if="visible"
+    id="amikon-refrigerant-notice"
+    class="refrigerant-notice"
+    :class="{ 'refrigerant-notice--collapsible': collapsible }"
+    data-testid="refrigerant-notice"
+  >
+    <summary v-if="collapsible">{{ t('amikonRefrigerant.title') }}</summary>
+    <h2 v-else>{{ t('amikonRefrigerant.title') }}</h2>
     <div class="notice-content">
       <p>{{ t('amikonRefrigerant.intro') }}</p>
       <ul>
@@ -8,7 +16,7 @@
       </ul>
       <NuxtLink :to="localePath('/contact')" class="contact-link">{{ t('amikonRefrigerant.contact') }}</NuxtLink>
     </div>
-  </section>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -16,9 +24,9 @@ import type { Product } from '@plentymarkets/shop-api';
 import { hasAmikonRefrigerantService } from '~/utils/amikonRefrigerantNotice';
 import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
-const props = defineProps<{ product: Product }>();
+const props = defineProps<{ product: Product; collapsible?: boolean }>();
 const { t } = useI18n();
-const localePath = useLocalePath();
+const localePath = useLocalizedPath();
 const { data: categoryTree } = useCategoryTree();
 const amikonLayout = inject(amikonProductLayoutKey, ref(false));
 const visible = computed(() => amikonLayout.value && hasAmikonRefrigerantService(props.product, categoryTree.value));
@@ -30,6 +38,22 @@ const steps = ['recovery', 'components', 'refilling', 'adjustment', 'leakTest', 
   margin: 32px 0 0;
   line-height: 1.6;
   overflow-wrap: anywhere;
+}
+.refrigerant-notice--collapsible {
+  margin: 20px 0;
+  border: 1px solid #dbd5ee;
+  border-radius: 8px;
+  background: #f4f1fa;
+  scroll-margin-top: 20px;
+}
+.refrigerant-notice--collapsible summary {
+  padding: 14px 18px;
+  color: #392f6e;
+  cursor: pointer;
+  font-weight: 650;
+}
+.refrigerant-notice--collapsible .notice-content {
+  padding: 0 18px 16px;
 }
 h2 {
   margin: 0;

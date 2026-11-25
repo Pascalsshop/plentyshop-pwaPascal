@@ -7,6 +7,7 @@ import type {
   UseProductAttributesState,
 } from './types';
 import type { Product, VariationMapProductVariation } from '@plentymarkets/shop-api';
+import { getProductItemParameter, updateProductURLPathForVariation } from '~/utils/productHelper';
 
 /**
  * @description Composable for handling product attributes.
@@ -39,9 +40,10 @@ export const useProductAttributes = (): UseProductAttributesReturn => {
 
     const route = useRoute();
 
-    if (!useCallisto().isEnabled) {
-      const path = updateProductURLPathForVariation(route.path, state.value.itemId, variationId);
-      navigateTo(path);
+    const itemParameter = getProductItemParameter(route.params, route.path);
+    if (!useCallisto().isEnabled && typeof itemParameter === 'string') {
+      const path = updateProductURLPathForVariation(route.path, itemParameter, variationId);
+      if (path !== route.path) navigateTo({ path, query: route.query, hash: route.hash });
     }
 
     state.value.variationId = variationId;

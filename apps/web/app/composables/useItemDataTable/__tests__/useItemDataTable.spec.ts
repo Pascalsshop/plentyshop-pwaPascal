@@ -61,15 +61,20 @@ describe('useItemDataTable', () => {
       variationProperties: [],
     } as unknown as Product);
 
-    const { fieldValues } = useItemDataTable(productRef, { t: mockT });
+    const locale = ref('de');
+    const { fieldValues } = useItemDataTable(productRef, { t: mockT, locale });
 
     expect(fieldValues.value.itemId).toBe('109');
     expect(fieldValues.value.manufacturer).toBe('Teston Testerton');
     expect(fieldValues.value.manufacturingCountry).toBe('Germany');
     expect(fieldValues.value.content).toBe('1 Piece');
-    expect(fieldValues.value.grossWeight).toBe('400 g');
-    expect(fieldValues.value.netWeight).toBe('300 g');
+    expect(fieldValues.value.grossWeight).toBe('0,4 kg');
+    expect(fieldValues.value.netWeight).toBe('0,3 kg');
     expect(fieldValues.value.dimensions).toBe('550 x 650 x 330 mm');
     expect(fieldValues.value.ageRating).toBe('16 and older');
+
+    locale.value = 'en';
+    expect(fieldValues.value.grossWeight).toBe('0.4 kg');
+    expect(fieldValues.value.netWeight).toBe('0.3 kg');
   });
 });

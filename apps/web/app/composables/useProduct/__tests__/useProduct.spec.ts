@@ -6,6 +6,8 @@ const productId = ProductMock.item.id.toString();
 
 const { mockUseHead } = vi.hoisted(() => ({ mockUseHead: vi.fn() }));
 mockNuxtImport('useHead', () => mockUseHead);
+const { mockUseAsyncData } = vi.hoisted(() => ({ mockUseAsyncData: vi.fn() }));
+mockNuxtImport('useAsyncData', () => mockUseAsyncData);
 
 const siteSettingsValue = ref('');
 const { useSiteSettingsMock } = vi.hoisted(() => ({
@@ -27,6 +29,29 @@ describe('useProduct', () => {
 
     expect(product.value).not.toBeUndefined();
   });
+
+  it.each([false, true])(
+    'keeps the latest variant when an earlier request completes late (with data: %s)',
+    async (withData) => {
+      const response = (data?: typeof ProductMock) => ({
+        data: { value: data ? { data } : null },
+        error: { value: null },
+      });
+      const olderResponse = Promise.withResolvers<ReturnType<typeof response>>();
+      const newerProduct = { ...ProductMock, variation: { ...ProductMock.variation, id: 1101 } };
+      mockUseAsyncData.mockReturnValueOnce(olderResponse.promise).mockResolvedValueOnce(response(newerProduct));
+      const earlier = useProduct('variant-switch-' + withData);
+      const later = useProduct('variant-switch-' + withData);
+
+      const firstRequest = earlier.fetchProduct({ id: productId, variationId: 1100 });
+      await later.fetchProduct({ id: productId, variationId: 1101 });
+      olderResponse.resolve(response(withData ? ProductMock : undefined));
+      await firstRequest;
+
+      expect(earlier.data.value.variation.id).toBe(1101);
+      expect(later.loading.value).toBe(false);
+    },
+  );
 });
 
 describe('useProduct setProductMeta title suffix fallback', () => {

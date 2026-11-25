@@ -2,6 +2,8 @@ import type { InjectionKey, Ref } from 'vue';
 import type { PriceCardFieldKey, PriceCardOrderItem } from '~/components/ui/PurchaseCard/types';
 
 export const amikonProductLayoutKey: InjectionKey<Ref<boolean>> = Symbol('amikon-product-layout');
+export const amikonModernProductLayoutKey: InjectionKey<Ref<boolean>> = Symbol('amikon-modern-product-layout');
+export const amikonProductSectionIdPrefix = 'artikel-abschnitt-';
 
 const purchaseFieldOrder: PriceCardFieldKey[] = [
   'itemName',
@@ -13,8 +15,8 @@ const purchaseFieldOrder: PriceCardFieldKey[] = [
   'orderProperties',
   'itemBundle',
   'graduatedPrices',
-  'price',
   'availability',
+  'price',
   'quantityAndAddToCart',
   'addToWishlist',
   'guaranteeLabel',

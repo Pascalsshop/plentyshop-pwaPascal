@@ -113,7 +113,7 @@ describe('<PurchaseCard />', () => {
         global: { stubs: globalStubs, provide: { [amikonProductLayoutKey as symbol]: ref(arranged) } },
       });
 
-    it('puts the existing title and short description before price, availability and cart', () => {
+    it('puts the existing title and short description before availability, price and cart', () => {
       const product = structuredClone(ProductMock);
       product.texts.shortDescription = 'Example description';
       const wrapper = mountAmikon(product);
@@ -121,8 +121,8 @@ describe('<PurchaseCard />', () => {
       const selectors = [
         'product-name',
         'product-description',
-        'product-price-row',
         'product-availability',
+        'product-price-row',
         'product-purchase-actions',
       ];
       const ordered = [...fields.querySelectorAll('[data-testid]')]

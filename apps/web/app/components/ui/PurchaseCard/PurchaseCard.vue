@@ -35,7 +35,9 @@
                 {{ productGetters.getVariationNumber(product) }}
               </p>
             </template>
-            <template v-if="key === 'price' && configuration?.fields.price">
+            <template
+              v-if="key === 'price' && configuration?.fields.price && (!modernLayout || !hideSoldPurchaseActions)"
+            >
               <div class="flex space-x-2" data-testid="product-price-row">
                 <Price :crossed-price="crossedPrice" :price="priceWithProperties" />
                 <div
@@ -59,7 +61,15 @@
               <UiBadges :product="product" :use-availability="false" :use-tags="true" class="mb-2" />
             </template>
             <template v-if="key === 'availability' && configuration?.fields.availability">
-              <UiProductAvailability v-if="amikonLayout" :product="product" />
+              <div
+                v-if="modernLayout"
+                class="amikon-article-status"
+                :class="{ 'amikon-article-status--sold': hideSoldPurchaseActions }"
+              >
+                <span v-if="condition" class="amikon-article-condition">{{ condition }}</span>
+                <UiProductAvailability :product="product" />
+              </div>
+              <UiProductAvailability v-else-if="amikonLayout" :product="product" />
               <UiBadges v-else :product="product" :use-availability="true" :use-tags="false" class="mb-2" />
             </template>
             <template v-if="key === 'variationProperties' && configuration?.fields.variationProperties">
@@ -193,7 +203,11 @@
                   </SfTooltip>
                 </div>
 
-                <div class="mt-4 typography-text-xs flex gap-1">
+                <div
+                  v-if="!modernLayout || !hideSoldPurchaseActions"
+                  class="mt-4 typography-text-xs flex gap-1"
+                  data-testid="product-price-note"
+                >
                   <span>{{ t('common.labels.asterisk') }}</span>
                   <span>{{ showNetPrices ? t('product.priceExclVAT') : t('product.priceInclVAT') }}</span>
                   <i18n-t keypath="shipping.excludedLabel" scope="global">
@@ -244,13 +258,21 @@
         </section>
       </div>
     </div>
-    <AmikonRefrigerantNotice v-if="amikonLayout" :product="product" />
+    <NuxtLink v-if="modernLayout" class="amikon-article-contact" :to="localePath(paths.contact)">
+      {{ t('product.articleContact') }}
+    </NuxtLink>
+    <AmikonRefrigerantNotice v-if="amikonLayout && !modernLayout" :product="product" />
   </form>
 </template>
 
 <script lang="ts" setup>
 import { AMIKON_CUSTOMER_REVIEWS_ENABLED } from '~/utils/amikonCustomerReviews';
-import { amikonProductLayoutKey, arrangeAmikonPurchaseFields } from '~/utils/amikonProductLayout';
+import {
+  amikonModernProductLayoutKey,
+  amikonProductLayoutKey,
+  arrangeAmikonPurchaseFields,
+} from '~/utils/amikonProductLayout';
+import { getConditionName } from '~/composables/useItemDataTable/helpers/ItemDataHelpers';
 import { productGetters, reviewGetters, productBundleGetters } from '@plentymarkets/shop-api';
 import { SfCounter, SfRating, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
 import type { PriceCardPadding, PriceCardTextBlockItem, PurchaseCardProps } from '~/components/ui/PurchaseCard/types';
@@ -317,6 +339,8 @@ const props = withDefaults(defineProps<PurchaseCardProps>(), {
 });
 
 const amikonLayout = inject(amikonProductLayoutKey, ref(false));
+const modernLayout = inject(amikonModernProductLayoutKey, ref(false));
+const condition = computed(() => getConditionName(props.product));
 const itemId = computed(() => {
   const id = Number(productGetters.getItemId(props.product));
   return Number.isSafeInteger(id) && id > 0 ? id : undefined;

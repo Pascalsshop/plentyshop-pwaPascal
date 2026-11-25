@@ -2,9 +2,12 @@ import type { RouteParams } from 'vue-router';
 import type { Breadcrumb, Product, ProductParams } from '@plentymarkets/shop-api';
 import { productGetters, breadcrumbGetters } from '@plentymarkets/shop-api';
 
-export const validateProductParams = (params: RouteParams): boolean => {
-  const itemId = params.itemId as string;
-  if (!itemId) return false;
+export const getProductItemParameter = (params: RouteParams, path: string) =>
+  /\/a-(\d+(?:_\d+)?)\/?$/.exec(path)?.[1] ?? params.itemId;
+
+export const validateProductParams = (params: RouteParams, path: string): boolean => {
+  const itemId = getProductItemParameter(params, path);
+  if (typeof itemId !== 'string' || !itemId) return false;
 
   const pieces = itemId.split('_');
   if (pieces.length === 0 || pieces.length > 2) return false;
@@ -14,8 +17,9 @@ export const validateProductParams = (params: RouteParams): boolean => {
   return true;
 };
 
-export const createProductParams = (params: RouteParams) => {
-  const productPieces = (params.itemId as string).split('_');
+export const createProductParams = (params: RouteParams, path: string) => {
+  const itemParameter = getProductItemParameter(params, path);
+  const productPieces = typeof itemParameter === 'string' ? itemParameter.split('_') : [];
 
   const productParams: ProductParams = {
     id: productPieces[0] ?? '',
@@ -30,32 +34,17 @@ export const createProductParams = (params: RouteParams) => {
 
 export const updateProductURLPathForVariation = (
   currentPath: string,
-  itemId: string | number,
+  itemParameter: string,
   variationId: string | number,
 ) => {
-  const trailingSlash = currentPath.endsWith('/');
+  const trailingSlash = currentPath.endsWith('/') ? '/' : '';
   const normalizedPath = trailingSlash ? currentPath.slice(0, -1) : currentPath;
-  const pathSegments = normalizedPath.split('/');
-  let lastSegment = pathSegments.pop();
-  if (!lastSegment) return currentPath;
-
-  const lastSegmentParts = lastSegment.split('_');
-  const itemIdPosition = lastSegmentParts.length - 1;
-
-  itemId = String(itemId);
-  variationId = String(variationId);
-
-  if (lastSegmentParts[itemIdPosition] === itemId) {
-    lastSegmentParts.push(variationId);
-  } else {
-    lastSegmentParts[itemIdPosition] = variationId;
+  if (!normalizedPath.endsWith('_' + itemParameter) && !normalizedPath.endsWith('/a-' + itemParameter)) {
+    return currentPath;
   }
 
-  lastSegment = lastSegmentParts.join('_');
-  pathSegments.push(lastSegment);
-
-  const result = pathSegments.join('/');
-  return trailingSlash ? result + '/' : result;
+  const [itemId] = itemParameter.split('_', 1);
+  return normalizedPath.slice(0, -itemParameter.length) + itemId + '_' + variationId + trailingSlash;
 };
 
 export const generateBreadcrumbs = (product: Product, home: string): Breadcrumb[] => {

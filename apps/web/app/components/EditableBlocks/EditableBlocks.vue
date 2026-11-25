@@ -42,7 +42,11 @@
         </template>
       </component>
       <div v-else class="content">
-        <div v-for="block in data" :key="block.meta.uuid">
+        <div
+          v-for="(block, index) in data"
+          :id="blockIdPrefix ? blockIdPrefix + index : undefined"
+          :key="block.meta.uuid"
+        >
           <UiBlockPlaceholder v-if="shouldDisplayPlaceholder(block.meta.uuid, 'top', drawerOpen, drawerView)" />
           <component
             :is="isNarrowContainer(block) ? NarrowContainer : 'div'"
@@ -65,6 +69,7 @@
             />
           </component>
           <UiBlockPlaceholder v-if="shouldDisplayPlaceholder(block.meta.uuid, 'bottom', drawerOpen, drawerView)" />
+          <slot name="after-block" :block="block" :blocks="data" />
         </div>
       </div>
     </template>
@@ -88,7 +93,7 @@ const isNarrowContainer = (block: Block) => {
 const draggableComp = shallowRef<ConcreteComponent | null>(null);
 
 const { isLiveMode, shouldShowEditorUI } = useEditorState();
-const props = withDefaults(defineProps<EditableBlocksProps>(), {
+const props = withDefaults(defineProps<EditableBlocksProps & { blockIdPrefix?: string }>(), {
   identifier: HOMEPAGE_IDENTIFIER,
   type: 'immutable',
   isRoot: false,
@@ -96,6 +101,7 @@ const props = withDefaults(defineProps<EditableBlocksProps>(), {
   preventBlocksRequest: false,
   readOnly: false,
   blocks: () => [],
+  blockIdPrefix: '',
 });
 
 const { pageBlocks, updateBlocks } = useBlocks();
@@ -132,7 +138,7 @@ const data = computed({
   },
 });
 
-const getIndex = (block: Block) => renderedBlocks.value.indexOf(block);
+const getIndex = (block: Block) => data.value.indexOf(block);
 
 const isContentEmptyInLive = computed(() => data.value.length === 0 && isLiveMode.value);
 

@@ -19,7 +19,7 @@ const copies = {
 mockNuxtImport('useI18n', () => () => ({
   t: (key: string) => copies[language.value as keyof typeof copies].amikonRefrigerant[key.split('.')[1]!],
 }));
-mockNuxtImport('useLocalePath', () => () => (path: string) => `/${language.value}${path}`);
+mockNuxtImport('useLocalizedPath', () => () => (path: string) => `/${language.value}${path}`);
 mockNuxtImport('useCategoryTree', () => () => ({ data: ref([]) }));
 
 describe('Amikon refrigerant notice', () => {

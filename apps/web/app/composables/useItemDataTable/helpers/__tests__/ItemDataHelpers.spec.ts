@@ -80,8 +80,12 @@ describe('formatWeight', () => {
   });
 
   it('should format number including 0', () => {
-    expect(formatWeight(0)).toBe('0 g');
-    expect(formatWeight(400)).toBe('400 g');
+    expect(formatWeight(0)).toBe('0 kg');
+    expect(formatWeight(400)).toBe('0,4 kg');
+    expect(formatWeight(1)).toBe('0,001 kg');
+    expect(formatWeight(0.5)).toBe('0,0005 kg');
+    expect(formatWeight(2000000)).toBe('2.000 kg');
+    expect(formatWeight(400, 'en')).toBe('0.4 kg');
   });
 });
 

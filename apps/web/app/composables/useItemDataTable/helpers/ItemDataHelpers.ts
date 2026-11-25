@@ -30,9 +30,10 @@ export const getManufacturingCountryName = (product: Product): string => {
   return country.name ?? country.isoCode2 ?? '';
 };
 
-export const formatWeight = (value: number | null | undefined): string => {
-  if (value == null) return '';
-  return `${value} g`;
+export const formatWeight = (grams: number | null | undefined, locale = 'de'): string => {
+  if (grams == null || !Number.isFinite(grams)) return '';
+  const kilograms = new Intl.NumberFormat(locale, { maximumFractionDigits: 6 }).format(grams / 1000);
+  return `${kilograms} kg`;
 };
 
 export const formatDimensions = (

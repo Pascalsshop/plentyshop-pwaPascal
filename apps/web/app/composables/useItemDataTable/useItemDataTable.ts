@@ -11,7 +11,7 @@ import {
   formatVariationProperties,
   getAgeRatingDescriptor,
 } from './helpers/ItemDataHelpers';
-export function useItemDataTable(productRef: Ref<Product | null>, options?: { t?: TranslateFn }) {
+export function useItemDataTable(productRef: Ref<Product | null>, options?: { t?: TranslateFn; locale?: Ref<string> }) {
   const { shouldHideZeroValues } = useEditorState();
 
   const fieldValues = computed<ItemDataFieldValues>(() => {
@@ -67,9 +67,9 @@ export function useItemDataTable(productRef: Ref<Product | null>, options?: { t?
 
       content: formatContent(product),
 
-      grossWeight: shouldHideWeightG ? '' : formatWeight(weightG),
+      grossWeight: shouldHideWeightG ? '' : formatWeight(weightG, options?.locale?.value),
 
-      netWeight: shouldHideWeightNetG ? '' : formatWeight(weightNetG),
+      netWeight: shouldHideWeightNetG ? '' : formatWeight(weightNetG, options?.locale?.value),
 
       dimensions: allDimensionsZero ? '' : formatDimensions(lengthMM, widthMM, heightMM),
 

@@ -109,6 +109,9 @@
   },
   "product": {
     "itemIdLabel": "Artikel-ID",
+    "descriptionNav": "Beschrijving",
+    "dataNav": "Artikelgegevens",
+    "articleContact": "Vraag over dit artikel",
     "allFromCategory": "Alle artikelen in {name}",
     "allProducts": "Alle artikelen",
     "allProductsLink": "Artikelen bekijken",

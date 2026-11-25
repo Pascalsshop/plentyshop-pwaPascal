@@ -1,7 +1,19 @@
 <template>
   <NuxtLayout name="default" :breadcrumbs="breadcrumbs">
-    <AmikonProductAppearance>
-      <EditableBlocks :identifier="'0'" :type="'product'" prevent-blocks-request />
+    <AmikonProductAppearance modern>
+      <EditableBlocks
+        :identifier="'0'"
+        :type="'product'"
+        :block-id-prefix="amikonProductSectionIdPrefix"
+        prevent-blocks-request
+      >
+        <template #after-block="{ block, blocks }">
+          <template v-if="!shouldEnableEditorFeatures">
+            <AmikonProductSpecs v-if="block === getOverviewBlock(blocks)" :product="product" :blocks="blocks" />
+            <AmikonRefrigerantNotice v-if="block === getDetailsEndBlock(blocks)" :product="product" collapsible />
+          </template>
+        </template>
+      </EditableBlocks>
     </AmikonProductAppearance>
     <UiReviewModal />
     <ProductLegalDetailsDrawer v-if="open" :product="product" />
@@ -9,10 +21,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Product, ApiError } from '@plentymarkets/shop-api';
+import type { Product, ApiError, Block } from '@plentymarkets/shop-api';
 import type { WatchStopHandle } from 'vue';
 import { productGetters } from '@plentymarkets/shop-api';
 import type { Locale } from '#i18n';
+import { amikonProductSectionIdPrefix } from '~/utils/amikonProductLayout';
 
 defineI18nRoute({
   locales: process.env.LANGUAGELIST?.split(',') as Locale[],
@@ -23,10 +36,11 @@ const { setCurrentProduct } = useProducts();
 const { setBlocksListContext } = useBlocksList();
 const { setProductMetaData, setProductRobotsMetaData, setProductCanonicalMetaData } = useStructuredData();
 const localePath = useLocalizedPath();
-const { productParams, productId } = createProductParams(route.params);
+const { productParams, productId } = createProductParams(route.params, route.path);
 const { productForEditor, fetchProduct, setProductMeta, setBreadcrumbs, breadcrumbs } = useProduct(productId);
 const product = productForEditor;
 const { disableActions } = useEditor();
+const { shouldEnableEditorFeatures } = useEditorState();
 const { fetchProductReviews, fetchProductAuthenticatedReviews } = useProductReviews(Number(productId));
 const { open } = useProductLegalDetailsDrawer();
 const { setPageMeta } = usePageMeta();
@@ -36,11 +50,23 @@ const { variationId } = useProductAttributes();
 const { addLastSeen } = useLastSeen();
 let variationWatchHandler: WatchStopHandle | undefined;
 
+const getOverviewBlock = (blocks: Block[]) =>
+  blocks.find(
+    (block) =>
+      block.name === 'PriceCard' ||
+      (block.name === 'MultiGrid' &&
+        Array.isArray(block.content) &&
+        block.content.some(({ name }) => name === 'PriceCard')),
+  );
+const getDetailsEndBlock = (blocks: Block[]) =>
+  blocks.findLast(({ name }) => ['ItemText', 'ItemData', 'TechnicalData', 'ProductLegalInformation'].includes(name)) ??
+  getOverviewBlock(blocks);
+
 definePageMeta({
   layout: false,
   path: '/:slug*:sep(/a-|_):itemId',
   validate: async (route) => {
-    return validateProductParams(route.params);
+    return validateProductParams(route.params, route.path);
   },
   type: 'product',
   isBlockified: true,

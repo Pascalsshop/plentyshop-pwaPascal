@@ -1114,6 +1114,9 @@
   },
   "product": {
     "itemIdLabel": "Artikel-ID",
+    "descriptionNav": "Beschreibung",
+    "dataNav": "Artikeldaten",
+    "articleContact": "Frage zum Artikel",
     "allFromCategory": "Alle {name}",
     "allProducts": "Alle Artikel",
     "allProductsLink": "Artikel durchsuchen",

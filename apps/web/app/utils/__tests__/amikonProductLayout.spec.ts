@@ -8,8 +8,8 @@ describe('Amikon product layout', () => {
     expect(arrangeAmikonPurchaseFields(fields)).toEqual([
       'itemName',
       'previewText',
-      'price',
       'availability',
+      'price',
       'quantityAndAddToCart',
     ]);
     expect(fields).toEqual(original);

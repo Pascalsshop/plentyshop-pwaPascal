@@ -4,9 +4,9 @@ const range = String.raw`(?:\s*(?:bis|[-–—…]|\.\.\.)\s*${number})?`;
 const measurement = (units: string) => String.raw`${qualifier}${number}${range}\s*(?:${units})`;
 const dimension = String.raw`${qualifier}${number}(?:\s*[×x]\s*${number}){1,2}\s*mm`;
 
-const field = (label: string, names: string, value: string) => ({
+const field = (label: string, names: string, value: string, suffix = '') => ({
   label,
-  pattern: new RegExp(String.raw`^(?:${names})(?:\s*:\s*|\s+)(?<value>${value})$`, 'i'),
+  pattern: new RegExp(String.raw`^(?:${names})(?:\s*:\s*|\s+)(?<value>${value})${suffix}$`, 'i'),
 });
 const measured = (label: string, names: string, units: string) => field(label, names, measurement(units));
 const labeledText = (label: string, names: string) => ({
@@ -76,8 +76,12 @@ const profiles = {
     aliases: ['robotics', 'robotica'],
     fields: [
       measured('Traglast', '(?:Nenn[- ]?)?Traglast', 'kg'),
-      measured('Reichweite', '(?:(?<maximum>Maximale|max\\.)\\s+)?Reichweite', 'mm|cm|m'),
-      field('Achsen', '(?:Anzahl\\s+)?Achsen', '[1-9]\\d*'),
+      measured(
+        'Reichweite',
+        String.raw`(?:(?<maximum>Maximale|max\.)\s+)?Reichweite(?:\s+laut\s+(?:(?<nameplate>Typenschild)|Datenblatt))?`,
+        'mm|cm|m',
+      ),
+      field('Achsen', '(?:Anzahl(?: der)?\\s+)?Achsen', '[1-9]\\d*', String.raw`(?:\s*/\s*Bodenmontage)?`),
     ],
   },
   '/shaker-schwingpruefanlagen': {
@@ -287,13 +291,17 @@ export function extractAmikonArticleSpecs(
             .map((entry) => entry.value.trim())
             .filter(Boolean)
         : [];
-    const sourceValues = structured.length
-      ? structured
-      : candidates.flatMap((line) => {
-          const groups = pattern.exec(line)?.groups;
-          if (!groups?.value) return [];
-          return [groups.maximum && !/^max\.?/i.test(groups.value) ? 'max. ' + groups.value : groups.value];
-        });
+    let sourceValues = structured;
+    if (!sourceValues.length) {
+      const matches = candidates.flatMap((line) => {
+        const groups = pattern.exec(line)?.groups;
+        if (!groups?.value) return [];
+        const value = groups.maximum && !/^max\.?/i.test(groups.value) ? 'max. ' + groups.value : groups.value;
+        return [{ value, fromNameplate: Boolean(groups.nameplate) }];
+      });
+      const nameplateMatches = matches.filter(({ fromNameplate }) => fromNameplate);
+      sourceValues = (nameplateMatches.length ? nameplateMatches : matches).map(({ value }) => value);
+    }
     const values = new Map<string, string>();
     for (const value of sourceValues) {
       const key = value.toLowerCase().replace(/\s+/g, ' ').replace(/[−–]/g, '-');

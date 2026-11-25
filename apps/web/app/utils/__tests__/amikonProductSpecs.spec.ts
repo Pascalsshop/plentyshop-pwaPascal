@@ -49,6 +49,33 @@ describe('getAmikonProductSpecs', () => {
     expect(getAmikonProductSpecs(product, [])).toEqual([{ label: 'Reichweite', value: 'max. ca. 2496 mm' }]);
   });
 
+  it('uses the reach on the robot nameplate and reads the axis count before the mounting note', () => {
+    const product = productIn('Roboter');
+    product.texts.description =
+      '<p>Nenn-Traglast: 500 kg<br>Max. Traglast laut Datenblatt: 611 kg*<br>' +
+      'Reichweite laut Typenschild: 2.828 mm<br>Reichweite laut Datenblatt: 2.826 mm<br>' +
+      'Achsen: 6 / Bodenmontage</p>';
+
+    expect(getAmikonProductSpecs(product, [])).toEqual([
+      { label: 'Traglast', value: '500 kg' },
+      { label: 'Reichweite', value: '2.828 mm' },
+      { label: 'Achsen', value: '6' },
+    ]);
+  });
+
+  it('uses the datasheet reach when it is the only value and skips conflicting nameplate values', () => {
+    const product = productIn('Roboter');
+    product.texts.description = '<p>Reichweite laut Datenblatt: 2.826 mm<br>Anzahl der Achsen 6</p>';
+    expect(getAmikonProductSpecs(product, [])).toEqual([
+      { label: 'Reichweite', value: '2.826 mm' },
+      { label: 'Achsen', value: '6' },
+    ]);
+
+    product.texts.technicalData =
+      '<p>Reichweite laut Typenschild: 2.828 mm<br>Reichweite laut Typenschild: 2.900 mm</p>';
+    expect(getAmikonProductSpecs(product, [])).toEqual([{ label: 'Achsen', value: '6' }]);
+  });
+
   it('skips products without a recognized category or explicit specifications', () => {
     const product = productIn('Roboter');
     expect(getAmikonProductSpecs(product, [])).toEqual([]);

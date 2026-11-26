@@ -26,7 +26,8 @@
     "adjustment": "Controleren / afstellen van de oververhitting bij expansieventielen",
     "leakTest": "Lekdichtheidscontrole",
     "testRun": "Proefdraaien van de installatie",
-    "contact": "Contact opnemen"
+    "contact": "Contact opnemen",
+    "details": "Details over de ombouw"
   },
   "amikonHeader": {
     "actions": { "login": "Inloggen", "register": "Registreren" },
@@ -110,7 +111,7 @@
   "product": {
     "itemIdLabel": "Artikel-ID",
     "descriptionNav": "Beschrijving",
-    "dataNav": "Artikelgegevens",
+    "dataNav": "Technische gegevens",
     "articleContact": "Vraag over dit artikel",
     "allFromCategory": "Alle artikelen in {name}",
     "allProducts": "Alle artikelen",

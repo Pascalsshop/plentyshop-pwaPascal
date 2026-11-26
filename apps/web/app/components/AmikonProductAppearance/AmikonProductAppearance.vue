@@ -223,45 +223,76 @@ provide(
 }
 
 .amikon-product--modern {
-  width: min(100%, 1440px);
-  padding: 16px clamp(16px, 3vw, 44px) 56px;
+  width: min(100%, 1536px);
+  padding: 20px clamp(16px, 4.3vw, 66px) 56px;
   background: #fff;
   color: #252632;
+}
+
+.amikon-product--modern :deep([data-testid='breadcrumbs']) {
+  display: flex;
+  margin-bottom: 24px;
+  font-size: clamp(14px, 1.15vw, 17px);
+}
+
+.amikon-product--modern
+  :deep(
+    [data-testid='block-wrapper']:has(
+        > .block-wrapper > [data-testid='multi-grid-structure'] [data-testid='gallery']
+      ):has([data-testid='purchase-card'])
+  ) {
+  margin-block: 0;
+  padding-block: 0;
 }
 
 .amikon-product--modern :deep([data-testid='purchase-card'] [data-testid='product-name']) {
   margin: 0;
   border-left: 0;
   padding: 0;
-  font-size: clamp(26px, 3vw, 43px);
+  font-size: clamp(26px, 2.35vw, 36px);
   font-weight: 750;
-  line-height: 1.13;
-  letter-spacing: -0.025em;
+  line-height: 1.18;
+  letter-spacing: -0.018em;
 }
 
 .amikon-product--modern :deep([data-testid='product-item-id']) {
-  margin: 6px 0 12px;
+  margin: 8px 0 0;
   color: #555866;
-  font-size: 14px;
+  font-size: clamp(14px, 1.2vw, 17px);
 }
 
 .amikon-product--modern :deep([data-testid='gallery-images']) {
-  height: clamp(260px, 43vw, 515px);
-  border: 1px solid #e1e1e9;
+  height: clamp(280px, 33vw, 500px);
   border-radius: 12px;
-  background: #f5f5f7;
+  background: #eeeff1;
 }
 
-.amikon-product--modern :deep(.swiper-slide-thumb-active img) {
-  border: 1px solid #392f6e;
+.amikon-product--modern :deep(.gallery-thumbnails--vertical) {
+  --thumbnail-width: clamp(80px, 7.3vw, 112px);
+  width: var(--thumbnail-width);
+}
+
+.amikon-product--modern :deep(.gallery-thumbnails--vertical .swiper-slide) {
+  width: var(--thumbnail-width) !important;
+  height: calc(var(--thumbnail-width) * 0.94) !important;
+}
+
+.amikon-product--modern :deep(.gallery-thumbnails--vertical img) {
+  border: 1px solid #d5d5de;
+  border-radius: 7px;
+  background: #f0f0f2;
+}
+
+.amikon-product--modern :deep(.gallery-thumbnails--vertical .swiper-slide-thumb-active img) {
+  border: 2px solid #392f6e;
 }
 
 .amikon-product--modern :deep(.amikon-article-status) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
-  margin: 24px 0 16px;
+  gap: 10px clamp(12px, 2.6vw, 40px);
+  margin: 24px 0 20px;
 }
 
 .amikon-product--modern :deep(.amikon-article-status:empty) {
@@ -269,39 +300,44 @@ provide(
 }
 
 .amikon-product--modern :deep(.amikon-article-condition) {
-  padding: 4px 9px;
-  border-radius: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
   background: #eeeef2;
-  font-size: 14px;
+  font-size: clamp(14px, 1.2vw, 17px);
+  font-weight: 600;
 }
 
 .amikon-product--modern :deep(.amikon-article-status [data-testid='product-availability']) {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: auto;
   margin: 0;
-  font-size: 14px;
+  font-size: clamp(14px, 1.25vw, 18px);
   font-weight: 650;
 }
 
 .amikon-product--modern :deep(.amikon-article-status :is(.availability-1, .availability-5)) {
   padding: 0;
   background: transparent !important;
-  color: #225932 !important;
+  color: #252632 !important;
 }
 
 .amikon-product--modern :deep(.amikon-article-status :is(.availability-1, .availability-5)::before) {
-  width: 9px;
-  height: 9px;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: currentColor;
+  background: #45a34d;
   content: '';
 }
 
 .amikon-product--modern :deep(.amikon-article-status--sold [data-testid='product-availability']) {
   color: #962e37 !important;
+}
+
+.amikon-product--modern :deep(.amikon-article-status--sold [data-testid='product-availability']::before) {
+  background: currentColor;
 }
 
 .amikon-product--modern :deep([data-testid='product-price-row']) {
@@ -315,24 +351,42 @@ provide(
 }
 
 .amikon-product--modern :deep([data-testid='add-to-cart']) {
-  min-height: 50px;
+  min-height: 54px;
+  font-size: clamp(15px, 1.35vw, 19px);
+}
+
+.amikon-product--modern :deep([data-testid='quantity-selector'] > div:first-child) {
+  min-height: 54px;
+  border-color: #c5c5d1;
+  border-radius: 8px;
+}
+
+.amikon-product--modern :deep([data-testid='quantity-selector-input']) {
+  height: auto;
+  min-width: 0;
 }
 
 .amikon-product--modern :deep([data-testid='product-purchase-actions']) {
   display: flex;
   flex-direction: column;
+  margin-top: 6px;
 }
 
 .amikon-product--modern :deep([data-testid='product-price-note']) {
   order: -1;
-  margin: 0 0 12px;
+  margin: 0 0 22px;
   flex-wrap: wrap;
+  color: #555866;
+  font-size: clamp(13px, 1.2vw, 17px);
 }
 
 .amikon-product--modern :deep(.amikon-article-contact) {
-  display: inline-block;
-  margin-top: 19px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
   color: #392f6e;
+  font-size: clamp(15px, 1.3vw, 19px);
   text-decoration: underline;
   text-underline-offset: 3px;
   font-weight: 600;
@@ -340,6 +394,7 @@ provide(
 
 .amikon-product--modern
   :deep(:is([data-testid='item-text-block'], [data-testid='item-data-block'], [data-testid='technical-data-block'])) {
+  margin-top: 18px;
   padding: 0;
   border: 0;
 }
@@ -362,7 +417,25 @@ provide(
 @media (min-width: 900px) {
   .amikon-product--modern {
     --pdp-overview-columns: minmax(0, 59fr) minmax(0, 41fr);
-    --pdp-overview-gap: clamp(24px, 4vw, 48px);
+    --pdp-overview-gap: clamp(24px, 3vw, 46px);
+  }
+}
+
+@media (max-width: 767px) {
+  .amikon-product--modern {
+    padding-top: 13px;
+  }
+
+  .amikon-product--modern :deep([data-testid='breadcrumbs']) {
+    margin-bottom: 15px;
+  }
+
+  .amikon-product--modern :deep([data-testid='gallery-images']) {
+    height: auto;
+  }
+
+  .amikon-product--modern :deep([data-testid='product-price-note']) {
+    margin-bottom: 14px;
   }
 }
 

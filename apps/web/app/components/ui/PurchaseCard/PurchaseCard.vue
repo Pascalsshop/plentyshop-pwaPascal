@@ -259,6 +259,7 @@
       </div>
     </div>
     <NuxtLink v-if="modernLayout" class="amikon-article-contact" :to="localePath(paths.contact)">
+      <SfIconEmail size="sm" aria-hidden="true" />
       {{ t('product.articleContact') }}
     </NuxtLink>
     <AmikonRefrigerantNotice v-if="amikonLayout && !modernLayout" :product="product" />
@@ -274,7 +275,7 @@ import {
 } from '~/utils/amikonProductLayout';
 import { getConditionName } from '~/composables/useItemDataTable/helpers/ItemDataHelpers';
 import { productGetters, reviewGetters, productBundleGetters } from '@plentymarkets/shop-api';
-import { SfCounter, SfRating, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
+import { SfCounter, SfRating, SfIconEmail, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
 import type { PriceCardPadding, PriceCardTextBlockItem, PurchaseCardProps } from '~/components/ui/PurchaseCard/types';
 import type { PayPalAddToCartCallback } from '#paypal/types';
 const isTextBlock = (item: unknown): item is PriceCardTextBlockItem =>

@@ -14,7 +14,8 @@
     "adjustment": "Checking / adjusting superheat at expansion valves",
     "leakTest": "Leak test",
     "testRun": "Test run of the system",
-    "contact": "Contact us"
+    "contact": "Contact us",
+    "details": "Conversion details"
   },
   "notifyMe": {
     "notifyButtonTooltip": "We will notify you as soon as the product is available again.",
@@ -1115,7 +1116,7 @@
   "product": {
     "itemIdLabel": "Item ID",
     "descriptionNav": "Description",
-    "dataNav": "Product data",
+    "dataNav": "Technical data",
     "articleContact": "Ask about this item",
     "allFromCategory": "All {name}",
     "allProducts": "All items",

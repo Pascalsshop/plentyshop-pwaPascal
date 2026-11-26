@@ -14,7 +14,8 @@
     "adjustment": "Überprüfung / Anpassung der Überhitzung bei Expansionsventilen",
     "leakTest": "Dichtheitsprüfung",
     "testRun": "Probelauf der Anlage",
-    "contact": "Kontakt aufnehmen"
+    "contact": "Kontakt aufnehmen",
+    "details": "Details zur Umstellung"
   },
   "notifyMe": {
     "notifyButtonTooltip": "Wir benachrichtigen Sie, sobald das Produkt wieder verfügbar ist",
@@ -1115,7 +1116,7 @@
   "product": {
     "itemIdLabel": "Artikel-ID",
     "descriptionNav": "Beschreibung",
-    "dataNav": "Artikeldaten",
+    "dataNav": "Technische Daten",
     "articleContact": "Frage zum Artikel",
     "allFromCategory": "Alle {name}",
     "allProducts": "Alle Artikel",

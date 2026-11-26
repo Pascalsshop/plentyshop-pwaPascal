@@ -7,7 +7,13 @@
     :class="{ 'refrigerant-notice--collapsible': collapsible }"
     data-testid="refrigerant-notice"
   >
-    <summary v-if="collapsible">{{ t('amikonRefrigerant.title') }}</summary>
+    <summary v-if="collapsible">
+      <span>{{ t('amikonRefrigerant.title') }}</span>
+      <span class="notice-details">
+        {{ t('amikonRefrigerant.details') }}
+        <SfIconChevronRight size="sm" aria-hidden="true" />
+      </span>
+    </summary>
     <h2 v-else>{{ t('amikonRefrigerant.title') }}</h2>
     <div class="notice-content">
       <p>{{ t('amikonRefrigerant.intro') }}</p>
@@ -21,6 +27,7 @@
 
 <script setup lang="ts">
 import type { Product } from '@plentymarkets/shop-api';
+import { SfIconChevronRight } from '@storefront-ui/vue';
 import { hasAmikonRefrigerantService } from '~/utils/amikonRefrigerantNotice';
 import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
@@ -41,16 +48,38 @@ const steps = ['recovery', 'components', 'refilling', 'adjustment', 'leakTest', 
 }
 .refrigerant-notice--collapsible {
   margin: 20px 0;
-  border: 1px solid #dbd5ee;
+  border: 1px solid #8b80b4;
   border-radius: 8px;
-  background: #f4f1fa;
+  background: #f0ecfa;
   scroll-margin-top: 20px;
 }
 .refrigerant-notice--collapsible summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 22px;
   padding: 14px 18px;
   color: #392f6e;
   cursor: pointer;
-  font-weight: 650;
+  font-size: clamp(16px, 1.35vw, 19px);
+  font-weight: 700;
+  list-style: none;
+}
+.refrigerant-notice--collapsible summary::-webkit-details-marker {
+  display: none;
+}
+.notice-details {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9em;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.refrigerant-notice[open] .notice-details :deep(svg) {
+  transform: rotate(90deg);
 }
 .refrigerant-notice--collapsible .notice-content {
   padding: 0 18px 16px;

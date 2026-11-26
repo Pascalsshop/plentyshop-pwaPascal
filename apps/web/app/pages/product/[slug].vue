@@ -1,6 +1,7 @@
 <template>
-  <NuxtLayout name="default" :breadcrumbs="breadcrumbs">
+  <NuxtLayout name="default" :breadcrumbs="shouldEnableEditorFeatures ? breadcrumbs : undefined">
     <AmikonProductAppearance modern>
+      <UiBreadcrumbs v-if="!shouldEnableEditorFeatures" :breadcrumbs="breadcrumbs.slice(0, -1)" link-last />
       <EditableBlocks
         :identifier="'0'"
         :type="'product'"
@@ -10,7 +11,7 @@
         <template #after-block="{ block, blocks }">
           <template v-if="!shouldEnableEditorFeatures">
             <AmikonProductSpecs v-if="block === getOverviewBlock(blocks)" :product="product" :blocks="blocks" />
-            <AmikonRefrigerantNotice v-if="block === getDetailsEndBlock(blocks)" :product="product" collapsible />
+            <AmikonRefrigerantNotice v-if="block === getNoticeBlock(blocks)" :product="product" collapsible />
           </template>
         </template>
       </EditableBlocks>
@@ -58,9 +59,9 @@ const getOverviewBlock = (blocks: Block[]) =>
         Array.isArray(block.content) &&
         block.content.some(({ name }) => name === 'PriceCard')),
   );
-const getDetailsEndBlock = (blocks: Block[]) =>
-  blocks.findLast(({ name }) => ['ItemText', 'ItemData', 'TechnicalData', 'ProductLegalInformation'].includes(name)) ??
-  getOverviewBlock(blocks);
+const getNoticeBlock = (blocks: Block[]) =>
+  getOverviewBlock(blocks) ??
+  blocks.findLast(({ name }) => ['ItemText', 'ItemData', 'TechnicalData', 'ProductLegalInformation'].includes(name));
 
 definePageMeta({
   layout: false,

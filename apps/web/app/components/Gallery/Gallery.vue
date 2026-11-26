@@ -37,7 +37,7 @@
           :modules="thumbsModules"
           :direction="thumbsDirection"
           :slides-per-view="thumbsSlidesPerView"
-          :space-between="4"
+          :space-between="modernLayout && isSide ? 12 : 4"
           :free-mode="true"
           :watch-slides-progress="true"
           :centered-slides="false"
@@ -109,6 +109,7 @@ import type { Swiper as SwiperType } from 'swiper';
 import { SfIconChevronLeft, SfIconChevronRight } from '@storefront-ui/vue';
 import { productImageGetters } from '@plentymarkets/shop-api';
 import type { GalleryProps } from '~/components/Gallery/types';
+import { amikonModernProductLayoutKey } from '~/utils/amikonProductLayout';
 
 const props = withDefaults(defineProps<GalleryProps>(), {
   configuration: () => ({
@@ -124,6 +125,7 @@ const props = withDefaults(defineProps<GalleryProps>(), {
 });
 
 const { shouldEnableEditorFeatures } = useEditorState();
+const modernLayout = inject(amikonModernProductLayoutKey, ref(false));
 
 const configuration = computed(() => props.configuration);
 const { images } = toRefs(props);
@@ -144,7 +146,9 @@ const hasMoreImages = computed(() => images.value.length > 1);
 const thumbsDirection = computed(() => (isSide.value ? 'vertical' : 'horizontal'));
 const thumbsSlidesPerView = computed(() => (isSide.value ? 'auto' : Math.min(images.value.length, 6)));
 const thumbsSwiperClass = computed(() =>
-  isSide.value ? 'hidden md:block md:h-full md:w-[5.5rem]' : 'hidden md:block md:w-full md:min-h-[5.5rem]',
+  isSide.value
+    ? 'gallery-thumbnails--vertical hidden md:block md:h-full md:w-[5.5rem]'
+    : 'hidden md:block md:w-full md:min-h-[5.5rem]',
 );
 
 const thumbSlideClass = (index: number) =>

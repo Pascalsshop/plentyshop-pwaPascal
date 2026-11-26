@@ -26,7 +26,8 @@
     "adjustment": "Contrôle / réglage de la surchauffe au niveau des détendeurs",
     "leakTest": "Contrôle d’étanchéité",
     "testRun": "Essai de fonctionnement de l’installation",
-    "contact": "Nous contacter"
+    "contact": "Nous contacter",
+    "details": "Détails de la conversion"
   },
   "amikonHeader": {
     "actions": { "login": "Connexion", "register": "Inscription" },
@@ -110,7 +111,7 @@
   "product": {
     "itemIdLabel": "ID de l’article",
     "descriptionNav": "Description",
-    "dataNav": "Données de l’article",
+    "dataNav": "Caractéristiques techniques",
     "articleContact": "Une question sur cet article",
     "allFromCategory": "Tous les articles de {name}",
     "allProducts": "Tous les articles",

@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { productGetters } from '@plentymarkets/shop-api';
 import type { ItemTextProps } from './types';
-import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
+import { amikonModernProductLayoutKey, amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
 const props = defineProps<ItemTextProps>();
 const initiallyCollapsed = computed(() => !props.content?.layout.initiallyCollapsed);
@@ -43,6 +43,7 @@ const { currentProduct } = useProducts();
 const content = computed(() => props.content);
 const { t } = useI18n();
 const amikonLayout = inject(amikonProductLayoutKey, ref(false));
+const modernLayout = inject(amikonModernProductLayoutKey, ref(false));
 // Localize inherited standard headings, but preserve custom copy and Builder editing.
 const title = computed(() => {
   const configured = content.value.text.title;
@@ -53,7 +54,9 @@ const title = computed(() => {
     'Artikelgegevens',
     'defaultTemplate.product.itemText.title',
   ];
-  return amikonLayout.value && standardTitles.includes(configured.trim()) ? t('product.details') : configured;
+  return amikonLayout.value && standardTitles.includes(configured.trim())
+    ? t(modernLayout.value ? 'product.descriptionNav' : 'product.details')
+    : configured;
 });
 const text = computed(() => productGetters.getDescription(currentProduct.value));
 const inlineStyle = computed(() => {

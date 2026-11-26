@@ -8,13 +8,18 @@
       :title="getEditorTranslation('last-seen-hint-title')"
       :message="getEditorTranslation('last-seen-tracking-disabled-hint')"
     />
-    <ProductSlider v-if="shouldShowSlider" :items="recommendedProducts" />
+    <ProductSlider
+      v-if="shouldShowSlider"
+      :items="recommendedProducts"
+      :appearance="modernLayout ? 'amikon' : undefined"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { ProductRecommendedProductsProps } from './types';
 import { productGetters } from '@plentymarkets/shop-api';
+import { amikonModernProductLayoutKey } from '~/utils/amikonProductLayout';
 
 const props = withDefaults(defineProps<ProductRecommendedProductsProps>(), { shouldLoad: undefined });
 
@@ -22,6 +27,7 @@ const { locale } = useI18n();
 const { data: categoryTree } = useCategoryTree();
 const { currentProduct } = useProducts();
 const { isEditMode } = useEditorState();
+const modernLayout = inject(amikonModernProductLayoutKey, ref(false));
 const { getBooleanSetting: isLastSeenTrackingEnabled } = useSiteSettings('enableLastSeenTracking');
 const blockRef = ref<HTMLElement | null>(null);
 const { isNearViewport } = useNearViewport(blockRef, {

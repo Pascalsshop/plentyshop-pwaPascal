@@ -392,6 +392,54 @@ provide(
   font-weight: 600;
 }
 
+.amikon-product--modern :deep(.amikon-product-slider) {
+  --recommendation-gap: clamp(16px, 2vw, 24px);
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='product-slider']) {
+  gap: var(--recommendation-gap);
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='product-card']) {
+  width: min(100%, max(17rem, calc((100% - 3 * var(--recommendation-gap)) / 4)));
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='product-card-content']) {
+  gap: 10px;
+  padding: 14px;
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='productcard-name']) {
+  min-height: 2.8em;
+  color: #252632;
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='product-availability']) {
+  margin-top: 0;
+  padding: 6px 8px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='product-card-purchase-row']) {
+  min-height: 56px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='product-card-purchase-row'] > :is(a, button)) {
+  min-height: 44px;
+  max-width: 100%;
+}
+
+.amikon-product--modern :deep(.amikon-product-slider [data-testid='add-to-basket-short'] svg) {
+  flex-shrink: 0;
+}
+
 .amikon-product--modern
   :deep(:is([data-testid='item-text-block'], [data-testid='item-data-block'], [data-testid='technical-data-block'])) {
   margin-top: 18px;

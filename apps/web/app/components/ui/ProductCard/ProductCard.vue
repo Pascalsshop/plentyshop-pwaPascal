@@ -84,6 +84,7 @@
 
     <div
       class="p-2 border-t border-neutral-200 typography-text-sm flex flex-col flex-auto"
+      data-testid="product-card-content"
       :class="{
         'items-center': configuration?.contentAlignment === 'center',
         'items-end': configuration?.contentAlignment === 'right',

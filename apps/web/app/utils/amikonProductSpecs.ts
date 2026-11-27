@@ -62,7 +62,7 @@ function productSpecProfile(product: Product, tree: CategoryTreeItem[]) {
 const lineBreakTags = /^(?:br|div|p|h[1-6]|li|tr|section)$/i;
 
 /** Keep the same line boundaries and entities in the server and browser renders. */
-function productTextLines(html: string) {
+export function productTextLines(html: string) {
   return decode(
     html
       .replace(/<!--[\s\S]*?-->|<(script|style|template)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '')

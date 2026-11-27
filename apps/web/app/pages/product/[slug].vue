@@ -1,5 +1,9 @@
 <template>
-  <NuxtLayout name="default" :breadcrumbs="shouldEnableEditorFeatures ? breadcrumbs : undefined">
+  <NuxtLayout
+    name="default"
+    :breadcrumbs="shouldEnableEditorFeatures ? breadcrumbs : undefined"
+    :compact-product-header="!shouldEnableEditorFeatures"
+  >
     <AmikonProductAppearance modern>
       <UiBreadcrumbs v-if="!shouldEnableEditorFeatures" :breadcrumbs="breadcrumbs.slice(0, -1)" link-last />
       <EditableBlocks

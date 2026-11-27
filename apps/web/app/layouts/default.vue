@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-white text-slate-900">
-    <AmikonHeader />
+    <AmikonHeader :compact-product="compactProductHeader" />
 
     <NarrowContainer v-if="breadcrumbs?.length" class="p-4 @md:px-0">
       <LazyUiBreadcrumbs :breadcrumbs="breadcrumbs" />

@@ -2,6 +2,7 @@ import type { Breadcrumb } from '~/components/ui/Breadcrumbs/types';
 
 export type DefaultLayoutProps = {
   breadcrumbs?: Breadcrumb[];
+  compactProductHeader?: boolean;
 };
 
 export type MyAccountSubsection = {

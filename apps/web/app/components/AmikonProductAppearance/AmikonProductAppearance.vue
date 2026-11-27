@@ -323,6 +323,11 @@ provide(
   color: #252632 !important;
 }
 
+.amikon-product--modern :deep(.amikon-article-status .amikon-article-condition + [data-testid='product-availability']) {
+  padding-inline-start: clamp(9px, 1.6vw, 24px);
+  border-inline-start: 1px solid #d9d9e3;
+}
+
 .amikon-product--modern :deep(.amikon-article-status :is(.availability-1, .availability-5)::before) {
   width: 13px;
   height: 13px;
@@ -351,12 +356,13 @@ provide(
 }
 
 .amikon-product--modern :deep([data-testid='add-to-cart']) {
-  min-height: 54px;
+  min-height: 58px;
+  border-radius: 8px;
   font-size: clamp(15px, 1.35vw, 19px);
 }
 
 .amikon-product--modern :deep([data-testid='quantity-selector'] > div:first-child) {
-  min-height: 54px;
+  min-height: 58px;
   border-color: #c5c5d1;
   border-radius: 8px;
 }
@@ -383,6 +389,7 @@ provide(
 .amikon-product--modern :deep(.amikon-article-contact) {
   display: inline-flex;
   align-items: center;
+  align-self: flex-start;
   gap: 8px;
   margin-top: 22px;
   color: #392f6e;
@@ -390,6 +397,23 @@ provide(
   text-decoration: underline;
   text-underline-offset: 3px;
   font-weight: 600;
+}
+
+.amikon-product--modern :deep(.amikon-express-payment) {
+  max-width: 340px;
+  margin-top: 12px;
+  color: #555866;
+  font-size: 14px;
+}
+
+.amikon-product--modern :deep(.amikon-express-payment summary) {
+  padding-block: 4px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.amikon-product--modern :deep(#amikon-technische-daten) {
+  scroll-margin-top: 24px;
 }
 
 .amikon-product--modern :deep(.amikon-product-slider) {
@@ -466,6 +490,10 @@ provide(
   .amikon-product--modern {
     --pdp-overview-columns: minmax(0, 59fr) minmax(0, 41fr);
     --pdp-overview-gap: clamp(24px, 3vw, 46px);
+  }
+
+  .amikon-product--modern :deep([data-testid='product-quantity-cart-row'] > :first-child:not(:last-child)) {
+    flex-basis: clamp(145px, 11.3vw, 174px);
   }
 }
 

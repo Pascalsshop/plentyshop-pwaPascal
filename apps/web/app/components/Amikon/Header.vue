@@ -2,10 +2,12 @@
   <header
     ref="headerRoot"
     class="@container relative w-full bg-white text-neutral-900 shadow-sm z-sticky"
+    :class="{ 'amikon-header--compact-product': compactProduct }"
     data-testid="amikon-header"
     @keydown.esc="closeMenus"
+    @mouseleave="compactProduct && closeDesktopMenu()"
   >
-    <div class="hidden bg-amikon-600 text-white @lg:block">
+    <div class="amikon-header-benefits hidden bg-amikon-600 text-white @lg:block">
       <div class="amikon-header-container flex items-center justify-center gap-12 py-2 text-sm font-semibold">
         <span class="flex items-center gap-2 text-white">
           <SfIconCheck class="h-4 w-4" aria-hidden="true" />
@@ -22,7 +24,7 @@
       </div>
     </div>
 
-    <div class="border-b border-neutral-200">
+    <div class="amikon-header-search border-b border-neutral-200">
       <div class="amikon-header-container">
         <nav
           class="flex min-h-10 items-center justify-end gap-1 @lg:hidden"
@@ -74,7 +76,7 @@
           </NuxtLink>
         </nav>
 
-        <div class="py-1 @lg:flex @lg:min-h-14 @lg:items-center @lg:gap-7 @lg:py-2">
+        <div class="amikon-header-search-row py-1 @lg:flex @lg:min-h-14 @lg:items-center @lg:gap-7 @lg:py-2">
           <form class="flex min-w-0 flex-1" role="search" @submit.prevent="submitSearch">
             <label for="amikon-search" class="sr-only">{{ t('common.actions.search') }}</label>
             <input
@@ -96,7 +98,7 @@
           </form>
 
           <nav
-            class="hidden shrink-0 items-center gap-1 text-sm @lg:flex"
+            class="amikon-header-account hidden shrink-0 items-center gap-1 text-sm @lg:flex"
             :aria-label="t('amikonHeader.aria.customerNavigation')"
           >
             <NuxtLink
@@ -147,9 +149,13 @@
       </div>
     </div>
 
-    <div class="relative" @mouseleave="closeDesktopMenu">
+    <div class="amikon-header-navigation relative" @mouseleave="!compactProduct && closeDesktopMenu()">
       <div class="amikon-header-container flex min-h-20 items-center justify-between gap-5">
-        <NuxtLink :to="localePath(paths.home)" class="shrink-0" :aria-label="t('amikonHeader.logoAlt')">
+        <NuxtLink
+          :to="localePath(paths.home)"
+          class="amikon-header-brand shrink-0"
+          :aria-label="t('amikonHeader.logoAlt')"
+        >
           <img
             :src="AMIKON_LOGO_PATH"
             :alt="t('amikonHeader.logoAlt')"
@@ -162,7 +168,7 @@
         <button
           ref="mobileMenuTrigger"
           type="button"
-          class="flex h-11 w-11 items-center justify-center rounded hover:bg-amikon-600 hover:text-white @lg:hidden"
+          class="amikon-header-menu-toggle flex h-11 w-11 items-center justify-center rounded hover:bg-amikon-600 hover:text-white @lg:hidden"
           :aria-label="t('common.navigation.openMenu')"
           :aria-expanded="mobileMenuOpen"
           aria-controls="amikon-mobile-menu"
@@ -172,10 +178,13 @@
         </button>
 
         <nav
-          class="hidden self-stretch items-stretch text-sm font-bold uppercase @lg:flex @xl:text-base"
+          class="amikon-header-links hidden self-stretch items-stretch text-sm font-bold uppercase @lg:flex @xl:text-base"
           :aria-label="t('amikonHeader.aria.mainNavigation')"
         >
-          <NuxtLink :to="localePath(paths.home)" class="flex items-center px-4 hover:bg-amikon-600 hover:text-white">
+          <NuxtLink
+            :to="localePath(paths.home)"
+            class="amikon-header-secondary flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+          >
             {{ t('amikonHeader.navigation.home') }}
           </NuxtLink>
           <div class="flex">
@@ -200,7 +209,7 @@
           </NuxtLink>
           <NuxtLink
             :to="localePath(paths.privacyPolicy)"
-            class="flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+            class="amikon-header-secondary flex items-center px-4 hover:bg-amikon-600 hover:text-white"
           >
             {{ t('amikonHeader.navigation.privacy') }}
           </NuxtLink>
@@ -209,11 +218,14 @@
           </NuxtLink>
           <NuxtLink
             :to="localePath(AMIKON_PURCHASE_FORM_PATH)"
-            class="flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+            class="amikon-header-secondary flex items-center px-4 hover:bg-amikon-600 hover:text-white"
           >
             {{ t('amikonHeader.navigation.purchaseForm') }}
           </NuxtLink>
-          <a :href="AMIKON_NEWSLETTER_URL" class="flex items-center px-4 hover:bg-amikon-600 hover:text-white">
+          <a
+            :href="AMIKON_NEWSLETTER_URL"
+            class="amikon-header-secondary flex items-center px-4 hover:bg-amikon-600 hover:text-white"
+          >
             {{ t('amikonHeader.navigation.newsletter') }}
           </a>
         </nav>
@@ -264,7 +276,7 @@
     >
       <div
         v-if="mobileMenuOpen"
-        class="fixed inset-0 bg-neutral-900/50 z-drawer-backdrop @lg:hidden"
+        class="amikon-header-menu-backdrop fixed inset-0 bg-neutral-900/50 z-drawer-backdrop @lg:hidden"
         data-testid="amikon-mobile-menu-backdrop"
         @click.self="closeMenus"
       >
@@ -383,6 +395,8 @@ import {
   isAmikonCategoryMenuLabelVisible,
   splitIntoBalancedColumns,
 } from './navigation';
+
+defineProps<{ compactProduct?: boolean }>();
 
 const { t, locale } = useI18n();
 const localePath = useLocalizedPath();
@@ -522,5 +536,95 @@ watch(
   max-width: 1600px;
   margin-inline: auto;
   padding-inline: 15px;
+}
+
+@media (min-width: 1200px) {
+  .amikon-header--compact-product {
+    display: grid;
+    grid-template:
+      'brand search links menu' 76px
+      'benefits benefits account account' minmax(32px, auto)
+      / max-content minmax(0, 1fr) max-content max-content;
+    align-items: center;
+    column-gap: clamp(12px, 2.5vw, 38px);
+    padding-inline: max(clamp(16px, 4.3vw, 66px), calc((100% - 1404px) / 2));
+    border-bottom: 4px solid #392f6e;
+  }
+
+  .amikon-header--compact-product .amikon-header-search,
+  .amikon-header--compact-product .amikon-header-search > .amikon-header-container,
+  .amikon-header--compact-product .amikon-header-search-row,
+  .amikon-header--compact-product .amikon-header-navigation,
+  .amikon-header--compact-product .amikon-header-navigation > .amikon-header-container:first-child {
+    display: contents;
+  }
+
+  .amikon-header--compact-product .amikon-header-brand {
+    grid-area: brand;
+  }
+
+  .amikon-header--compact-product .amikon-header-brand img {
+    width: 112px;
+    height: 70px;
+  }
+
+  .amikon-header--compact-product form {
+    grid-area: search;
+  }
+
+  .amikon-header--compact-product input[type='search'] {
+    background: #f6f6f8;
+  }
+
+  .amikon-header--compact-product .amikon-header-links {
+    grid-area: links;
+    font-size: 16px;
+    text-transform: none;
+  }
+
+  .amikon-header--compact-product .amikon-header-links .amikon-header-secondary {
+    display: none;
+  }
+
+  .amikon-header--compact-product .amikon-header-menu-toggle {
+    display: flex;
+    grid-area: menu;
+  }
+
+  .amikon-header--compact-product .amikon-header-menu-backdrop {
+    display: block;
+  }
+
+  .amikon-header--compact-product .amikon-header-benefits {
+    grid-area: benefits;
+    background: transparent;
+    color: #555866;
+  }
+
+  .amikon-header--compact-product .amikon-header-benefits > .amikon-header-container {
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 4px 0;
+    font-size: 12px;
+  }
+
+  .amikon-header--compact-product .amikon-header-benefits .text-white {
+    color: inherit;
+  }
+
+  .amikon-header--compact-product .amikon-header-account {
+    grid-area: account;
+    justify-self: end;
+    gap: 0;
+    font-size: 12px;
+  }
+
+  .amikon-header--compact-product .amikon-header-account > :is(a, button) {
+    padding-block: 4px;
+  }
+
+  .amikon-header--compact-product #amikon-desktop-menu {
+    top: 76px;
+  }
 }
 </style>

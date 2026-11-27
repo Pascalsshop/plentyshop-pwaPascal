@@ -26,7 +26,7 @@
       <h2 class="font-bold text-lg leading-6 @md:text-2xl">
         {{ title }}
       </h2>
-      <div v-if="text" class="no-preflight [&>p:first-child]:mt-0 [&>p:last-child]:mb-0" v-html="text" />
+      <div v-if="text" class="no-preflight [&>p:first-child]:mt-0 [&>p:last-child]:mb-0" v-html="displayText" />
     </div>
   </div>
 </template>
@@ -35,10 +35,10 @@
 import { productGetters } from '@plentymarkets/shop-api';
 import type { ItemTextProps } from './types';
 import { amikonModernProductLayoutKey, amikonProductLayoutKey } from '~/utils/amikonProductLayout';
+import { addInlineTechnicalDataAnchor, hasInlineTechnicalData } from '~/utils/amikonProductPresentation';
 
 const props = defineProps<ItemTextProps>();
 const initiallyCollapsed = computed(() => !props.content?.layout.initiallyCollapsed);
-const displayAsCollapsable = computed(() => props.content?.layout.displayAsCollapsable);
 const { currentProduct } = useProducts();
 const content = computed(() => props.content);
 const { t } = useI18n();
@@ -59,6 +59,9 @@ const title = computed(() => {
     : configured;
 });
 const text = computed(() => productGetters.getDescription(currentProduct.value));
+const hasInlineData = computed(() => modernLayout.value && hasInlineTechnicalData(text.value));
+const displayAsCollapsable = computed(() => !hasInlineData.value && props.content?.layout.displayAsCollapsable);
+const displayText = computed(() => (hasInlineData.value ? addInlineTechnicalDataAnchor(text.value) : text.value));
 const inlineStyle = computed(() => {
   const layout = props.content?.layout || {};
   return {

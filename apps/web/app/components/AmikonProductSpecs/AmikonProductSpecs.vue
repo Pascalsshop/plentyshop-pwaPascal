@@ -15,6 +15,7 @@
       {{ t(label) }}
     </a>
   </nav>
+  <p v-if="introduction" :id="articleIntroductionId" class="product-introduction">{{ introduction }}</p>
 </template>
 
 <script setup lang="ts">
@@ -23,6 +24,12 @@ import { useEventListener } from '@vueuse/core';
 import { getAmikonProductSpecs } from '~/utils/amikonProductSpecs';
 import { hasAmikonRefrigerantService } from '~/utils/amikonRefrigerantNotice';
 import { amikonProductSectionIdPrefix } from '~/utils/amikonProductLayout';
+import {
+  articleIntroduction,
+  articleIntroductionId,
+  hasInlineTechnicalData,
+  inlineTechnicalDataId,
+} from '~/utils/amikonProductPresentation';
 
 const props = defineProps<{ product: Product; blocks: Block[] }>();
 const { data: categoryTree } = useCategoryTree();
@@ -49,17 +56,31 @@ const variationPending = computed(
 const specs = computed(() =>
   locale.value === 'de' && !variationPending.value ? getAmikonProductSpecs(props.product, categoryTree.value) : [],
 );
+const description = computed(() => productGetters.getDescription(props.product));
+const descriptionIndex = computed(() => props.blocks.findIndex(({ name }) => name === 'ItemText'));
+const introduction = computed(() =>
+  descriptionIndex.value >= 0
+    ? articleIntroduction(productGetters.getShortDescription(props.product), description.value)
+    : '',
+);
 const detailLinks = computed(() => {
   const { blocks, product } = props;
-  const description = blocks.findIndex(({ name }) => name === 'ItemText');
-  const data = blocks.findIndex(
-    ({ name }) => name === 'ItemData' || (name === 'TechnicalData' && productGetters.getTechnicalData(product)),
-  );
+  const data = blocks.findIndex(({ name }) => name === 'TechnicalData' && productGetters.getTechnicalData(product));
+  const itemData = blocks.findIndex(({ name }) => name === 'ItemData');
   const links = [];
-  if (description >= 0 && productGetters.getDescription(product)) {
-    links.push({ label: 'product.descriptionNav', href: '#' + amikonProductSectionIdPrefix + description });
+  if (descriptionIndex.value >= 0 && description.value) {
+    links.push({
+      label: 'product.descriptionNav',
+      href: '#' + (introduction.value ? articleIntroductionId : amikonProductSectionIdPrefix + descriptionIndex.value),
+    });
   }
-  if (data >= 0) links.push({ label: 'product.dataNav', href: '#' + amikonProductSectionIdPrefix + data });
+  if (data >= 0) {
+    links.push({ label: 'product.dataNav', href: '#' + amikonProductSectionIdPrefix + data });
+  } else if (descriptionIndex.value >= 0 && hasInlineTechnicalData(description.value)) {
+    links.push({ label: 'product.dataNav', href: '#' + inlineTechnicalDataId });
+  } else if (itemData >= 0) {
+    links.push({ label: 'product.dataNav', href: '#' + amikonProductSectionIdPrefix + itemData });
+  }
   if (hasAmikonRefrigerantService(product, categoryTree.value)) {
     links.push({ label: 'amikonRefrigerant.title', href: '#amikon-refrigerant-notice' });
   }
@@ -128,6 +149,14 @@ const activeLink = computed(
   color: #392f6e;
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+.product-introduction {
+  max-width: 95ch;
+  margin: 16px 0 22px;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.5;
+  scroll-margin-top: 20px;
 }
 
 @media (max-width: 420px) {

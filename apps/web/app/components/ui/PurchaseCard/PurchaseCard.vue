@@ -20,7 +20,7 @@
             </template>
             <template v-if="key === 'itemName' && configuration?.fields.itemName">
               <h1 class="font-bold typography-headline-4 break-word" data-testid="product-name">
-                {{ productGetters.getName(product) }}
+                {{ displayName }}
               </h1>
               <p v-if="amikonLayout && itemId" class="text-xs text-neutral-500" data-testid="product-item-id">
                 {{ t('product.itemIdLabel') }}: {{ itemId }}
@@ -191,8 +191,8 @@
                       type="submit"
                     >
                       <template #prefix>
-                        <div v-if="!loading" class="flex row items-center">
-                          <SfIconShoppingCart size="sm" />
+                        <div v-if="!loading" class="flex items-center gap-2">
+                          <SfIconShoppingCart size="sm" class="shrink-0" />
                           {{ t('common.actions.addToCart') }}
                         </div>
                         <div v-else>
@@ -222,19 +222,28 @@
                     </template>
                   </i18n-t>
                 </div>
-                <template v-if="showPayPalButtons && !hideSoldPurchaseActions">
-                  <PayPalExpressButton
-                    class="mt-4"
-                    location="itemPage"
-                    type="SingleItem"
-                    @validation-callback="paypalHandleAddToCart"
-                  />
-                  <PayPalPayLaterBanner
-                    :amount="priceWithProperties * quantitySelectorValue"
-                    location="itemPage"
-                    placement="product"
-                  />
-                </template>
+                <AmikonArticleQuestion v-if="modernLayout" />
+                <component
+                  :is="modernLayout ? 'details' : 'div'"
+                  v-if="showPayPalButtons && !hideSoldPurchaseActions"
+                  :class="{ 'amikon-express-payment': modernLayout }"
+                  @toggle="showExpressPayment"
+                >
+                  <summary v-if="modernLayout">PayPal</summary>
+                  <template v-if="!modernLayout || expressPaymentOpened">
+                    <PayPalExpressButton
+                      class="mt-4"
+                      location="itemPage"
+                      type="SingleItem"
+                      @validation-callback="paypalHandleAddToCart"
+                    />
+                    <PayPalPayLaterBanner
+                      :amount="priceWithProperties * quantitySelectorValue"
+                      location="itemPage"
+                      placement="product"
+                    />
+                  </template>
+                </component>
               </div>
             </template>
 
@@ -258,10 +267,7 @@
         </section>
       </div>
     </div>
-    <NuxtLink v-if="modernLayout" class="amikon-article-contact" :to="localePath(paths.contact)">
-      <SfIconEmail size="sm" aria-hidden="true" />
-      {{ t('product.articleContact') }}
-    </NuxtLink>
+    <AmikonArticleQuestion v-if="modernLayout && !hasPurchaseActions" />
     <AmikonRefrigerantNotice v-if="amikonLayout && !modernLayout" :product="product" />
   </form>
 </template>
@@ -275,7 +281,8 @@ import {
 } from '~/utils/amikonProductLayout';
 import { getConditionName } from '~/composables/useItemDataTable/helpers/ItemDataHelpers';
 import { productGetters, reviewGetters, productBundleGetters } from '@plentymarkets/shop-api';
-import { SfCounter, SfRating, SfIconEmail, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
+import { SfCounter, SfRating, SfIconShoppingCart, SfLoaderCircular, SfTooltip } from '@storefront-ui/vue';
+import { compactArticleTitle } from '~/utils/amikonProductPresentation';
 import type { PriceCardPadding, PriceCardTextBlockItem, PurchaseCardProps } from '~/components/ui/PurchaseCard/types';
 import type { PayPalAddToCartCallback } from '#paypal/types';
 const isTextBlock = (item: unknown): item is PriceCardTextBlockItem =>
@@ -354,6 +361,17 @@ const displayedFieldsOrder = computed(() => {
   const fields = props.configuration?.fieldsOrder ?? [];
   return amikonLayout.value ? arrangeAmikonPurchaseFields(fields) : fields;
 });
+const hasPurchaseActions = computed(
+  () => props.configuration?.fields.quantityAndAddToCart && displayedFieldsOrder.value.includes('quantityAndAddToCart'),
+);
+const displayName = computed(() => {
+  const name = productGetters.getName(props.product);
+  return modernLayout.value ? compactArticleTitle(name, productGetters.getDescription(props.product)) : name;
+});
+const expressPaymentOpened = ref(false);
+const showExpressPayment = (event: Event) => {
+  if ((event.currentTarget as HTMLDetailsElement).open) expressPaymentOpened.value = true;
+};
 
 const { currentProduct } = useProducts();
 

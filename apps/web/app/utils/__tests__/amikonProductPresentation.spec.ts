@@ -1,6 +1,5 @@
 import {
   addInlineTechnicalDataAnchor,
-  articleIntroduction,
   compactArticleTitle,
   hasInlineTechnicalData,
 } from '../amikonProductPresentation';
@@ -30,16 +29,5 @@ describe('Amikon product presentation', () => {
     );
     expect(hasInlineTechnicalData('<p>Technische Daten folgen.</p>')).toBe(false);
     expect(hasInlineTechnicalData('<p>Technische Daten:</p><p>Prüfraumvolumen: ca. 335 Liter</p>')).toBe(true);
-  });
-
-  it('uses the authored short description or an intact paragraph before the technical data', () => {
-    const paragraph =
-      'Der Klimaprüfschrank eignet sich für Temperatur- und Feuchteprüfungen, Umweltsimulation, Materialprüfung und Qualitätssicherung.';
-    const description = '<h5>' + paragraph + '</h5><h5>Technische Daten:</h5><h5>Temperaturbereich</h5>';
-    expect(articleIntroduction('<p>Beschreibung&nbsp;des Artikels.</p>', description)).toBe(
-      'Beschreibung des Artikels.',
-    );
-    expect(articleIntroduction('', description)).toBe(paragraph);
-    expect(articleIntroduction('', '<h5>Technische Daten:</h5><p>' + paragraph + '</p>')).toBe('');
   });
 });

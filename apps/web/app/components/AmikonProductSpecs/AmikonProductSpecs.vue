@@ -15,7 +15,6 @@
       {{ t(label) }}
     </a>
   </nav>
-  <p v-if="introduction" :id="articleIntroductionId" class="product-introduction">{{ introduction }}</p>
 </template>
 
 <script setup lang="ts">
@@ -24,12 +23,7 @@ import { useEventListener } from '@vueuse/core';
 import { getAmikonProductSpecs } from '~/utils/amikonProductSpecs';
 import { hasAmikonRefrigerantService } from '~/utils/amikonRefrigerantNotice';
 import { amikonProductSectionIdPrefix } from '~/utils/amikonProductLayout';
-import {
-  articleIntroduction,
-  articleIntroductionId,
-  hasInlineTechnicalData,
-  inlineTechnicalDataId,
-} from '~/utils/amikonProductPresentation';
+import { hasInlineTechnicalData, inlineTechnicalDataId } from '~/utils/amikonProductPresentation';
 
 const props = defineProps<{ product: Product; blocks: Block[] }>();
 const { data: categoryTree } = useCategoryTree();
@@ -58,20 +52,16 @@ const specs = computed(() =>
 );
 const description = computed(() => productGetters.getDescription(props.product));
 const descriptionIndex = computed(() => props.blocks.findIndex(({ name }) => name === 'ItemText'));
-const introduction = computed(() =>
-  descriptionIndex.value >= 0
-    ? articleIntroduction(productGetters.getShortDescription(props.product), description.value)
-    : '',
-);
 const detailLinks = computed(() => {
   const { blocks, product } = props;
   const data = blocks.findIndex(({ name }) => name === 'TechnicalData' && productGetters.getTechnicalData(product));
   const itemData = blocks.findIndex(({ name }) => name === 'ItemData');
+  const legalInfo = blocks.findIndex(({ name }) => name === 'ProductLegalInformation');
   const links = [];
   if (descriptionIndex.value >= 0 && description.value) {
     links.push({
       label: 'product.descriptionNav',
-      href: '#' + (introduction.value ? articleIntroductionId : amikonProductSectionIdPrefix + descriptionIndex.value),
+      href: '#' + amikonProductSectionIdPrefix + descriptionIndex.value,
     });
   }
   if (data >= 0) {
@@ -83,6 +73,9 @@ const detailLinks = computed(() => {
   }
   if (hasAmikonRefrigerantService(product, categoryTree.value)) {
     links.push({ label: 'amikonRefrigerant.title', href: '#amikon-refrigerant-notice' });
+  }
+  if (legalInfo >= 0) {
+    links.push({ label: 'product.legalDetails', href: '#' + amikonProductSectionIdPrefix + legalInfo });
   }
   return links;
 });
@@ -149,14 +142,6 @@ const activeLink = computed(
   color: #392f6e;
   text-decoration: underline;
   text-underline-offset: 4px;
-}
-
-.product-introduction {
-  max-width: 95ch;
-  margin: 16px 0 22px;
-  font-size: clamp(16px, 1.25vw, 19px);
-  line-height: 1.5;
-  scroll-margin-top: 20px;
 }
 
 @media (max-width: 420px) {

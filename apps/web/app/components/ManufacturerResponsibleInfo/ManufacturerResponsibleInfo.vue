@@ -1,12 +1,16 @@
 <template>
-  <div v-if="hasAnyInfo" class="py-2 px-4">
-    <h4 class="typography-headline-4 font-bold text-neutral-900">
+  <div v-if="hasAnyInfo" :class="{ 'py-2 px-4': !compact }">
+    <h4 v-if="!compact" class="typography-headline-4 font-bold text-neutral-900">
       {{ t('manufacturer.responsibleHeader') }}
     </h4>
-    <p class="mb-2">{{ t('manufacturer.responsibleSubtitle') }}</p>
+    <p v-if="!compact" class="mb-2">{{ t('manufacturer.responsibleSubtitle') }}</p>
 
-    <div class="border-2 py-2 px-4">
-      <p v-if="manufacturerResponsibleInfo.name" data-testid="manufacturer-responsible-info-name">
+    <div class="manufacturer-address" :class="{ 'border-2 py-2 px-4': !compact }">
+      <p
+        v-if="manufacturerResponsibleInfo.name"
+        class="manufacturer-company"
+        data-testid="manufacturer-responsible-info-name"
+      >
         {{ manufacturerResponsibleInfo.name }}
       </p>
       <p
@@ -26,7 +30,7 @@
         {{ manufacturerResponsibleInfo.postCode }}
         <span v-if="manufacturerResponsibleInfo.town"> {{ manufacturerResponsibleInfo.town }}</span>
         <span v-if="manufacturerResponsibleInfo.town && manufacturerResponsibleInfo.country">, &nbsp;</span>
-        <span v-if="manufacturerResponsibleInfo.country">{{ manufacturerResponsibleInfo.country.name }}</span>
+        <span v-if="manufacturerResponsibleInfo.country">{{ manufacturerResponsibleInfo.country }}</span>
       </p>
       <p v-if="manufacturerResponsibleInfo.phoneNo" data-testid="manufacturer-responsible-info-phone">
         {{ t('common.labels.phone') }}: {{ manufacturerResponsibleInfo.phoneNo }}
@@ -39,7 +43,7 @@
       </p>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="manufacturer-missing-info">
     {{ t('manufacturer.noResponsibleInformation') }}
   </div>
 </template>
@@ -49,20 +53,21 @@ import { manufacturerGetters, productGetters } from '@plentymarkets/shop-api';
 import type { ManufacturerResponsibleInfoProps } from '~/components/ManufacturerResponsibleInfo/types';
 
 const props = defineProps<ManufacturerResponsibleInfoProps>();
-const manufacturer = productGetters.getManufacturer(props.product);
-const country = manufacturerGetters.getManufacturerResponsibleCountry(manufacturer);
 
-const manufacturerResponsibleInfo = computed(() => ({
-  name: manufacturerGetters.getManufacturerResponsibleName(manufacturer),
-  street: manufacturerGetters.getManufacturerResponsibleStreet(manufacturer),
-  houseNo: manufacturerGetters.getManufacturerResponsibleHouseNo(manufacturer),
-  postCode: manufacturerGetters.getManufacturerResponsiblePostCode(manufacturer),
-  town: manufacturerGetters.getManufacturerResponsibleTown(manufacturer),
-  country: Object.keys(country).length > 0 ? country : null,
-  email: manufacturerGetters.getManufacturerResponsibleEmail(manufacturer),
-  phoneNo: manufacturerGetters.getManufacturerResponsiblePhoneNo(manufacturer),
-  responsibleContactUrl: manufacturerGetters.getManufacturerResponsibleContactUrl(manufacturer),
-}));
+const manufacturerResponsibleInfo = computed(() => {
+  const manufacturer = productGetters.getManufacturer(props.product);
+  return {
+    name: manufacturerGetters.getManufacturerResponsibleName(manufacturer),
+    street: manufacturerGetters.getManufacturerResponsibleStreet(manufacturer),
+    houseNo: manufacturerGetters.getManufacturerResponsibleHouseNo(manufacturer),
+    postCode: manufacturerGetters.getManufacturerResponsiblePostCode(manufacturer),
+    town: manufacturerGetters.getManufacturerResponsibleTown(manufacturer),
+    country: manufacturerGetters.getManufacturerResponsibleCountry(manufacturer).name,
+    email: manufacturerGetters.getManufacturerResponsibleEmail(manufacturer),
+    phoneNo: manufacturerGetters.getManufacturerResponsiblePhoneNo(manufacturer),
+    responsibleContactUrl: manufacturerGetters.getManufacturerResponsibleContactUrl(manufacturer),
+  };
+});
 
 const hasAnyInfo = computed(() => {
   const info = manufacturerResponsibleInfo.value;

@@ -1,5 +1,5 @@
 <template>
-  <div :style="inlineStyle" data-testid="item-text-block">
+  <div :style="modernLayout ? undefined : inlineStyle" data-testid="item-text-block">
     <div v-if="displayAsCollapsable">
       <UiAccordionItem
         v-if="text"
@@ -17,6 +17,7 @@
           v-if="text"
           data-testid="item-text-innertext"
           class="no-preflight [&>p:first-child]:mt-0 [&>p:last-child]:mb-0"
+          :class="{ 'amikon-description-copy': modernLayout }"
           v-html="text"
         />
       </UiAccordionItem>
@@ -26,7 +27,12 @@
       <h2 class="font-bold text-lg leading-6 @md:text-2xl">
         {{ title }}
       </h2>
-      <div v-if="text" class="no-preflight [&>p:first-child]:mt-0 [&>p:last-child]:mb-0" v-html="displayText" />
+      <div
+        v-if="text"
+        class="no-preflight [&>p:first-child]:mt-0 [&>p:last-child]:mb-0"
+        :class="{ 'amikon-description-copy': modernLayout }"
+        v-html="displayText"
+      />
     </div>
   </div>
 </template>

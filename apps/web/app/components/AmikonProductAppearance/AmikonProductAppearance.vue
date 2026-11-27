@@ -478,6 +478,57 @@ provide(
   font-weight: 700;
 }
 
+.amikon-product--modern :deep([data-testid='item-text-block']) {
+  max-width: 1070px;
+  margin-top: 24px;
+  margin-inline: auto;
+  padding: clamp(18px, 3vw, 36px);
+  border: 1px solid #e1e1e9;
+  border-radius: 10px;
+}
+
+.amikon-product--modern :deep([data-testid='item-text-block'] > div > h2) {
+  margin: 0 0 20px;
+  font-size: clamp(22px, 2.1vw, 30px);
+}
+
+.amikon-product--modern :deep(.amikon-description-copy) {
+  max-width: 82ch;
+  color: #353543;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.amikon-product--modern :deep(.amikon-description-copy :is(div, p, h2, h3, h4, h5, h6)[style*='text-align']) {
+  text-align: start !important;
+}
+
+.amikon-product--modern :deep(.amikon-description-copy :is(p, h5, h6)) {
+  margin-block: 0.9em;
+  font-size: inherit;
+  font-weight: 400;
+  line-height: inherit;
+}
+
+.amikon-product--modern :deep(.amikon-description-copy :is(h2, h3, h4, h5, h6, p):has(> #amikon-technische-daten)) {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid #e1e1e9;
+  color: #392f6e;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.amikon-product--modern :deep(.amikon-description-copy :is(img, video, iframe)) {
+  max-width: 100%;
+}
+
+.amikon-product--modern :deep(.amikon-description-copy :is(table, pre)) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 @media (min-width: 900px) {
   .amikon-product--modern {
     --pdp-overview-columns: minmax(0, 59fr) minmax(0, 41fr);

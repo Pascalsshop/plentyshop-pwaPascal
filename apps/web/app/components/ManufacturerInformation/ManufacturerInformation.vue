@@ -1,23 +1,26 @@
 <template>
-  <div v-if="hasAnyInfo" class="py-2 px-4">
-    <h4 class="typography-headline-4 font-bold text-neutral-900">
+  <div v-if="hasAnyInfo" :class="{ 'py-2 px-4': !compact }">
+    <h4 v-if="!compact" class="typography-headline-4 font-bold text-neutral-900">
       {{ t('manufacturer.header') }}
     </h4>
-    <p class="mb-2">{{ t('manufacturer.subtitle') }}</p>
+    <p v-if="!compact" class="mb-2">{{ t('manufacturer.subtitle') }}</p>
 
-    <div class="border-2 py-2 px-4">
+    <div class="manufacturer-address" :class="{ 'border-2 py-2 px-4': !compact }">
       <p v-if="manufacturerInfo.logo">
         <NuxtImg :src="manufacturerInfo.logo" :alt="t('manufacturer.logoAlt')" loading="lazy" />
       </p>
-      <p v-if="manufacturerInfo.name" data-testid="manufacturerInfo-name">{{ manufacturerInfo.name }}</p>
-      <p v-else-if="manufacturerInfo.externalName">{{ manufacturerInfo.externalName }}</p>
+      <p v-if="manufacturerInfo.name" class="manufacturer-company" data-testid="manufacturerInfo-name">
+        {{ manufacturerInfo.name }}
+      </p>
+      <p v-else-if="manufacturerInfo.externalName" class="manufacturer-company">{{ manufacturerInfo.externalName }}</p>
       <p v-if="manufacturerInfo.legalName">{{ manufacturerInfo.legalName }}</p>
       <p v-if="manufacturerInfo.street || manufacturerInfo.houseNo">
         {{ manufacturerInfo.street }} {{ manufacturerInfo.houseNo }}
       </p>
       <p v-if="manufacturerInfo.postcode || manufacturerInfo.town || manufacturerInfo.country">
         {{ manufacturerInfo.postcode }}
-        <span v-if="manufacturerInfo.town"> {{ manufacturerInfo.town }},&nbsp;</span>
+        <span v-if="manufacturerInfo.town"> {{ manufacturerInfo.town }}</span>
+        <span v-if="manufacturerInfo.town && manufacturerInfo.country">, </span>
         {{ manufacturerInfo.country }}
       </p>
       <p v-if="manufacturerInfo.phoneNumber">{{ t('common.labels.phone') }}: {{ manufacturerInfo.phoneNumber }}</p>
@@ -31,7 +34,7 @@
       </p>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="manufacturer-missing-info">
     {{ t('manufacturer.noInformation') }}
   </div>
 </template>
@@ -41,10 +44,9 @@ import { productGetters, manufacturerGetters } from '@plentymarkets/shop-api';
 import type { ManufacturerInformationProps } from '~/components/ManufacturerInformation/types';
 
 const props = defineProps<ManufacturerInformationProps>();
-const manufacturer = productGetters.getManufacturer(props.product);
-const country = manufacturerGetters.getManufacturerCountry(manufacturer);
 
 const manufacturerInfo = computed(() => {
+  const manufacturer = productGetters.getManufacturer(props.product);
   return {
     logo: manufacturerGetters.getManufacturerLogo(manufacturer),
     name: manufacturerGetters.getManufacturerName(manufacturer),
@@ -54,7 +56,7 @@ const manufacturerInfo = computed(() => {
     houseNo: manufacturerGetters.getManufacturerHouseNo(manufacturer),
     postcode: manufacturerGetters.getManufacturerPostCode(manufacturer),
     town: manufacturerGetters.getManufacturerTown(manufacturer),
-    country: Object.keys(country).length > 0 ? country : null,
+    country: manufacturerGetters.getManufacturerCountry(manufacturer).name,
     email: manufacturerGetters.getManufacturerEmail(manufacturer),
     phoneNumber: manufacturerGetters.getManufacturerPhoneNumber(manufacturer),
     faxNumber: manufacturerGetters.getManufacturerFaxNumber(manufacturer),

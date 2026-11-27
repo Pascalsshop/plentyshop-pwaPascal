@@ -223,27 +223,22 @@
                   </i18n-t>
                 </div>
                 <AmikonArticleQuestion v-if="modernLayout" />
-                <component
-                  :is="modernLayout ? 'details' : 'div'"
+                <div
                   v-if="showPayPalButtons && !hideSoldPurchaseActions"
                   :class="{ 'amikon-express-payment': modernLayout }"
-                  @toggle="showExpressPayment"
                 >
-                  <summary v-if="modernLayout">PayPal</summary>
-                  <template v-if="!modernLayout || expressPaymentOpened">
-                    <PayPalExpressButton
-                      class="mt-4"
-                      location="itemPage"
-                      type="SingleItem"
-                      @validation-callback="paypalHandleAddToCart"
-                    />
-                    <PayPalPayLaterBanner
-                      :amount="priceWithProperties * quantitySelectorValue"
-                      location="itemPage"
-                      placement="product"
-                    />
-                  </template>
-                </component>
+                  <PayPalExpressButton
+                    :class="{ 'mt-4': !modernLayout }"
+                    location="itemPage"
+                    type="SingleItem"
+                    @validation-callback="paypalHandleAddToCart"
+                  />
+                  <PayPalPayLaterBanner
+                    :amount="priceWithProperties * quantitySelectorValue"
+                    location="itemPage"
+                    placement="product"
+                  />
+                </div>
               </div>
             </template>
 
@@ -368,10 +363,6 @@ const displayName = computed(() => {
   const name = productGetters.getName(props.product);
   return modernLayout.value ? compactArticleTitle(name, productGetters.getDescription(props.product)) : name;
 });
-const expressPaymentOpened = ref(false);
-const showExpressPayment = (event: Event) => {
-  if ((event.currentTarget as HTMLDetailsElement).open) expressPaymentOpened.value = true;
-};
 
 const { currentProduct } = useProducts();
 

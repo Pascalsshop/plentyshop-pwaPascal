@@ -4,7 +4,7 @@ import type { ReviewCounts } from '@plentymarkets/shop-api';
 import { mockNuxtImport } from '@nuxt/test-utils/runtime';
 import { ProductMock } from '../../../../../__tests__/__mocks__/product.mock';
 import type { PriceCardContent, PriceCardTextBlockItem, PriceCardOrderItem } from '../types';
-import { amikonProductLayoutKey } from '~/utils/amikonProductLayout';
+import { amikonModernProductLayoutKey, amikonProductLayoutKey } from '~/utils/amikonProductLayout';
 
 const { isInternalLinkMock } = vi.hoisted(() => ({
   isInternalLinkMock: vi.fn((href: string) => href.startsWith('/')),
@@ -107,11 +107,19 @@ describe('<PurchaseCard />', () => {
         },
         fieldsOrder: ['price', 'availability', 'itemName', 'quantityAndAddToCart', 'previewText'],
       });
-    const mountAmikon = (product = ProductMock, arranged = true) =>
-      mount(UiPurchaseCard, {
+    const mountAmikon = (product = ProductMock, arranged = true, modern = false) => {
+      useProductAttributes().setAttribute(product, true);
+      return mount(UiPurchaseCard, {
         props: { product, configuration: layoutConfiguration() },
-        global: { stubs: globalStubs, provide: { [amikonProductLayoutKey as symbol]: ref(arranged) } },
+        global: {
+          stubs: globalStubs,
+          provide: {
+            [amikonProductLayoutKey as symbol]: ref(arranged),
+            [amikonModernProductLayoutKey as symbol]: ref(modern),
+          },
+        },
       });
+    };
 
     it('puts the existing title and short description before availability, price and cart', () => {
       const product = structuredClone(ProductMock);
@@ -188,6 +196,24 @@ describe('<PurchaseCard />', () => {
       const product = structuredClone(ProductMock);
       product.variation.availability.id = 2;
       expect(mountAmikon(product).find('[data-testid="add-to-cart"]').exists()).toBe(true);
+    });
+
+    it('renders the standard PayPal express button without a disclosure in the modern purchase card', () => {
+      const payment = mountAmikon(ProductMock, true, true).get('.amikon-express-payment');
+      expect(payment.getComponent({ name: 'PayPalExpressButton' }).props()).toMatchObject({
+        location: 'itemPage',
+        type: 'SingleItem',
+      });
+      expect(payment.find('details').exists()).toBe(false);
+    });
+
+    it('does not render PayPal express for sold items in the modern purchase card', () => {
+      const { variation } = ProductMock;
+      const product = {
+        ...ProductMock,
+        variation: { ...variation, availability: { ...variation.availability, id: 5 } },
+      };
+      expect(mountAmikon(product, true, true).findComponent({ name: 'PayPalExpressButton' }).exists()).toBe(false);
     });
   });
 

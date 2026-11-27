@@ -400,16 +400,8 @@ provide(
 }
 
 .amikon-product--modern :deep(.amikon-express-payment) {
-  max-width: 340px;
+  width: min(100%, 340px);
   margin-top: 12px;
-  color: #555866;
-  font-size: 14px;
-}
-
-.amikon-product--modern :deep(.amikon-express-payment summary) {
-  padding-block: 4px;
-  width: fit-content;
-  cursor: pointer;
 }
 
 .amikon-product--modern :deep(#amikon-technische-daten) {
